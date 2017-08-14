@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="Apo_Chan.Views.UserReportList">
     <ContentPage.Content>
         <Grid RowSpacing="0">
@@ -25,7 +26,8 @@
             </controls:ImageButton>
 
             <Label x:Name="monthLabel"  Grid.Row="0" Grid.Column="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
-                   Text="2017/08" FontSize="Large"
+                   BindingContext="{x:Static sys:DateTime.Now}"
+                   Text="{Binding StringFormat='{0:yyyy/MM}'}" FontSize="Large"
                    IsVisible="True">
             </Label>
 
@@ -36,18 +38,36 @@
 
             <ListView x:Name="reportList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"
                       SeparatorColor="Color.Accent"
+                      RowHeight="120"
                       ItemSelected="OnReportListItemSelected"
                       ItemsSource="{Binding ReportItems}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout Orientation="Vertical" >
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="Day" />
-                                    <Label Text="Time" />
-                                </StackLayout>
-                                <Label Text="{Binding Report.ReportTitle}" />
-                            </StackLayout>
+                            <Grid RowSpacing="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="1" Grid.Column="0"
+                                           FontAttributes="Bold" FontSize="Large" TextColor="DarkBlue"
+                                           Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"/>
+                                <Label Grid.Row="1" Grid.Column="2"
+                                           FontAttributes="Bold" FontSize="Large" TextColor="DarkBlue"
+                                           Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"/>
+
+                                <Label Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4"
+                                       Text="{Binding ReportTitle}" FontSize="Large"/>
+                            </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

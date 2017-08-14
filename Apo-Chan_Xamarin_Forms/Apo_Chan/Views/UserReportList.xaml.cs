@@ -24,6 +24,11 @@ namespace Apo_Chan.Views
             BindingContext = viewModel = new UserReportListViewModel();
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+        }
+
         private async void OnPreviousButtonClicked(object sender, EventArgs e)
         {
             await DisplayAlert("OnPreviousButtonClicked", "I'm doing nothing", "OK");
@@ -32,6 +37,14 @@ namespace Apo_Chan.Views
         private async void OnNextButtonClicked(object sender, EventArgs e)
         {
             await DisplayAlert("OnNextButtonClicked", "I'm doing nothing", "OK");
+            //viewModel.ReportItems.Add(new Report()
+            //{
+            //    Id = "123",
+            //    RefUserId = "asd",
+            //    ReportStartDate = new DateTime(2017, 8, 10),
+            //    ReportStartTime = new TimeSpan(18, 38, 30),
+            //    ReportTitle = "report 1"
+            //});
         }
 
         private async void OnReportListItemSelected(object sender, SelectedItemChangedEventArgs e)

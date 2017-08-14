@@ -51,5 +51,6 @@ namespace Apo_Chan.Models
 
         [Deleted]
         public Boolean Deleted { get; set; }
+
     }
 }
