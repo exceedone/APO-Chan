@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             x:Class="Apo_Chan.Views.UserReportList">
+    <ContentPage.Content>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*" />
+              <RowDefinition Height="5*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ActivityIndicator Grid.RowSpan="2" HorizontalOptions="Center"  VerticalOptions="Center"
+                       x:Name="syncIndicator" IsVisible="False" IsEnabled="True" />
+
+            <controls:ImageButton x:Name="previousButton" Grid.Row="0" Grid.Column="1" VerticalOptions="Start"
+                                  Image="TriangleLeft.png" BackgroundColor="Transparent" Scale="0.4"
+                                  Clicked="OnPreviousButtonClicked">
+            </controls:ImageButton>
+
+            <Label x:Name="monthLabel"  Grid.Row="0" Grid.Column="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
+                   Text="2017/08" FontSize="Large"
+                   IsVisible="True">
+            </Label>
+
+            <controls:ImageButton x:Name="nextButton"  Grid.Row="0" Grid.Column="3" VerticalOptions="Start"
+                                  Image="TriangleRight.png" BackgroundColor="Transparent" Scale="0.4"
+                                  Clicked="OnNextButtonClicked">
+            </controls:ImageButton>
+
+            <ListView x:Name="reportList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"
+                      SeparatorColor="Color.Accent"
+                      ItemSelected="OnReportListItemSelected"
+                      ItemsSource="{Binding ReportItems}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Vertical" >
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Day" />
+                                    <Label Text="Time" />
+                                </StackLayout>
+                                <Label Text="{Binding Report.ReportTitle}" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
