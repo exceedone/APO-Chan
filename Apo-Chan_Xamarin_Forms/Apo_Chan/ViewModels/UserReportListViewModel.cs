@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Apo_Chan.Managers;
 
 namespace Apo_Chan.ViewModels
 {
@@ -17,8 +18,21 @@ namespace Apo_Chan.ViewModels
 
         public UserReportListViewModel()
         {
-            //ReportItems = new ObservableCollection<Report>();
-            ReportItems = (ObservableCollection<Report>)ReportManager.GetItems();
+            //var manager = new ReportManager();
+
+            //try
+            //{
+            //    this.ReportItems = (ObservableCollection<Report>)ReportManager.DefaultManager.GetItemsAsync().Result;
+            //}
+            //catch
+            //{
+
+            //}
+        }
+
+        async public void SetItemsAsync()
+        {
+            this.ReportItems = await ReportManager.DefaultManager.GetItemsAsync();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

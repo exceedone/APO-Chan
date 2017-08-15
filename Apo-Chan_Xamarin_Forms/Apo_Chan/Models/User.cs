@@ -4,11 +4,8 @@ using Microsoft.WindowsAzure.MobileServices;
 
 namespace Apo_Chan.Models
 {
-    public class User
+    public class User: BaseModel
     {
-        [JsonProperty(PropertyName = "Id")]
-        public string Id { get; set; }
-
         [JsonProperty(PropertyName = "ProviderType")]
         public int ProviderType { get; set; }
 
@@ -23,17 +20,5 @@ namespace Apo_Chan.Models
 
         [JsonProperty(PropertyName = "DeletedAt")]
         public DateTime DeletedAt { get; set; }
-
-        [Version]
-        public string Version { get; set; }
-
-        [CreatedAt]
-        public DateTimeOffset CreatedAt { get; set; }
-
-        [UpdatedAt]
-        public DateTimeOffset UpdatedAt { get; set; }
-
-        [Deleted]
-        public Boolean Deleted { get; set; }
     }
 }

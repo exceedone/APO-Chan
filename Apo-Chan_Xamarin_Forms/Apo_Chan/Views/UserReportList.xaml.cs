@@ -22,6 +22,7 @@ namespace Apo_Chan.Views
             InitializeComponent();
 
             BindingContext = viewModel = new UserReportListViewModel();
+            viewModel.SetItemsAsync();
         }
 
         protected override void OnAppearing()

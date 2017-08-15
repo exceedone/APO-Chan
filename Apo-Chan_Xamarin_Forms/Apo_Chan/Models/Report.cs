@@ -8,49 +8,34 @@ using Microsoft.WindowsAzure.MobileServices;
 
 namespace Apo_Chan.Models
 {
-    public class Report
+    public class Report: BaseModel
     {
-        [JsonProperty(PropertyName = "Id")]
-        public string Id { get; set; }
-
-        [JsonProperty(PropertyName = "RefUserId")]
+        [JsonProperty(PropertyName = "refUserId")]
         public string RefUserId { get; set; }
 
-        [JsonProperty(PropertyName = "ReportTitle")]
+        [JsonProperty(PropertyName = "reportTitle")]
         public string ReportTitle { get; set; }
 
-        [JsonProperty(PropertyName = "ReportComment")]
+        [JsonProperty(PropertyName = "reportComment")]
         public string ReportComment { get; set; }
 
-        [JsonProperty(PropertyName = "ReportStartDate")]
+        [JsonProperty(PropertyName = "reportStartDate")]
         public DateTime ReportStartDate { get; set; }
 
-        [JsonProperty(PropertyName = "ReportStartTime")]
+        [JsonProperty(PropertyName = "reportStartTime")]
         public TimeSpan ReportStartTime { get; set; }
 
-        [JsonProperty(PropertyName = "ReportEndDate")]
+        [JsonProperty(PropertyName = "reportEndDate")]
         public DateTime ReportEndDate { get; set; }
 
-        [JsonProperty(PropertyName = "ReportEndTime")]
+        [JsonProperty(PropertyName = "reportEndTime")]
         public TimeSpan ReportEndTime { get; set; }
 
-        [JsonProperty(PropertyName = "ReportLat")]
+        [JsonProperty(PropertyName = "reportLat")]
         public double ReportLat { get; set; }
 
-        [JsonProperty(PropertyName = "ReportLon")]
+        [JsonProperty(PropertyName = "reportLon")]
         public double ReportLon { get; set; }
-
-        [Version]
-        public string Version { get; set; }
-
-        [CreatedAt]
-        public DateTimeOffset CreatedAt { get; set; }
-
-        [UpdatedAt]
-        public DateTimeOffset UpdatedAt { get; set; }
-
-        [Deleted]
-        public Boolean Deleted { get; set; }
 
     }
 }
