@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.WindowsAzure.MobileServices;
 
-namespace Apo_Chan.Models
+namespace Apo_Chan.Items
 {
-    public abstract class BaseModel
+    public abstract class BaseItem
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }

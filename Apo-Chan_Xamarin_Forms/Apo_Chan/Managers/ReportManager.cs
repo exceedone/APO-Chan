@@ -1,4 +1,4 @@
-﻿using Apo_Chan.Models;
+﻿using Apo_Chan.Items;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +10,7 @@ using Microsoft.WindowsAzure.MobileServices;
 
 namespace Apo_Chan.Managers
 {
-    public partial class ReportManager : BaseManager<Report>
+    public partial class ReportManager : BaseManager<ReportItem>
     {
         //public override string SyncQueryName
         //{
@@ -33,7 +33,7 @@ namespace Apo_Chan.Managers
                 defaultInstance = value;
             }
         }
-        public override async Task<ObservableCollection<Report>> GetItemsAsync(bool syncItems = false)
+        public override async Task<ObservableCollection<ReportItem>> GetItemsAsync(bool syncItems = false)
         {
             //var reportStore = new ObservableCollection<Report>
             //{
@@ -74,10 +74,10 @@ namespace Apo_Chan.Managers
                 }
 #endif
 
-                IEnumerable<Report> items = await this.dataTable
+                IEnumerable<ReportItem> items = await this.dataTable
                     .ToEnumerableAsync();
 
-                return new ObservableCollection<Report>(items);
+                return new ObservableCollection<ReportItem>(items);
             }
             catch (MobileServiceInvalidOperationException msioe)
             {

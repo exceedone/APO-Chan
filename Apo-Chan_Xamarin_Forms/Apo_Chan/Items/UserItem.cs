@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using Microsoft.WindowsAzure.MobileServices;
 
-namespace Apo_Chan.Models
+namespace Apo_Chan.Items
 {
-    public class User: BaseModel
+    public class UserItem: BaseItem
     {
         [JsonProperty(PropertyName = "ProviderType")]
         public int ProviderType { get; set; }

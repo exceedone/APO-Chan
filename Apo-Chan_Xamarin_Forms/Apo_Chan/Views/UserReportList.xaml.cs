@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-using Apo_Chan.Models;
+using Apo_Chan.Items;
 using Apo_Chan.ViewModels;
 
 namespace Apo_Chan.Views
@@ -53,7 +53,7 @@ namespace Apo_Chan.Views
             if (e.SelectedItem == null)
                 return;
 
-            await DisplayAlert("Item Tapped", "An item was tapped: " + (((ListView)sender).SelectedItem as Report).ReportTitle, "OK");
+            await DisplayAlert("Item Tapped", "An item was tapped: " + (((ListView)sender).SelectedItem as ReportItem).ReportTitle, "OK");
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;

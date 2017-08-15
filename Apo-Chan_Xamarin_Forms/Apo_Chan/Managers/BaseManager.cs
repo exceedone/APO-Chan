@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Sync;
-using Apo_Chan.Models;
+using Apo_Chan.Items;
 
 namespace Apo_Chan.Managers
 {
     /// <summary>
     /// Base Manager Class
     /// </summary>
-    public abstract partial class BaseManager<T1> where T1 : BaseModel
+    public abstract partial class BaseManager<T1> where T1 : BaseItem
     {
         protected static BaseManager<T1> defaultInstance;
         MobileServiceClient client;
