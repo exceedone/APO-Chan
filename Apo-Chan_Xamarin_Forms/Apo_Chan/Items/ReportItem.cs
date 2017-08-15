@@ -3,39 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Microsoft.WindowsAzure.MobileServices;
+using Apo_Chan.Models;
 
 namespace Apo_Chan.Items
 {
-    public class ReportItem: BaseItem
+    [DataContract(Name ="report")]
+    public class ReportItem : BaseItem
     {
-        [JsonProperty(PropertyName = "RefUserId")]
+        [JsonProperty(PropertyName = "refUserId")]
         public string RefUserId { get; set; }
 
-        [JsonProperty(PropertyName = "ReportTitle")]
+        [JsonProperty(PropertyName = "reportTitle")]
         public string ReportTitle { get; set; }
 
-        [JsonProperty(PropertyName = "ReportComment")]
+        [JsonProperty(PropertyName = "reportComment")]
         public string ReportComment { get; set; }
 
-        [JsonProperty(PropertyName = "ReportStartDate")]
+        [JsonProperty(PropertyName = "reportStartDate")]
         public DateTime ReportStartDate { get; set; }
 
-        [JsonProperty(PropertyName = "ReportStartTime")]
+        [JsonProperty(PropertyName = "reportStartTime")]
         public TimeSpan ReportStartTime { get; set; }
 
-        [JsonProperty(PropertyName = "ReportEndDate")]
+        [JsonProperty(PropertyName = "reportEndDate")]
         public DateTime ReportEndDate { get; set; }
 
-        [JsonProperty(PropertyName = "ReportEndTime")]
+        [JsonProperty(PropertyName = "reportEndTime")]
         public TimeSpan ReportEndTime { get; set; }
 
-        [JsonProperty(PropertyName = "ReportLat")]
+        [JsonProperty(PropertyName = "reportLat")]
         public double ReportLat { get; set; }
 
-        [JsonProperty(PropertyName = "ReportLon")]
+        [JsonProperty(PropertyName = "reportLon")]
         public double ReportLon { get; set; }
-
     }
 }

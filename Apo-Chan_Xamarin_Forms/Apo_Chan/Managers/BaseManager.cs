@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 using Apo_Chan.Items;
+using Apo_Chan.Models;
 
 namespace Apo_Chan.Managers
 {
@@ -38,7 +40,7 @@ namespace Apo_Chan.Managers
             //Initializes the SyncContext using the default IMobileServiceSyncHandler.
             this.client.SyncContext.InitializeAsync(store);
 
-            this.dataTable = client.GetSyncTable<Table>();
+            this.dataTable = client.GetSyncTable<T1>();
 #else
             this.dataTable = client.GetTable<T1>();
 #endif

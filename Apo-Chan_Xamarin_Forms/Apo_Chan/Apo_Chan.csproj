@@ -36,9 +36,11 @@
     <Compile Include="Items\BaseItem.cs" />
     <Compile Include="Items\ReportItem.cs" />
     <Compile Include="Items\UserItem.cs" />
+    <Compile Include="Models\Attribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Managers\ReportManager.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="Views\TodoList.xaml.cs">
       <DependentUpon>TodoList.xaml</DependentUpon>
     </Compile>

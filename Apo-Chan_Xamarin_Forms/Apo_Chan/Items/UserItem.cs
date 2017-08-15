@@ -1,9 +1,12 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Microsoft.WindowsAzure.MobileServices;
+using Apo_Chan.Models;
+using System.Runtime.Serialization;
 
 namespace Apo_Chan.Items
 {
+    [DataContract(Name = "report")]
     public class UserItem: BaseItem
     {
         [JsonProperty(PropertyName = "ProviderType")]
