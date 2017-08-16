@@ -41,12 +41,8 @@
     <Compile Include="App.cs" />
     <Compile Include="Managers\ReportManager.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="Views\TodoList.xaml.cs">
-      <DependentUpon>TodoList.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModels\NewReportViewModel.cs" />
     <Compile Include="Models\Constants.cs" />
-    <Compile Include="Items\TodoItem.cs" />
-    <Compile Include="Managers\TodoItemManager.cs" />
     <Compile Include="ViewModels\UserReportListViewModel.cs" />
     <Compile Include="Views\UserReportList.xaml.cs">
       <DependentUpon>UserReportList.xaml</DependentUpon>
@@ -56,12 +52,6 @@
   <ItemGroup>
     <None Include="project.json" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\TodoList.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Views\UserReportList.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>

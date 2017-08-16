@@ -87,5 +87,8 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\TriangleLeft.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\CircleAdd.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
 </Project>

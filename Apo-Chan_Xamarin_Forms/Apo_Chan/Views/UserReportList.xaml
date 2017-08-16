@@ -3,76 +3,72 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             NavigationPage.HasNavigationBar="True"
              x:Class="Apo_Chan.Views.UserReportList">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="previousButton" Order="Primary" Priority="0"
+                     Icon="TriangleLeft.png"
+                     Clicked="OnPreviousButtonClicked"/>
+
+        <ToolbarItem Name="monthLabel" Order="Primary" Priority="1"
+                     BindingContext="{x:Static sys:DateTime.Now}"
+                     Text="{Binding StringFormat='{0:yyyy/MM}'}" />
+
+        <ToolbarItem Name="nextButton" Order="Primary" Priority="2"
+                     Icon="TriangleRight.png"
+                     Clicked="OnNextButtonClicked"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
-              <RowDefinition Height="*" />
-              <RowDefinition Height="5*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="4*" />
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <ActivityIndicator Grid.RowSpan="2" HorizontalOptions="Center"  VerticalOptions="Center"
-                       x:Name="syncIndicator" IsVisible="False" IsEnabled="True" />
 
-            <controls:ImageButton x:Name="previousButton" Grid.Row="0" Grid.Column="1" VerticalOptions="Start"
-                                  Image="TriangleLeft.png" BackgroundColor="Transparent" Scale="0.4"
-                                  Clicked="OnPreviousButtonClicked">
-            </controls:ImageButton>
-
-            <Label x:Name="monthLabel"  Grid.Row="0" Grid.Column="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
-                   BindingContext="{x:Static sys:DateTime.Now}"
-                   Text="{Binding StringFormat='{0:yyyy/MM}'}" FontSize="Large"
-                   IsVisible="True">
-            </Label>
-
-            <controls:ImageButton x:Name="nextButton"  Grid.Row="0" Grid.Column="3" VerticalOptions="Start"
-                                  Image="TriangleRight.png" BackgroundColor="Transparent" Scale="0.4"
-                                  Clicked="OnNextButtonClicked">
-            </controls:ImageButton>
-
-            <ListView x:Name="reportList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"
+            <ListView x:Name="reportList"
+                      Grid.RowSpan="2"
                       SeparatorColor="Color.Accent"
-                      RowHeight="120"
+                      BackgroundColor="GhostWhite"
                       ItemSelected="OnReportListItemSelected"
+                      HasUnevenRows="True"
                       ItemsSource="{Binding ReportItems}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid RowSpacing="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Row="1" Grid.Column="0"
-                                           FontAttributes="Bold" FontSize="Large" TextColor="DarkBlue"
+                            <StackLayout Orientation="Vertical"
+                                         HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                                         Padding="10,20,0,0">
+                                <StackLayout Orientation="Horizontal"
+                                             HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                                    <Label HorizontalOptions="Start" VerticalOptions="StartAndExpand"
+                                           HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
+                                           FontAttributes="Bold" TextColor="#212121"
                                            Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"/>
-                                <Label Grid.Row="1" Grid.Column="2"
-                                           FontAttributes="Bold" FontSize="Large" TextColor="DarkBlue"
+                                    <Label HorizontalOptions="Center" VerticalOptions="StartAndExpand"
+                                           HorizontalTextAlignment="Center" VerticalTextAlignment="Start"
+                                           FontAttributes="Bold" TextColor="#212121"
                                            Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"/>
-
-                                <Label Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4"
-                                       Text="{Binding ReportTitle}" FontSize="Large"/>
-                            </Grid>
+                                </StackLayout>
+                                <Label HorizontalOptions="Start" VerticalOptions="EndAndExpand"
+                                       HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                                       Text="{Binding ReportTitle}"
+                                       TextColor="#303030"/>
+                            </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
+            <Button x:Name="newReportButton" Grid.Row="1"
+                    VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand"
+                    BackgroundColor="GhostWhite"
+                    Image="CircleAdd.png" Scale="0.4"
+                    Clicked="OnNewReportButtonClicked"/>
+            <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
+                               HorizontalOptions="Center" VerticalOptions="Center"
+                               Color="Color.Accent"
+                               x:Name="syncIndicator" IsVisible="False" IsRunning="False" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

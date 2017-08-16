@@ -1,32 +1,29 @@
-﻿using System;
+﻿using Apo_Chan.Views;
+using Prism.Unity;
+using System;
 
 using Xamarin.Forms;
 
 namespace Apo_Chan
 {
-	public class App : Application
-	{
+	public class App : PrismApplication
+    {
 		public App ()
 		{
             // The root page of your application
-            //MainPage = new TodoList();
-            MainPage = new Views.UserReportList();
+            //MainPage = new Views.UserReportList();
         }
 
-		protected override void OnStart ()
-		{
-			// Handle when your app starts
-		}
+		protected override void OnInitialized()
+        {
+            NavigationService.NavigateAsync("NavigationPage/UserReportList");
+        }
 
-		protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
-
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
-	}
+        protected override void RegisterTypes()
+        {
+            Container.RegisterTypeForNavigation<NavigationPage>();
+            Container.RegisterTypeForNavigation<UserReportList>();
+        }
+    }
 }
 

@@ -38,14 +38,6 @@ namespace Apo_Chan.Views
         private async void OnNextButtonClicked(object sender, EventArgs e)
         {
             await DisplayAlert("OnNextButtonClicked", "I'm doing nothing", "OK");
-            //viewModel.ReportItems.Add(new Report()
-            //{
-            //    Id = "123",
-            //    RefUserId = "asd",
-            //    ReportStartDate = new DateTime(2017, 8, 10),
-            //    ReportStartTime = new TimeSpan(18, 38, 30),
-            //    ReportTitle = "report 1"
-            //});
         }
 
         private async void OnReportListItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -57,6 +49,11 @@ namespace Apo_Chan.Views
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;
+        }
+
+        private void OnNewReportButtonClicked(object sender, EventArgs e)
+        {
+
         }
     }
 }
