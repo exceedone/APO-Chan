@@ -15,19 +15,21 @@ namespace Apo_Chan.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class UserReportList : ContentPage
     {
-        public UserReportListViewModel viewModel;
+        //public UserReportListViewModel viewModel;
 
         public UserReportList()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new UserReportListViewModel();
-            viewModel.SetItemsAsync();
+            //BindingContext = viewModel = new UserReportListViewModel();
+            //viewModel.SetItemsAsync();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            reportList.RefreshCommand.Execute(null);
         }
 
         private async void OnPreviousButtonClicked(object sender, EventArgs e)
@@ -49,11 +51,6 @@ namespace Apo_Chan.Views
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;
-        }
-
-        private void OnNewReportButtonClicked(object sender, EventArgs e)
-        {
-
         }
     }
 }

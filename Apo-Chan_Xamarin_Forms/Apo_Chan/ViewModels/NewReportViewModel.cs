@@ -10,7 +10,7 @@ namespace Apo_Chan.ViewModels
     {
         public NewReportViewModel()
         {
-
+            
         }
     }
 }

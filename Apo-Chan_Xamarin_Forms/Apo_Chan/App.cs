@@ -23,6 +23,7 @@ namespace Apo_Chan
         {
             Container.RegisterTypeForNavigation<NavigationPage>();
             Container.RegisterTypeForNavigation<UserReportList>();
+            Container.RegisterTypeForNavigation<NewReport>();
         }
     }
 }

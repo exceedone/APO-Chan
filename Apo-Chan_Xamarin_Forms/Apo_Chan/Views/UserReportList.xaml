@@ -13,8 +13,7 @@
                      Clicked="OnPreviousButtonClicked"/>
 
         <ToolbarItem Name="monthLabel" Order="Primary" Priority="1"
-                     BindingContext="{x:Static sys:DateTime.Now}"
-                     Text="{Binding StringFormat='{0:yyyy/MM}'}" />
+                     Text="{Binding CurrentDate, StringFormat='{0:yyyy/MM}'}" />
 
         <ToolbarItem Name="nextButton" Order="Primary" Priority="2"
                      Icon="TriangleRight.png"
@@ -33,6 +32,7 @@
                       BackgroundColor="GhostWhite"
                       ItemSelected="OnReportListItemSelected"
                       HasUnevenRows="True"
+                      RefreshCommand="{Binding RefreshCommand}"
                       ItemsSource="{Binding ReportItems}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -64,7 +64,7 @@
                     VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand"
                     BackgroundColor="GhostWhite"
                     Image="CircleAdd.png" Scale="0.4"
-                    Clicked="OnNewReportButtonClicked"/>
+                    Command="{Binding NavigateNewReportCommand}"/>
             <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
                                HorizontalOptions="Center" VerticalOptions="Center"
                                Color="Color.Accent"
