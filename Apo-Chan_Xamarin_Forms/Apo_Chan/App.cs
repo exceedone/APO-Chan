@@ -1,4 +1,8 @@
-﻿using Apo_Chan.Views;
+﻿/*
+ * 
+ */
+
+using Apo_Chan.Views;
 using Prism.Unity;
 using System;
 
@@ -24,6 +28,8 @@ namespace Apo_Chan
             Container.RegisterTypeForNavigation<NavigationPage>();
             Container.RegisterTypeForNavigation<UserReportList>();
             Container.RegisterTypeForNavigation<NewReport>();
+            Container.RegisterTypeForNavigation<DetailReport>();
+            Container.RegisterTypeForNavigation<DetailReport>();
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace Apo_Chan.ViewModels
 {
-    public class UserReportListViewModel : BindableBase
+    public class UserReportListViewModel : BindableBase, INavigationAware
     {
         private INavigationService navigationService;
         public DelegateCommand NavigateNewReportCommand { get; private set; }
@@ -48,6 +48,21 @@ namespace Apo_Chan.ViewModels
         private void NavigateNewReport()
         {
             navigationService.NavigateAsync("NewReport");
+        }
+
+        public void OnNavigatedFrom(NavigationParameters parameters)
+        {
+            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatedFrom UserReportList");
+        }
+
+        public void OnNavigatedTo(NavigationParameters parameters)
+        {
+            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatedTo UserReportList");
+        }
+
+        public void OnNavigatingTo(NavigationParameters parameters)
+        {
+            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatingTo UserReportList");
         }
     }
 }

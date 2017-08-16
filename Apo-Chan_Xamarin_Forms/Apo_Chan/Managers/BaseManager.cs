@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -10,6 +14,7 @@ using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 using Apo_Chan.Items;
 using Apo_Chan.Models;
+using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 
 namespace Apo_Chan.Managers
 {
@@ -35,7 +40,7 @@ namespace Apo_Chan.Managers
 
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore(offlineDbPath);
-            store.DefineTable<T>();
+            store.DefineTable<T1>();
 
             //Initializes the SyncContext using the default IMobileServiceSyncHandler.
             this.client.SyncContext.InitializeAsync(store);
