@@ -1,8 +1,4 @@
-﻿/*
- * 
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -13,7 +9,6 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 using Apo_Chan.Items;
-using Apo_Chan.Models;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 
 namespace Apo_Chan.Managers

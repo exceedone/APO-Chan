@@ -8,14 +8,19 @@ using System.Collections.ObjectModel;
 
 namespace Apo_Chan.ViewModels
 {
-    public class UserReportListViewModel : BindableBase, INavigationAware
+    public class UserReportListViewModel : BindableBase
     {
         private INavigationService navigationService;
-        public DelegateCommand NavigateNewReportCommand { get; private set; }
 
         public DateTime CurrentDate { get; set; }
 
+        public bool IsBusy { get; set; }
+
         public DelegateCommand RefreshCommand { get; private set; }
+
+        public DelegateCommand<ReportItem> ItemTappedCommand { get; private set; }
+
+        public DelegateCommand NavigateNewReportCommand { get; private set; }
 
         private ObservableCollection<ReportItem> reportItems;
         public ObservableCollection<ReportItem> ReportItems
@@ -38,11 +43,31 @@ namespace Apo_Chan.ViewModels
             CurrentDate = DateTime.Now;
             RefreshCommand = new DelegateCommand(SetItemsAsync);
             NavigateNewReportCommand = new DelegateCommand(NavigateNewReport);
+            IsBusy = false;
+            ItemTappedCommand = new DelegateCommand<ReportItem>(NavigateDetailReport);
         }
 
         public async void SetItemsAsync()
         {
-            this.ReportItems = await ReportManager.DefaultManager.GetItemsAsync();
+            IsBusy = true;
+            RaisePropertyChanged("IsBusy");
+
+            var allReports = await ReportManager.DefaultManager.GetItemsAsync();
+            if (allReports.Count > 0)
+            {
+                GlobalAttributes.refUserId = allReports[0].RefUserId;
+            }
+            ReportItems.Clear();
+            foreach (var item in allReports)
+            {
+                if (!item.Deleted)
+                {
+                    ReportItems.Add(item);
+                }
+            }
+
+            IsBusy = false;
+            RaisePropertyChanged("IsBusy");
         }
 
         private void NavigateNewReport()
@@ -50,19 +75,9 @@ namespace Apo_Chan.ViewModels
             navigationService.NavigateAsync("NewReport");
         }
 
-        public void OnNavigatedFrom(NavigationParameters parameters)
+        private void NavigateDetailReport(ReportItem item)
         {
-            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatedFrom UserReportList");
-        }
-
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
-            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatedTo UserReportList");
-        }
-
-        public void OnNavigatingTo(NavigationParameters parameters)
-        {
-            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatingTo UserReportList");
+            navigationService.NavigateAsync("DetailReport?Id=" + item.Id);
         }
     }
 }

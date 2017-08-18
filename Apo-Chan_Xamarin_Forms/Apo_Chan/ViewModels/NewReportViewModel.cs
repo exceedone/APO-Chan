@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Apo_Chan.ViewModels
 {
-    public class NewReportViewModel : BindableBase, INavigationAware
+    public class NewReportViewModel : BindableBase
     {
         private INavigationService navigationService;
         public DelegateCommand SubmitCommand { get; private set; }
@@ -33,10 +33,8 @@ namespace Apo_Chan.ViewModels
             this.navigationService = navigationService;
             Report = new ReportItem
             {
-#if TESTING_LOCAL_DATA
-                Id = Guid.NewGuid().ToString(),
-                RefUserId = Test.TestReportLocalStore.GetUserId(),
-#endif
+                Id = null,
+                RefUserId = GlobalAttributes.refUserId,
                 ReportStartDate = DateTime.UtcNow.ToLocalTime(),
                 ReportStartTime = DateTime.UtcNow.ToLocalTime().TimeOfDay,
                 ReportEndDate = DateTime.UtcNow.ToLocalTime(),
@@ -50,7 +48,16 @@ namespace Apo_Chan.ViewModels
         {
             if (isValidReport())
             {
-                ReportManager.DefaultManager.SaveTaskAsync(Report);
+                try
+                {
+                    await ReportManager.DefaultManager.SaveTaskAsync(Report);
+                }
+                catch (Exception e)
+                {
+
+                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] ", e.Message);
+                }
+                
                 await navigationService.GoBackAsync();
             }
         }
@@ -64,21 +71,6 @@ namespace Apo_Chan.ViewModels
             isValid &= Report.ReportComment != null;
 
             return isValid;
-        }
-
-        public void OnNavigatedFrom(NavigationParameters parameters)
-        {
-            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatedFrom NewReport");
-        }
-
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
-            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatedTo NewReport");
-        }
-
-        public void OnNavigatingTo(NavigationParameters parameters)
-        {
-            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatingTo NewReport");
         }
     }
 }

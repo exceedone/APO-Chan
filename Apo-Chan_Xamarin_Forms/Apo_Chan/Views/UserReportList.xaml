@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              NavigationPage.HasNavigationBar="True" NavigationPage.TitleIcon="CircleAdd.png"
              x:Class="Apo_Chan.Views.UserReportList">
     <ContentPage.ToolbarItems>
@@ -28,10 +29,14 @@
                       Grid.RowSpan="2"
                       SeparatorColor="Color.Accent"
                       BackgroundColor="GhostWhite"
-                      ItemSelected="OnReportListItemSelected"
                       HasUnevenRows="True"
                       RefreshCommand="{Binding RefreshCommand}"
                       ItemsSource="{Binding ReportItems}">
+                <ListView.Behaviors>
+                    <b:EventToCommandBehavior EventName="ItemTapped"
+                                      Command="{Binding ItemTappedCommand}"
+                                      EventArgsParameterPath="Item" />
+                </ListView.Behaviors>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -66,7 +71,7 @@
             <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
                                HorizontalOptions="Center" VerticalOptions="Center"
                                Color="Color.Accent"
-                               x:Name="syncIndicator" IsVisible="False" IsRunning="False" />
+                               x:Name="syncIndicator" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

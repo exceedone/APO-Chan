@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Apo_Chan.ViewModels
 {
-    public class DetailReportViewModel : BindableBase, INavigationAware
+    public class DetailReportViewModel : BindableBase, INavigatedAware
     {
         private INavigationService navigationService;
         public DelegateCommand UpdateCommand { get; private set; }
@@ -29,10 +29,9 @@ namespace Apo_Chan.ViewModels
         }
 
         //constructor
-        public DetailReportViewModel(INavigationService navigationService, ReportItem report)
+        public DetailReportViewModel(INavigationService navigationService)
         {
             this.navigationService = navigationService;
-            Report = report;
 
             UpdateCommand = new DelegateCommand(updateReport);
             DeleteCommand = new DelegateCommand(deleteReport);
@@ -42,22 +41,32 @@ namespace Apo_Chan.ViewModels
         {
             if (isValidReport())
             {
-#if TESTING_LOCAL_DATA
-                ReportManager.DefaultManager.UpdateItem(Report);
-#endif
+                try
+                {
+                    await ReportManager.DefaultManager.SaveTaskAsync(Report);
+                }
+                catch (Exception e)
+                {
+
+                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] ", e.Message);
+                }
                 await navigationService.GoBackAsync();
             }
         }
 
         private async void deleteReport()
         {
-            if (isValidReport())
+            Report.Deleted = true;
+            try
             {
-#if TESTING_LOCAL_DATA
-                ReportManager.DefaultManager.DeleteItem(Report);
-#endif
-                await navigationService.GoBackAsync();
+                await ReportManager.DefaultManager.SaveTaskAsync(Report);
             }
+            catch (Exception e)
+            {
+
+                System.Diagnostics.Debug.WriteLine("-------------------[Debug] ", e.Message);
+            }
+            await navigationService.GoBackAsync();
         }
 
         private bool isValidReport()
@@ -73,17 +82,15 @@ namespace Apo_Chan.ViewModels
 
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
-            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatedFrom DetailReport");
+            ;
         }
 
-        public void OnNavigatedTo(NavigationParameters parameters)
+        public async void OnNavigatedTo(NavigationParameters parameters)
         {
-            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatedTo DetailReport");
-        }
-
-        public void OnNavigatingTo(NavigationParameters parameters)
-        {
-            System.Diagnostics.Debug.WriteLine("------------------ OnNavigatingTo DetailReport");
+            if (parameters.ContainsKey("Id"))
+            {
+                Report = await ReportManager.DefaultManager.GetItem((string)parameters["Id"]);
+            }
         }
     }
 }

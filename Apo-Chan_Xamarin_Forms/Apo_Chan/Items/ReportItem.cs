@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Microsoft.WindowsAzure.MobileServices;
-using Apo_Chan.Models;
 
 namespace Apo_Chan.Items
 {

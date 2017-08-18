@@ -29,17 +29,5 @@ namespace Apo_Chan.Views
         {
             await DisplayAlert("OnNextButtonClicked", "Not implemented!", "OK");
         }
-
-        private async void OnReportListItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            if (e.SelectedItem == null)
-                return;
-
-            await DisplayAlert("Detail Report", "Not implemented!", "OK");
-            //await Navigation.PushAsync(new DetailReport(((ListView)sender).SelectedItem as ReportItem));
-
-            //Deselect Item
-            ((ListView)sender).SelectedItem = null;
-        }
     }
 }
