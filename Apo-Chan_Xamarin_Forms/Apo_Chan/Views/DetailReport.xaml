@@ -8,6 +8,7 @@
     <ContentPage.Content>
         <StackLayout Orientation="Vertical"
                      HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                     Padding="5,0,5,0"
                      BackgroundColor="GhostWhite">
             <StackLayout x:Name="startDateTimeLayout" Orientation="Horizontal"
                          HorizontalOptions="FillAndExpand"
@@ -55,12 +56,12 @@
                 <Button x:Name="updateButton"
                         VerticalOptions="Center" HorizontalOptions="Start"
                         BackgroundColor="GhostWhite"
-                        Image="update.png" Scale="0.8"
+                        Image="btnUpdate.png" Scale="0.8"
                         Command="{Binding UpdateCommand}"/>
                 <Button x:Name="deleteButton"
                         VerticalOptions="Center" HorizontalOptions="End"
                         BackgroundColor="GhostWhite"
-                        Image="delete.png" Scale="0.8"
+                        Image="btnDelete.png" Scale="0.8"
                         Command="{Binding DeleteCommand}"/>
             </StackLayout>
         </StackLayout>

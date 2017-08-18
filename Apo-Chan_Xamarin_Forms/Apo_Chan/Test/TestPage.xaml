@@ -1,36 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
-             prism:ViewModelLocator.AutowireViewModel="True"
-             NavigationPage.HasNavigationBar="True" NavigationPage.TitleIcon="CircleAdd.png"
-             x:Class="Apo_Chan.Views.UserReportList">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Name="previousButton" Order="Primary" Priority="0"
-                     Icon="btnPrevious.png"
-                     Clicked="OnPreviousButtonClicked"/>
-
-        <ToolbarItem Name="monthLabel" Order="Primary" Priority="1"
-                     Text="{Binding CurrentDate, StringFormat='{0:yyyy/MM}'}" />
-
-        <ToolbarItem Name="nextButton" Order="Primary" Priority="2"
-                     Icon="btnNext.png"
-                     Clicked="OnNextButtonClicked"/>
-    </ContentPage.ToolbarItems>
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             x:Class="Apo_Chan.Test.TestPage">
     <ContentPage.Content>
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
+            <AbsoluteLayout x:Name="slToolbar"  Grid.Row="0" BackgroundColor="#90A4AE">
+                <Button x:Name="previousButton" Clicked="OnPreviousButtonClicked"
+                        BackgroundColor="Transparent" Image="btnPrevious.png"
+                        AbsoluteLayout.LayoutFlags="PositionProportional">
+                    <AbsoluteLayout.LayoutBounds>
+                        <OnPlatform x:TypeArguments="Rectangle" iOS=".25, .1, 64, 64" Android=".25, .5, 50, 50" WinPhone=".25, .1, 64, 64" />
+                    </AbsoluteLayout.LayoutBounds>
+                </Button>
+                <Label x:Name="monthLabel"
+                       BindingContext="{x:Static sys:DateTime.Now}"
+                       Text="{Binding StringFormat='{0:yyyy/MM}'}" FontSize="Medium" BackgroundColor="Transparent"
+                       VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                       AbsoluteLayout.LayoutFlags="PositionProportional">
+                    <AbsoluteLayout.LayoutBounds>
+                        <OnPlatform x:TypeArguments="Rectangle" iOS=".5, .5, 96, 48" Android=".5, .5, 96, 48" WinPhone=".5, .5, 96, 48" />
+                    </AbsoluteLayout.LayoutBounds>
+                </Label>
+                <Button x:Name="nextButton" Clicked="OnNextButtonClicked"
+                        BackgroundColor="Transparent" Image="btnNext.png"
+                        AbsoluteLayout.LayoutFlags="PositionProportional">
+                    <AbsoluteLayout.LayoutBounds>
+                        <OnPlatform x:TypeArguments="Rectangle" iOS=".75, .25, 64, 64" Android=".75, .5, 50, 50" WinPhone=".75, .25, 64, 64" />
+                    </AbsoluteLayout.LayoutBounds>
+                </Button>
+                <Frame CornerRadius="5" BackgroundColor="#607D8B"
+                       Padding="0,0,0,0"
+                       AbsoluteLayout.LayoutFlags="All">
+                    <AbsoluteLayout.LayoutBounds>
+                        <OnPlatform x:TypeArguments="Rectangle" iOS="0, 1, 1, .1" Android="0, 1, 1, .1" WinPhone="0, 1, 1, .1" />
+                    </AbsoluteLayout.LayoutBounds>
+                </Frame>
+            </AbsoluteLayout>
+            
             <ListView x:Name="reportList"
-                      Grid.RowSpan="2"
+                      Grid.Row="1"
                       SeparatorColor="Color.Accent"
                       BackgroundColor="GhostWhite"
-                      ItemSelected="OnReportListItemSelected"
                       HasUnevenRows="True"
-                      RefreshCommand="{Binding RefreshCommand}"
                       ItemsSource="{Binding ReportItems}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -58,15 +75,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button x:Name="newReportButton" Grid.Row="1"
-                    VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand"
-                    BackgroundColor="GhostWhite"
-                    Image="btnAdd.png"
-                    Command="{Binding NavigateNewReportCommand}"/>
-            <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
-                               HorizontalOptions="Center" VerticalOptions="Center"
-                               Color="Color.Accent"
-                               x:Name="syncIndicator" IsVisible="False" IsRunning="False" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -42,7 +42,9 @@ namespace Apo_Chan.ViewModels
         {
             if (isValidReport())
             {
+#if TESTING_LOCAL_DATA
                 ReportManager.DefaultManager.UpdateItem(Report);
+#endif
                 await navigationService.GoBackAsync();
             }
         }
@@ -51,7 +53,9 @@ namespace Apo_Chan.ViewModels
         {
             if (isValidReport())
             {
+#if TESTING_LOCAL_DATA
                 ReportManager.DefaultManager.DeleteItem(Report);
+#endif
                 await navigationService.GoBackAsync();
             }
         }

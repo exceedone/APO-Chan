@@ -8,6 +8,7 @@
     <ContentPage.Content>
         <StackLayout Orientation="Vertical"
                      HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                     Padding="5,0,5,0"
                      BackgroundColor="GhostWhite">
             <StackLayout x:Name="startDateTimeLayout" Orientation="Horizontal"
                          HorizontalOptions="FillAndExpand"
@@ -55,7 +56,7 @@
                 <Button x:Name="submitButton"
                         VerticalOptions="Center" HorizontalOptions="Center"
                         BackgroundColor="GhostWhite"
-                        Image="submit.png" Scale="0.8"
+                        Image="btnSubmit.png" Scale="0.8"
                         Command="{Binding SubmitCommand}"/>
             </StackLayout>
         </StackLayout>

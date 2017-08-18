@@ -33,8 +33,10 @@ namespace Apo_Chan.ViewModels
             this.navigationService = navigationService;
             Report = new ReportItem
             {
+#if TESTING_LOCAL_DATA
                 Id = Guid.NewGuid().ToString(),
-                RefUserId = TestReportLocalStore.GetUserId(),
+                RefUserId = Test.TestReportLocalStore.GetUserId(),
+#endif
                 ReportStartDate = DateTime.UtcNow.ToLocalTime(),
                 ReportStartTime = DateTime.UtcNow.ToLocalTime().TimeOfDay,
                 ReportEndDate = DateTime.UtcNow.ToLocalTime(),

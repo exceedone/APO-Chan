@@ -1,25 +1,20 @@
-﻿/*
- * 
- */
-
+﻿using Prism.Unity;
 using Apo_Chan.Views;
-using Prism.Unity;
-using System;
-
 using Xamarin.Forms;
 
 namespace Apo_Chan
 {
-	public class App : PrismApplication
+    public partial class App : PrismApplication
     {
-		public App ()
-		{
-            // The root page of your application
-            //MainPage = new Views.UserReportList();
+        public App(IPlatformInitializer initializer = null) : base(initializer)
+        {
+            //MainPage = new Test.TestPage();
         }
 
-		protected override void OnInitialized()
+        protected override void OnInitialized()
         {
+            InitializeComponent();
+
             NavigationService.NavigateAsync("NavigationPage/UserReportList");
         }
 
@@ -29,8 +24,6 @@ namespace Apo_Chan
             Container.RegisterTypeForNavigation<UserReportList>();
             Container.RegisterTypeForNavigation<NewReport>();
             Container.RegisterTypeForNavigation<DetailReport>();
-            Container.RegisterTypeForNavigation<DetailReport>();
         }
     }
 }
-

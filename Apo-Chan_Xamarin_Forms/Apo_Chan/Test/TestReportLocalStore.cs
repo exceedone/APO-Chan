@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Apo_Chan.Managers
+namespace Apo_Chan.Test
 {
     public static class TestReportLocalStore
     {
@@ -58,20 +58,6 @@ namespace Apo_Chan.Managers
                     RefUserId = userId,
                     ReportStartDate = new DateTime(2017,8,16), ReportStartTime = new TimeSpan(14,00,0),
                     ReportTitle = "Push GitHub"
-                },
-                new ReportItem()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    RefUserId = userId,
-                    ReportStartDate = new DateTime(2017,8,19), ReportStartTime = new TimeSpan(16,30,0),
-                    ReportTitle = "Discuss next features"
-                },
-                new ReportItem()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    RefUserId = userId,
-                    ReportStartDate = new DateTime(2017,8,21), ReportStartTime = new TimeSpan(11,30,0),
-                    ReportTitle = "Tracking project progress"
                 },
             };
         }

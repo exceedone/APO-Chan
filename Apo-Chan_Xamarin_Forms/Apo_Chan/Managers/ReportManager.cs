@@ -39,7 +39,7 @@ namespace Apo_Chan.Managers
         public override async Task<ObservableCollection<ReportItem>> GetItemsAsync(bool syncItems = false)
         {
 #if TESTING_LOCAL_DATA
-            var reportStore = TestReportLocalStore.GetItems();
+            var reportStore = Test.TestReportLocalStore.GetItems();
            
             return reportStore;
 #else
@@ -73,17 +73,17 @@ namespace Apo_Chan.Managers
 #if TESTING_LOCAL_DATA
         public new void SaveTaskAsync(ReportItem item)
         {
-            TestReportLocalStore.InsertItem(item);
+            Test.TestReportLocalStore.InsertItem(item);
         }
 
         public void UpdateItem(ReportItem item)
         {
-            TestReportLocalStore.UpdateItem(item);
+            Test.TestReportLocalStore.UpdateItem(item);
         }
 
         public void DeleteItem(ReportItem item)
         {
-            TestReportLocalStore.DeleteItem(item);
+            Test.TestReportLocalStore.DeleteItem(item);
         }
 #endif
     }
