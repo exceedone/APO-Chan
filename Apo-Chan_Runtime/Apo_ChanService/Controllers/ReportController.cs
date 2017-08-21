@@ -69,10 +69,11 @@ namespace Apo_ChanService.Controllers
             return UpdateAsync(id, patch);
         }
 
-        //// DELETE tables/report/48D68C86-6EA6-4C25-AA33-223FC9A27959
-        //public Task DeleteReportItem(string id)
-        //{
-        //    return DeleteAsync(id);
-        //}
+        // DELETE tables/report/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        [HttpDelete]
+        public Task DeleteReportItem(string id)
+        {
+            return DeleteAsync(id);
+        }
     }
 }
