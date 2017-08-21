@@ -38,11 +38,6 @@ namespace Apo_Chan.Managers
         }
         public override async Task<ObservableCollection<ReportItem>> GetItemsAsync(bool syncItems = false)
         {
-#if TESTING_LOCAL_DATA
-            var reportStore = Test.TestReportLocalStore.GetItems();
-           
-            return reportStore;
-#else
             // get from Azure Mobile Apps
             try
             {
@@ -60,36 +55,13 @@ namespace Apo_Chan.Managers
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(@"Invalid sync operation: {0}", msioe.Message);
+                Debug.WriteLine(@"-------------------[Debug] Invalid sync operation: " + msioe.Message);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"Sync error: {0}", e.Message);
+                Debug.WriteLine(@"-------------------[Debug] Sync error: " + e.Message);
             }
             return null;
-#endif
         }
-
-#if TESTING_LOCAL_DATA
-        public new void SaveTaskAsync(ReportItem item)
-        {
-            Test.TestReportLocalStore.InsertItem(item);
-        }
-
-        public void UpdateItem(ReportItem item)
-        {
-            Test.TestReportLocalStore.UpdateItem(item);
-        }
-
-        public void DeleteItem(ReportItem item)
-        {
-            Test.TestReportLocalStore.DeleteItem(item);
-        }
-
-        public ReportItem GetItem(string id)
-        {
-            return Test.TestReportLocalStore.GetItem(id);
-        }
-#endif
     }
 }

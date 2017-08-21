@@ -67,7 +67,7 @@ namespace Apo_Chan.ViewModels
 
         private async void deleteReport()
         {
-            var accepted = await dialogService.DisplayAlertAsync("Confirmation", "Do you want to update the report?", "Confirm", "Cancel");
+            var accepted = await dialogService.DisplayAlertAsync("Confirmation", "Do you want to delete the report?", "Confirm", "Cancel");
             if (accepted)
             {
                 try

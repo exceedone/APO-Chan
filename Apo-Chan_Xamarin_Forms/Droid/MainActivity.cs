@@ -15,7 +15,7 @@ using Xamarin.Forms.Platform.Android;
 
 namespace Apo_Chan.Droid
 {
-	[Activity (Label = "Apo_Chan.Droid",
+	[Activity (Label = "Apo-Chan",
 		Icon = "@drawable/icon",
 		MainLauncher = true,
 		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
