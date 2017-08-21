@@ -3,6 +3,7 @@ using Apo_Chan.Managers;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,11 @@ namespace Apo_Chan.ViewModels
     public class DetailReportViewModel : BindableBase, INavigatedAware
     {
         private INavigationService navigationService;
+
+        private IPageDialogService dialogService;
+
         public DelegateCommand UpdateCommand { get; private set; }
+
         public DelegateCommand DeleteCommand { get; private set; }
 
         private ReportItem report;
@@ -29,9 +34,10 @@ namespace Apo_Chan.ViewModels
         }
 
         //constructor
-        public DetailReportViewModel(INavigationService navigationService)
+        public DetailReportViewModel(INavigationService navigationService, IPageDialogService dialogService)
         {
             this.navigationService = navigationService;
+            this.dialogService = dialogService;
 
             UpdateCommand = new DelegateCommand(updateReport);
             DeleteCommand = new DelegateCommand(deleteReport);
@@ -41,32 +47,40 @@ namespace Apo_Chan.ViewModels
         {
             if (isValidReport())
             {
-                try
+                var accepted = await dialogService.DisplayAlertAsync("Confirmation", "Do you want to update the report?", "Confirm", "Cancel");
+                if (accepted)
                 {
-                    await ReportManager.DefaultManager.SaveTaskAsync(Report);
-                }
-                catch (Exception e)
-                {
+                    try
+                    {
+                        await ReportManager.DefaultManager.SaveTaskAsync(Report);
+                    }
+                    catch (Exception e)
+                    {
 
-                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] ", e.Message);
+                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                    }
+
+                    await navigationService.GoBackAsync();
                 }
-                await navigationService.GoBackAsync();
             }
         }
 
         private async void deleteReport()
         {
-            Report.Deleted = true;
-            try
+            var accepted = await dialogService.DisplayAlertAsync("Confirmation", "Do you want to update the report?", "Confirm", "Cancel");
+            if (accepted)
             {
-                await ReportManager.DefaultManager.SaveTaskAsync(Report);
-            }
-            catch (Exception e)
-            {
+                try
+                {
+                    await ReportManager.DefaultManager.DeleteAsync(Report);
+                }
+                catch (Exception e)
+                {
 
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] ", e.Message);
+                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                }
+                await navigationService.GoBackAsync();
             }
-            await navigationService.GoBackAsync();
         }
 
         private bool isValidReport()
@@ -89,7 +103,15 @@ namespace Apo_Chan.ViewModels
         {
             if (parameters.ContainsKey("Id"))
             {
-                Report = await ReportManager.DefaultManager.GetItem((string)parameters["Id"]);
+                try
+                {
+                    Report = await ReportManager.DefaultManager.LookupAsync((string)parameters["Id"]);
+                }
+                catch (Exception e)
+                {
+
+                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                }
             }
         }
     }

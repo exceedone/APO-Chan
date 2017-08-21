@@ -90,21 +90,6 @@ namespace Apo_Chan.Managers
         {
             return Test.TestReportLocalStore.GetItem(id);
         }
-#else
-        public async Task<ReportItem> GetItem(string id)
-        {
-            IEnumerable<ReportItem> items = await this.dataTable.ToEnumerableAsync();
-            foreach (var report in items)
-            {
-                if (report.Id.CompareTo(id) == 0)
-                {
-                    return report;
-                }
-            }
-
-            //no report found
-            return null;
-        }
 #endif
     }
 }

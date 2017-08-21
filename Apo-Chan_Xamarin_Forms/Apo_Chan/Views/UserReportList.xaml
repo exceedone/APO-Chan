@@ -4,7 +4,7 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
-             NavigationPage.HasNavigationBar="True" NavigationPage.TitleIcon="CircleAdd.png"
+             NavigationPage.HasNavigationBar="True"
              x:Class="Apo_Chan.Views.UserReportList">
     <ContentPage.ToolbarItems>
         <ToolbarItem Name="previousButton" Order="Primary" Priority="0"

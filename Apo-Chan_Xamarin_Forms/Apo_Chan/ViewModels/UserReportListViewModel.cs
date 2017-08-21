@@ -52,7 +52,17 @@ namespace Apo_Chan.ViewModels
             IsBusy = true;
             RaisePropertyChanged("IsBusy");
 
-            var allReports = await ReportManager.DefaultManager.GetItemsAsync();
+            ObservableCollection<ReportItem> allReports = new ObservableCollection<ReportItem>();
+            try
+            {
+                allReports = await ReportManager.DefaultManager.GetItemsAsync();
+            }
+            catch (Exception e)
+            {
+
+                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+            }
+
             if (allReports.Count > 0)
             {
                 GlobalAttributes.refUserId = allReports[0].RefUserId;
