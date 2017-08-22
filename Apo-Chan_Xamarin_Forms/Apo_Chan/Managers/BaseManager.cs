@@ -89,6 +89,16 @@ namespace Apo_Chan.Managers
             }
         }
 
+        public async Task DeleteAsync(T1 item)
+        {
+            await dataTable.DeleteAsync(item);
+        }
+
+        public async Task<T1> LookupAsync(string id)
+        {
+            return await dataTable.LookupAsync(id);
+        }
+
 #if OFFLINE_SYNC_ENABLED
         public async Task SyncAsync()
         {

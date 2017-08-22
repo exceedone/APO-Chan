@@ -12,7 +12,7 @@
 
             <AbsoluteLayout x:Name="slToolbar"  Grid.Row="0" BackgroundColor="#B0BEC5">
                 <Button x:Name="previousButton" Clicked="OnPreviousButtonClicked"
-                        BackgroundColor="Transparent" Image="btnPrevious.png" Scale="0.6"
+                        BackgroundColor="Transparent" Image="button_previous.png" Scale="0.6"
                         AbsoluteLayout.LayoutFlags="PositionProportional">
                     <AbsoluteLayout.LayoutBounds>
                         <OnPlatform x:TypeArguments="Rectangle" iOS=".25, .1, 50, 50" Android=".3, .1, 50, 50" WinPhone=".25, .1, 50, 50" />
@@ -28,7 +28,7 @@
                     </AbsoluteLayout.LayoutBounds>
                 </Label>
                 <Button x:Name="nextButton" Clicked="OnNextButtonClicked"
-                        BackgroundColor="Transparent" Image="btnNext.png" Scale="0.6"
+                        BackgroundColor="Transparent" Image="button_next.png" Scale="0.6"
                         AbsoluteLayout.LayoutFlags="PositionProportional">
                     <AbsoluteLayout.LayoutBounds>
                         <OnPlatform x:TypeArguments="Rectangle" iOS=".75, .25, 50, 50" Android=".7, .1, 50, 50" WinPhone=".75, .25, 50, 50" />

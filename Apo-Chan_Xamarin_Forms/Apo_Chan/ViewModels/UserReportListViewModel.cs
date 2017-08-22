@@ -5,6 +5,7 @@ using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Collections.ObjectModel;
+using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
 {
@@ -15,6 +16,7 @@ namespace Apo_Chan.ViewModels
         public DateTime CurrentDate { get; set; }
 
         public bool IsBusy { get; set; }
+        //public FileImageSource AddButtonImage { get; set; }
 
         public DelegateCommand RefreshCommand { get; private set; }
 
@@ -43,8 +45,10 @@ namespace Apo_Chan.ViewModels
             CurrentDate = DateTime.Now;
             RefreshCommand = new DelegateCommand(SetItemsAsync);
             NavigateNewReportCommand = new DelegateCommand(NavigateNewReport);
-            IsBusy = false;
             ItemTappedCommand = new DelegateCommand<ReportItem>(NavigateDetailReport);
+
+            IsBusy = false;
+            //AddButtonImage = (FileImageSource)ImageSource.FromFile("button_add_A.png");
         }
 
         public async void SetItemsAsync()
@@ -52,17 +56,30 @@ namespace Apo_Chan.ViewModels
             IsBusy = true;
             RaisePropertyChanged("IsBusy");
 
-            var allReports = await ReportManager.DefaultManager.GetItemsAsync();
-            if (allReports.Count > 0)
+            ObservableCollection<ReportItem> allReports = null;
+            try
             {
-                GlobalAttributes.refUserId = allReports[0].RefUserId;
+                allReports = await ReportManager.DefaultManager.GetItemsAsync();
             }
-            ReportItems.Clear();
-            foreach (var item in allReports)
+            catch (Exception e)
             {
-                if (!item.Deleted)
+
+                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+            }
+
+            if (allReports != null)
+            {
+                if (allReports.Count > 0)
                 {
-                    ReportItems.Add(item);
+                    GlobalAttributes.refUserId = allReports[0].RefUserId;
+                }
+                ReportItems.Clear();
+                foreach (var item in allReports)
+                {
+                    if (!item.Deleted)
+                    {
+                        ReportItems.Add(item);
+                    }
                 }
             }
 
@@ -70,9 +87,15 @@ namespace Apo_Chan.ViewModels
             RaisePropertyChanged("IsBusy");
         }
 
-        private void NavigateNewReport()
+        private async void NavigateNewReport()
         {
-            navigationService.NavigateAsync("NewReport");
+            //AddButtonImage = (FileImageSource)ImageSource.FromFile("button_add_B.png");
+            //RaisePropertyChanged("AddButtonImage");
+
+            await navigationService.NavigateAsync("NewReport");
+
+            //AddButtonImage = (FileImageSource)ImageSource.FromFile("button_add_A.png");
+            //RaisePropertyChanged("AddButtonImage");
         }
 
         private void NavigateDetailReport(ReportItem item)

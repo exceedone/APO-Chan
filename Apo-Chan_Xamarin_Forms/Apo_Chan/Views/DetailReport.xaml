@@ -54,14 +54,14 @@
                          HorizontalOptions="FillAndExpand" VerticalOptions="End"
                          Padding="0,0,0,0">
                 <Button x:Name="updateButton"
-                        VerticalOptions="Center" HorizontalOptions="Start"
+                        VerticalOptions="Center" HorizontalOptions="StartAndExpand"
                         BackgroundColor="GhostWhite"
-                        Image="btnUpdate.png" Scale="0.8"
+                        Image="button_update_A.png" Scale="0.8"
                         Command="{Binding UpdateCommand}"/>
                 <Button x:Name="deleteButton"
-                        VerticalOptions="Center" HorizontalOptions="End"
+                        VerticalOptions="Center" HorizontalOptions="EndAndExpand"
                         BackgroundColor="GhostWhite"
-                        Image="btnDelete.png" Scale="0.8"
+                        Image="button_delete_A.png" Scale="0.8"
                         Command="{Binding DeleteCommand}"/>
             </StackLayout>
         </StackLayout>

@@ -4,18 +4,18 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
-             NavigationPage.HasNavigationBar="True" NavigationPage.TitleIcon="CircleAdd.png"
+             NavigationPage.HasNavigationBar="True"
              x:Class="Apo_Chan.Views.UserReportList">
     <ContentPage.ToolbarItems>
         <ToolbarItem Name="previousButton" Order="Primary" Priority="0"
-                     Icon="btnPrevious.png"
+                     Icon="button_previous.png"
                      Clicked="OnPreviousButtonClicked"/>
 
         <ToolbarItem Name="monthLabel" Order="Primary" Priority="1"
                      Text="{Binding CurrentDate, StringFormat='{0:yyyy/MM}'}" />
 
         <ToolbarItem Name="nextButton" Order="Primary" Priority="2"
-                     Icon="btnNext.png"
+                     Icon="button_next.png"
                      Clicked="OnNextButtonClicked"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
@@ -63,10 +63,10 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button x:Name="newReportButton" Grid.Row="1"
+            <Button x:Name="addButton" Grid.Row="1"
                     VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand"
-                    BackgroundColor="GhostWhite"
-                    Image="btnAdd.png"
+                    BackgroundColor="Transparent" Scale="0.8"
+                    Image="button_add_A.png"
                     Command="{Binding NavigateNewReportCommand}"/>
             <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
                                HorizontalOptions="Center" VerticalOptions="Center"

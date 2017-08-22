@@ -20,7 +20,7 @@ namespace Apo_Chan.Test
 			InitializeComponent ();
 
             BindingContext = this;
-            ReportItems = Test.TestReportLocalStore.GetItems();
+            ReportItems = TestReportLocalStore.GetItems();
             reportList.ItemsSource = ReportItems;
         }
 
