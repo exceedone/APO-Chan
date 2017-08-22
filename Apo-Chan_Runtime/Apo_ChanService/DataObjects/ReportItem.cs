@@ -30,14 +30,14 @@ namespace Apo_ChanService.DataObjects
         public string ReportComment { get; set; }
 
         [Column(TypeName = "Date")]
-        [JsonConverter(typeof(CustomAttributes.DateFormatConverter), "yyyy-MM-dd")]
+        //[JsonConverter(typeof(CustomAttributes.DateFormatConverter), "yyyy-MM-dd")]
         public DateTime? ReportStartDate { get; set; }
 
         [Column(TypeName = "Time")]
         public TimeSpan? ReportStartTime { get; set; }
 
         [Column(TypeName = "Date")]
-        [JsonConverter(typeof(CustomAttributes.DateFormatConverter))]//YYYYMMDD必要？
+        //[JsonConverter(typeof(CustomAttributes.DateFormatConverter))]//YYYYMMDD必要？
         public DateTime? ReportEndDate { get; set; }
 
         [Column(TypeName = "Time")]

@@ -27,7 +27,7 @@ namespace Apo_ChanService.Models
 
         public class DateFormatConverter : Newtonsoft.Json.Converters.IsoDateTimeConverter
         {
-            public DateFormatConverter(string format)
+            public DateFormatConverter(string format = null)
             {
                 if (string.IsNullOrWhiteSpace(format))
                 {
