@@ -56,7 +56,6 @@ namespace Apo_Chan.ViewModels
                     }
                     catch (Exception e)
                     {
-
                         System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                     }
 
@@ -76,7 +75,6 @@ namespace Apo_Chan.ViewModels
                 }
                 catch (Exception e)
                 {
-
                     System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                 }
                 await navigationService.GoBackAsync();
