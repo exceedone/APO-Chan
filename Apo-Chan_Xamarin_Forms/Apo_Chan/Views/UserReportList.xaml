@@ -65,9 +65,9 @@
             </ListView>
             <Button x:Name="addButton" Grid.Row="1"
                     VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand"
-                    BackgroundColor="Transparent" Scale="0.8"
-                    Image="button_add_A.png"
-                    Command="{Binding NavigateNewReportCommand}"/>
+                    BackgroundColor="GhostWhite" Scale="0.8"
+                    Image="{Binding AddButtonImage}"
+                    Command="{Binding AddNewReportCommand}"/>
             <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
                                HorizontalOptions="Center" VerticalOptions="Center"
                                Color="Color.Accent"

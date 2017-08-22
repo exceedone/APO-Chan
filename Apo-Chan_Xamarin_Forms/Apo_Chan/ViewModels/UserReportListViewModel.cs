@@ -13,17 +13,6 @@ namespace Apo_Chan.ViewModels
     {
         private INavigationService navigationService;
 
-        public DateTime CurrentDate { get; set; }
-
-        public bool IsBusy { get; set; }
-        //public FileImageSource AddButtonImage { get; set; }
-
-        public DelegateCommand RefreshCommand { get; private set; }
-
-        public DelegateCommand<ReportItem> ItemTappedCommand { get; private set; }
-
-        public DelegateCommand NavigateNewReportCommand { get; private set; }
-
         private ObservableCollection<ReportItem> reportItems;
         public ObservableCollection<ReportItem> ReportItems
         {
@@ -37,24 +26,54 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+        public DateTime CurrentDate { get; set; }
+
+        private bool isBusy = false;
+        public bool IsBusy
+        {
+            get
+            {
+                return isBusy;
+            }
+            set
+            {
+                SetProperty(ref this.isBusy, value);
+            }
+        }
+
+        private FileImageSource addButtonImage = (FileImageSource)ImageSource.FromFile("button_add_A.png");
+        public FileImageSource AddButtonImage
+        {
+            get
+            {
+                return addButtonImage;
+            }
+            set
+            {
+                SetProperty(ref this.addButtonImage, value);
+            }
+        }
+
+        public DelegateCommand RefreshCommand { get; private set; }
+
+        public DelegateCommand AddNewReportCommand { get; private set; }
+
+        public DelegateCommand<ReportItem> ItemTappedCommand { get; private set; }
+
         //constructor
         public UserReportListViewModel(INavigationService navigationService)
         {
             this.navigationService = navigationService;
             ReportItems = new ObservableCollection<ReportItem>();
             CurrentDate = DateTime.Now;
-            RefreshCommand = new DelegateCommand(SetItemsAsync);
-            NavigateNewReportCommand = new DelegateCommand(NavigateNewReport);
+            RefreshCommand = new DelegateCommand(SetItemsAsync).ObservesProperty(() => IsBusy);
+            AddNewReportCommand = new DelegateCommand(NavigateNewReport).ObservesProperty(() => AddButtonImage); ;
             ItemTappedCommand = new DelegateCommand<ReportItem>(NavigateDetailReport);
-
-            IsBusy = false;
-            //AddButtonImage = (FileImageSource)ImageSource.FromFile("button_add_A.png");
         }
 
         public async void SetItemsAsync()
         {
             IsBusy = true;
-            RaisePropertyChanged("IsBusy");
 
             ObservableCollection<ReportItem> allReports = null;
             try
@@ -84,18 +103,15 @@ namespace Apo_Chan.ViewModels
             }
 
             IsBusy = false;
-            RaisePropertyChanged("IsBusy");
         }
 
         private async void NavigateNewReport()
         {
-            //AddButtonImage = (FileImageSource)ImageSource.FromFile("button_add_B.png");
-            //RaisePropertyChanged("AddButtonImage");
+            AddButtonImage = (FileImageSource)ImageSource.FromFile("button_add_B.png");
 
             await navigationService.NavigateAsync("NewReport");
 
-            //AddButtonImage = (FileImageSource)ImageSource.FromFile("button_add_A.png");
-            //RaisePropertyChanged("AddButtonImage");
+            AddButtonImage = (FileImageSource)ImageSource.FromFile("button_add_A.png");
         }
 
         private void NavigateDetailReport(ReportItem item)
