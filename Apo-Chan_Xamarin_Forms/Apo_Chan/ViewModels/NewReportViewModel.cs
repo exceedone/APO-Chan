@@ -10,14 +10,8 @@ using System.Linq;
 
 namespace Apo_Chan.ViewModels
 {
-    public class NewReportViewModel : BindableBase
+    public class NewReportViewModel : BaseViewModel
     {
-        private INavigationService navigationService;
-
-        private IPageDialogService dialogService;
-
-        public DelegateCommand SubmitCommand { get; private set; }
-
         private ReportItem report;
         public ReportItem Report
         {
@@ -31,12 +25,12 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+        public DelegateCommand SubmitCommand { get; private set; }
+
         //constructor
         public NewReportViewModel(INavigationService navigationService, IPageDialogService dialogService)
+            : base(navigationService, dialogService)
         {
-            this.navigationService = navigationService;
-            this.dialogService = dialogService;
-
             Report = new ReportItem
             {
                 Id = null,

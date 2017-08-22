@@ -8,14 +8,14 @@ namespace Apo_Chan
     {
         public App(IPlatformInitializer initializer = null) : base(initializer)
         {
-            //MainPage = new Test.TestPage();
+            MainPage = new Test.TestPage();
         }
 
         protected override void OnInitialized()
         {
             InitializeComponent();
 
-            NavigationService.NavigateAsync("NavigationPage/UserReportList");
+            //NavigationService.NavigateAsync("NavigationPage/UserReportList");
         }
 
         protected override void RegisterTypes()
@@ -24,6 +24,12 @@ namespace Apo_Chan
             Container.RegisterTypeForNavigation<UserReportList>();
             Container.RegisterTypeForNavigation<NewReport>();
             Container.RegisterTypeForNavigation<DetailReport>();
+        }
+
+        private void ExecuteGoBack(object sender, System.EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("-------------------[Debug] ExecuteGoBack 2");
+            //NavigationService.GoBackAsync();
         }
     }
 }

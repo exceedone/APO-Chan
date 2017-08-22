@@ -66,7 +66,7 @@
             <Button x:Name="addButton" Grid.Row="1"
                     VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand"
                     BackgroundColor="GhostWhite" Scale="0.8"
-                    Image="{Binding AddButtonImage}"
+                    Image="button_add_A.png"
                     Command="{Binding AddNewReportCommand}"/>
             <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
                                HorizontalOptions="Center" VerticalOptions="Center"

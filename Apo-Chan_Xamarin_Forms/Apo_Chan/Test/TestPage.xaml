@@ -2,79 +2,39 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             ControlTemplate="{StaticResource MainPageTemplate}"
              x:Class="Apo_Chan.Test.TestPage">
     <ContentPage.Content>
-        <Grid RowSpacing="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <AbsoluteLayout x:Name="slToolbar"  Grid.Row="0" BackgroundColor="#B0BEC5">
-                <Button x:Name="previousButton" Clicked="OnPreviousButtonClicked"
-                        BackgroundColor="Transparent" Image="button_previous.png" Scale="0.6"
-                        AbsoluteLayout.LayoutFlags="PositionProportional">
-                    <AbsoluteLayout.LayoutBounds>
-                        <OnPlatform x:TypeArguments="Rectangle" iOS=".25, .1, 50, 50" Android=".3, .1, 50, 50" WinPhone=".25, .1, 50, 50" />
-                    </AbsoluteLayout.LayoutBounds>
-                </Button>
-                <Label x:Name="monthLabel"
-                       BindingContext="{x:Static sys:DateTime.Now}"
-                       Text="{Binding StringFormat='{0:yyyy/MM}'}" FontSize="Medium" BackgroundColor="Transparent"
-                       VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
-                       AbsoluteLayout.LayoutFlags="PositionProportional">
-                    <AbsoluteLayout.LayoutBounds>
-                        <OnPlatform x:TypeArguments="Rectangle" iOS=".5, .5, 96, 48" Android=".5, .1, 100, 50" WinPhone=".5, .5, 96, 48" />
-                    </AbsoluteLayout.LayoutBounds>
-                </Label>
-                <Button x:Name="nextButton" Clicked="OnNextButtonClicked"
-                        BackgroundColor="Transparent" Image="button_next.png" Scale="0.6"
-                        AbsoluteLayout.LayoutFlags="PositionProportional">
-                    <AbsoluteLayout.LayoutBounds>
-                        <OnPlatform x:TypeArguments="Rectangle" iOS=".75, .25, 50, 50" Android=".7, .1, 50, 50" WinPhone=".75, .25, 50, 50" />
-                    </AbsoluteLayout.LayoutBounds>
-                </Button>
-                <Frame BackgroundColor="#90A4AE"
-                       Padding="0,0,0,0" HasShadow="True"
-                       AbsoluteLayout.LayoutFlags="All">
-                    <AbsoluteLayout.LayoutBounds>
-                        <OnPlatform x:TypeArguments="Rectangle" iOS="0, 1, 1, .1" Android="0, 1, 1, .1" WinPhone="0, 1, 1, .1" />
-                    </AbsoluteLayout.LayoutBounds>
-                </Frame>
-            </AbsoluteLayout>
-            
-            <ListView x:Name="reportList"
-                      Grid.Row="1"
-                      SeparatorColor="Color.Accent"
-                      BackgroundColor="GhostWhite"
-                      HasUnevenRows="True"
-                      ItemsSource="{Binding ReportItems}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Vertical"
-                                         HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                                         Padding="10,20,0,0">
-                                <StackLayout Orientation="Horizontal"
-                                             HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
-                                    <Label HorizontalOptions="Start" VerticalOptions="StartAndExpand"
-                                           HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
-                                           FontAttributes="Bold" TextColor="#212121"
-                                           Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"/>
-                                    <Label HorizontalOptions="Center" VerticalOptions="StartAndExpand"
-                                           HorizontalTextAlignment="Center" VerticalTextAlignment="Start"
-                                           FontAttributes="Bold" TextColor="#212121"
-                                           Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"/>
-                                </StackLayout>
-                                <Label HorizontalOptions="Start" VerticalOptions="EndAndExpand"
-                                       HorizontalTextAlignment="Start" VerticalTextAlignment="End"
-                                       Text="{Binding ReportTitle}"
-                                       TextColor="#303030"/>
+        <ListView x:Name="reportList"
+                    SeparatorColor="Color.Accent"
+                    BackgroundColor="GhostWhite"
+                    HasUnevenRows="True"
+                    ItemsSource="{Binding ReportItems}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Vertical"
+                                        HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                                        Padding="10,20,0,0">
+                            <StackLayout Orientation="Horizontal"
+                                            HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                                <Label HorizontalOptions="Start" VerticalOptions="StartAndExpand"
+                                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
+                                        FontAttributes="Bold" TextColor="#212121"
+                                        Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"/>
+                                <Label HorizontalOptions="Center" VerticalOptions="StartAndExpand"
+                                        HorizontalTextAlignment="Center" VerticalTextAlignment="Start"
+                                        FontAttributes="Bold" TextColor="#212121"
+                                        Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"/>
                             </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Grid>
+                            <Label HorizontalOptions="Start" VerticalOptions="EndAndExpand"
+                                    HorizontalTextAlignment="Start" VerticalTextAlignment="End"
+                                    Text="{Binding ReportTitle}"
+                                    TextColor="#303030"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </ContentPage.Content>
 </ContentPage>

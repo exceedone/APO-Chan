@@ -133,5 +133,8 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\button_delete_A.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\button_back.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
 </Project>
