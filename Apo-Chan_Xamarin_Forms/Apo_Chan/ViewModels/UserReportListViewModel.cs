@@ -71,7 +71,7 @@ namespace Apo_Chan.ViewModels
             {
                 if (allReports.Count > 0)
                 {
-                    GlobalAttributes.refUserId = allReports[0].RefUserId;
+                    //GlobalAttributes.refUserId = allReports[0].RefUserId;
                 }
                 ReportItems.Clear();
                 foreach (var item in allReports)

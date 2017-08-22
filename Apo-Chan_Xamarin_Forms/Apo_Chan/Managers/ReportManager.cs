@@ -36,7 +36,7 @@ namespace Apo_Chan.Managers
                 defaultInstance = value;
             }
         }
-        public override async Task<ObservableCollection<ReportItem>> GetItemsAsync(bool syncItems = false)
+        public async Task<ObservableCollection<ReportItem>> GetItemsAsync(bool syncItems = false)
         {
             // get from Azure Mobile Apps
             try
@@ -47,8 +47,10 @@ namespace Apo_Chan.Managers
                     await this.SyncAsync();
                 }
 #endif
-
+                // Get UserItem
+                UserItem user = UserItem.GetCachedUserItem();
                 IEnumerable<ReportItem> items = await this.dataTable
+                    .Where(x => x.RefUserId == user.Id)
                     .ToEnumerableAsync();
 
                 return new ObservableCollection<ReportItem>(items);

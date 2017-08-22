@@ -75,8 +75,6 @@ namespace Apo_Chan.Managers
                 return typeof(T1).Name;
             }
         }
-        public abstract Task<ObservableCollection<T1>> GetItemsAsync(bool syncItems = false);
-
         public async Task SaveTaskAsync(T1 item)
         {
             if (item.Id == null)

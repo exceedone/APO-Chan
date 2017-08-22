@@ -8,6 +8,12 @@ namespace Apo_Chan
 {
     public static class GlobalAttributes
     {
-        public static string refUserId = string.Empty;
+        public static string refUserId
+        {
+            get
+            {
+                return Apo_Chan.Items.UserItem.GetCachedUserItem().Id;
+            }
+        }
     }
 }
