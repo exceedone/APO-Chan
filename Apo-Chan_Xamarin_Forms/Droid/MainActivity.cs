@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Json;
 
 using Android.App;
 using Android.Content;
@@ -10,55 +13,67 @@ using Android.Widget;
 using Android.OS;
 
 using Microsoft.WindowsAzure.MobileServices;
-
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Auth;
 
 using Apo_Chan.Managers;
 using Apo_Chan.Items;
+using Apo_Chan.Models;
 
 namespace Apo_Chan.Droid
 {
-	[Activity (Label = "Apo-Chan",
-		Icon = "@drawable/icon",
-		MainLauncher = true,
-		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
-		Theme = "@android:style/Theme.Holo.Light")]
-	public class MainActivity : FormsApplicationActivity, IAuthenticate
+    [Activity(Label = "Apo-Chan",
+        Icon = "@drawable/icon",
+        MainLauncher = true,
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        Theme = "@android:style/Theme.Holo.Light")]
+    public class MainActivity : FormsApplicationActivity, IAuthenticate
     {
         // Define a authenticated user.
-        private MobileServiceUser user;
+        private MobileServiceUser loginuser;
 
-        protected override void OnCreate (Bundle bundle)
-		{
-			base.OnCreate (bundle);
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
 
-			// Initialize Azure Mobile Apps
-			CurrentPlatform.Init();
+            // Initialize Azure Mobile Apps
+            CurrentPlatform.Init();
 
-			// Initialize Xamarin Forms
-			Forms.Init (this, bundle);
+            // Initialize Xamarin Forms
+            Forms.Init(this, bundle);
 
             // Initialize the authenticator before loading the app.
             App.Init((IAuthenticate)this);
 
             // Load the main application
-            LoadApplication (new App ());
-		}
-        
+            LoadApplication(new App());
+        }
+
         public async Task<bool> AuthenticateAsync(Constants.EProviderType providerType)
         {
             var success = false;
             try
             {
-                // Sign in with Facebook login using a server-managed flow.
-                user = await UsersManager.DefaultManager.CurrentClient.LoginAsync(this,
-                    MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, "apochan-scheme");
-                if (user != null)
+                // Sign in with AAD login using a server-managed flow.
+                loginuser = await UsersManager.DefaultManager.CurrentClient.LoginAsync(this, providerType.MobileServiceAuthenticationProvider(), "apochan-scheme");
+                if (loginuser != null)
                 {
+                    UserItem user = new UserItem()
+                    {
+                        AMSToken = loginuser.MobileServiceAuthenticationToken
+                        ,
+                        ProviderType = providerType.GetHashCode()
+                    };
+
+                    // get provider user profile.
+                    BaseAuthProvider providerObj = BaseAuthProvider.GetAuthProvider(providerType);
+                    string json = await providerObj.GetProfileJson(loginuser.MobileServiceAuthenticationToken);
+                    providerObj.SetUserProfile(user, json);
+
                     success = true;
-                    await UsersManager.CacheUserToken(user.UserId, user.MobileServiceAuthenticationToken, providerType);
+                    await UsersManager.CacheUserToken(user);
                 }
             }
             catch (Exception ex)
@@ -72,6 +87,12 @@ namespace Apo_Chan.Droid
             }
 
             return success;
+        }
+
+        public async Task SignOutAsync()
+        {
+            await UsersManager.DefaultManager.CurrentClient.LogoutAsync();
+
         }
     }
 }

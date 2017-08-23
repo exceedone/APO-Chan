@@ -4,7 +4,8 @@ using Newtonsoft.Json;
 using Microsoft.WindowsAzure.MobileServices;
 using System.Runtime.Serialization;
 using Xamarin.Auth;
-using Apo_Chan.Managers;
+using Xamarin.Forms;
+using Apo_Chan.Models;
 
 namespace Apo_Chan.Items
 {
@@ -12,7 +13,7 @@ namespace Apo_Chan.Items
     public class UserItem : BaseItem
     {
         [JsonProperty(PropertyName = "providerType")]
-        public Constants.EProviderType? ProviderType { get; set; }
+        public int ProviderType { get; set; }
 
         [JsonProperty(PropertyName = "userProviderId")]
         public string UserProviderId { get; set; }
@@ -23,14 +24,23 @@ namespace Apo_Chan.Items
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
 
-        [JsonProperty(PropertyName = "deletedAt")]
-        public DateTime DeletedAt { get; set; }
+        /// <summary>
+        /// Provider Service Token(Not Coneect Mobile App)
+        /// </summary>
+        //[JsonProperty(PropertyName = "AccessToken")]
+        public string AccessToken { get; set; }
 
         /// <summary>
-        /// Token(Not Coneect Mobile App)
+        /// Provider Service Token(Not Coneect Mobile App)
         /// </summary>
-        [JsonProperty(PropertyName = "token")]
-        public string Token { get; set; }
+        //[JsonProperty(PropertyName = "RefreshToken")]
+        public string RefreshToken { get; set; }
+
+        /// <summary>
+        /// Azure Mobile Service Token(Not Coneect Mobile App)
+        /// </summary>
+        //[JsonProperty(PropertyName = "AMSToken")]
+        public string AMSToken { get; set; }
 
         /// <summary>
         /// 
@@ -38,15 +48,13 @@ namespace Apo_Chan.Items
         /// <returns>If Non-Cached -- null else UserItem object.</returns>
         public static UserItem GetCachedUserItem()
         {
-            var account = AccountStore.Create().FindAccountsForService(Constants.ApplicationName).FirstOrDefault();
-            if (account == null)
-            {
-                return null;
-            }
-
-            var json = account.Properties["UserInfo"].ToString();
-            UserItem user = JsonConvert.DeserializeObject<UserItem>(json);
             
+            var json = Application.Current.Properties.GetOrDefault("UserInfo") as string;
+            UserItem user = JsonConvert.DeserializeObject<UserItem>(json);
+            user.AccessToken = Convert.ToString(Application.Current.Properties.GetOrDefault("AccessToken"));
+            user.RefreshToken = Convert.ToString(Application.Current.Properties.GetOrDefault("RefreshToken"));
+            user.AMSToken = Convert.ToString(Application.Current.Properties.GetOrDefault("AMSToken"));
+
             return user;
         }
     }

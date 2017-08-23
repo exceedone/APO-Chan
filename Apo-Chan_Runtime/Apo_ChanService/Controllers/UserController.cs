@@ -23,24 +23,25 @@ namespace Apo_ChanService.Controllers
         public IQueryable<UserItem> GetAllUserItems()
         {
             UserItem item = this.getObjByQuery<UserItem>();
-            var q = Query();
-            //TODO:Now Only Filter Id, ProviderType and UserProviderId.
-            if (item != null)
-            {
-                if (!string.IsNullOrWhiteSpace(item.Id))
-                {
-                    q = q.Where(x => item.Id == x.Id);
-                }
-                if (item.ProviderType.HasValue)
-                {
-                    q = q.Where(x => item.ProviderType == x.ProviderType);
-                }
-                if (!string.IsNullOrWhiteSpace(item.UserProviderId))
-                {
-                    q = q.Where(x => item.UserProviderId == x.UserProviderId);
-                }
-            }
-            return q;
+            //var q = Query();
+            ////TODO:Now Only Filter Id, ProviderType and UserProviderId.
+            //if (item != null)
+            //{
+            //    if (!string.IsNullOrWhiteSpace(item.Id))
+            //    {
+            //        q = q.Where(x => item.Id == x.Id);
+            //    }
+            //    if (item.ProviderType.HasValue)
+            //    {
+            //        q = q.Where(x => item.ProviderType == x.ProviderType);
+            //    }
+            //    if (!string.IsNullOrWhiteSpace(item.UserProviderId))
+            //    {
+            //        q = q.Where(x => item.UserProviderId == x.UserProviderId);
+            //    }
+            //}
+            //return q;
+            return Query();
         }
 
         // GET tables/user/48D68C86-6EA6-4C25-AA33-223FC9A27959
@@ -54,8 +55,13 @@ namespace Apo_ChanService.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> PostUserItem(UserItem item)
         {
+            try { 
             UserItem current = await InsertAsync(item);
             return CreatedAtRoute("Tables", new { id = current.Id }, current);
+            }catch(System.Exception ex)
+            {
+                throw;
+            }
         }
 
         // PATCH tables/user/48D68C86-6EA6-4C25-AA33-223FC9A27959

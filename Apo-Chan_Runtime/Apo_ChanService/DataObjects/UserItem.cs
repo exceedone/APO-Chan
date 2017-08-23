@@ -20,7 +20,9 @@ namespace Apo_ChanService.DataObjects
         //public int UserId { get; set; }
 
         [Required]
-        public Define.EProviderType? ProviderType { get; set; }
+        //public Define.EProviderType? ProviderType { get; set; }
+
+        public int? ProviderType { get; set; }
 
         [Index(IsUnique = true)]
         [Required]

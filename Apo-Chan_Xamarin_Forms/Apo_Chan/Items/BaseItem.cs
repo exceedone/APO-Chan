@@ -14,7 +14,7 @@ namespace Apo_Chan.Items
         public string Id { get; set; }
 
         [Version]
-        public string Version { get; set; }
+        public byte[] Version { get; set; }
 
         [CreatedAt]
         public DateTimeOffset CreatedAt { get; set; }
@@ -23,6 +23,10 @@ namespace Apo_Chan.Items
         public DateTimeOffset UpdatedAt { get; set; }
 
         [Deleted]
-        public Boolean Deleted { get; set; }
+        public bool Deleted { get; set; }
+
+        [JsonProperty(PropertyName = "deletedAt")]
+        public DateTimeOffset? DeletedAt { get; set; }
+
     }
 }

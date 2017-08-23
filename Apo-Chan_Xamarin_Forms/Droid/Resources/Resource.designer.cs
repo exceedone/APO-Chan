@@ -34,6 +34,9 @@ namespace Apo_Chan.Droid
 			global::Xamarin.Auth._MobileServices.Resource.String.ApplicationName = global::Apo_Chan.Droid.Resource.String.ApplicationName;
 			global::Xamarin.Auth._MobileServices.Resource.String.Hello = global::Apo_Chan.Droid.Resource.String.Hello;
 			global::Xamarin.Auth._MobileServices.Resource.String.title_activity_webview = global::Apo_Chan.Droid.Resource.String.title_activity_webview;
+			global::Microsoft.IdentityModel.Clients.ActiveDirectory.Resource.Id.agentWebView = global::Apo_Chan.Droid.Resource.Id.agentWebView;
+			global::Microsoft.IdentityModel.Clients.ActiveDirectory.Resource.Layout.WebAuthenticationBroker = global::Apo_Chan.Droid.Resource.Layout.WebAuthenticationBroker;
+			global::Microsoft.IdentityModel.Clients.ActiveDirectory.Resource.String.ApplicationName = global::Apo_Chan.Droid.Resource.String.ApplicationName;
 			global::PCLCrypto.Resource.String.ApplicationName = global::Apo_Chan.Droid.Resource.String.ApplicationName;
 			global::PCLCrypto.Resource.String.Hello = global::Apo_Chan.Droid.Resource.String.Hello;
 			global::Xamarin.Auth.Resource.Animation.slide_in_right = global::Apo_Chan.Droid.Resource.Animation.slide_in_right;
@@ -2321,6 +2324,9 @@ namespace Apo_Chan.Droid
 			// aapt resource value: 0x7f07003d
 			public const int activity_chooser_view_content = 2131165245;
 			
+			// aapt resource value: 0x7f070099
+			public const int agentWebView = 2131165337;
+			
 			// aapt resource value: 0x7f070049
 			public const int alertTitle = 2131165257;
 			
@@ -2974,6 +2980,9 @@ namespace Apo_Chan.Droid
 			
 			// aapt resource value: 0x7f030037
 			public const int support_simple_spinner_dropdown_item = 2130903095;
+			
+			// aapt resource value: 0x7f030038
+			public const int WebAuthenticationBroker = 2130903096;
 			
 			static Layout()
 			{

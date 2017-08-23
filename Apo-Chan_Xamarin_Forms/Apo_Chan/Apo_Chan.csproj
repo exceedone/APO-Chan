@@ -33,6 +33,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Mobile.Client" Version="4.0.1" />
     <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="4.0.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="3.16.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Prism.Core" Version="6.3.0" />
     <PackageReference Include="Prism.Forms" Version="6.3.0" />
     <PackageReference Include="Prism.Unity.Forms" Version="6.3.0" />
