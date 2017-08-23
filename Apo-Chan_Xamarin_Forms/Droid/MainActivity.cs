@@ -56,8 +56,8 @@ namespace Apo_Chan.Droid
             var success = false;
             try
             {
-                // Sign in with AAD login using a server-managed flow.
-                loginuser = await UsersManager.DefaultManager.CurrentClient.LoginAsync(this, providerType.MobileServiceAuthenticationProvider(), "apochan-scheme");
+                // Sign in using a server-managed flow.
+                loginuser = await App.CurrentClient.LoginAsync(this, providerType.MobileServiceAuthenticationProvider(), "apochan-scheme");
                 if (loginuser != null)
                 {
                     UserItem user = new UserItem()
@@ -91,7 +91,7 @@ namespace Apo_Chan.Droid
 
         public async Task SignOutAsync()
         {
-            await UsersManager.DefaultManager.CurrentClient.LogoutAsync();
+            await App.CurrentClient.LogoutAsync();
 
         }
     }

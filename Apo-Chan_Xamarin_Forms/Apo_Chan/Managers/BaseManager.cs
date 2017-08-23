@@ -19,8 +19,7 @@ namespace Apo_Chan.Managers
     public abstract partial class BaseManager<T1> where T1 : BaseItem
     {
         protected static BaseManager<T1> defaultInstance;
-        MobileServiceClient client;
-
+        
 #if OFFLINE_SYNC_ENABLED
         protected IMobileServiceSyncTable<T1> dataTable;
 #else
@@ -31,7 +30,6 @@ namespace Apo_Chan.Managers
 
         public BaseManager()
         {
-            this.client = new MobileServiceClient(Constants.ApplicationURL);
 
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore(offlineDbPath);
@@ -42,7 +40,7 @@ namespace Apo_Chan.Managers
 
             this.dataTable = client.GetSyncTable<T1>();
 #else
-            this.dataTable = client.GetTable<T1>();
+            this.dataTable =  App.CurrentClient.GetTable<T1>();
 #endif
         }
 
@@ -57,11 +55,6 @@ namespace Apo_Chan.Managers
         //        defaultInstance = value;
         //    }
         //}
-
-        public MobileServiceClient CurrentClient
-        {
-            get { return client; }
-        }
 
         public bool IsOfflineEnabled
         {

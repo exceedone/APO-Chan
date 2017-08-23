@@ -9,6 +9,7 @@ using Apo_ChanService.Models;
 
 namespace Apo_ChanService.Controllers
 {
+    [Authorize]
     public class UserController : BaseController<UserItem>
     {
         protected override void Initialize(HttpControllerContext controllerContext)
@@ -22,25 +23,6 @@ namespace Apo_ChanService.Controllers
         [HttpGet]
         public IQueryable<UserItem> GetAllUserItems()
         {
-            UserItem item = this.getObjByQuery<UserItem>();
-            //var q = Query();
-            ////TODO:Now Only Filter Id, ProviderType and UserProviderId.
-            //if (item != null)
-            //{
-            //    if (!string.IsNullOrWhiteSpace(item.Id))
-            //    {
-            //        q = q.Where(x => item.Id == x.Id);
-            //    }
-            //    if (item.ProviderType.HasValue)
-            //    {
-            //        q = q.Where(x => item.ProviderType == x.ProviderType);
-            //    }
-            //    if (!string.IsNullOrWhiteSpace(item.UserProviderId))
-            //    {
-            //        q = q.Where(x => item.UserProviderId == x.UserProviderId);
-            //    }
-            //}
-            //return q;
             return Query();
         }
 
