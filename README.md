@@ -1,5 +1,5 @@
 # APO-Chan
-This OSS project(Open-source software) is mainly SFA feauture.  
+This OSS project(Open-source software) is mainly SFA(Sales Force Automation) feauture.  
 It uses Xamarin, it corresponds to iPhone, Andoroid nad UWP.  
 This system uses Azure Mobile Apps.  
 Project Manager is Seiji Noro(Exceedone Co., Ltd).  
