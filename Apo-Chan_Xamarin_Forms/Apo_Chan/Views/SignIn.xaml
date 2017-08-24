@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Apo_Chan.Views.SignIn">
+    <ContentPage.Content>
+        <StackLayout>
+            <Button x:Name="loginOffice365" Text="Sign-in Office365" MinimumHeightRequest="30" Command="{Binding NavigateSignInCommand}"/>
+            <Button x:Name="loginGoogle" Text="Sign-in Google" MinimumHeightRequest="30" Command="{Binding NavigateSignInGoogleCommand}"/>
+            <Button x:Name="logout" Text="Sign-Out" MinimumHeightRequest="30" Command="{Binding NavigateSignOutCommand}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
