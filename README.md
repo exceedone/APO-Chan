@@ -1,5 +1,5 @@
 # APO-Chan
-This system is mainly SFA feauture.  
+This OSS project(Open-source software) is mainly SFA feauture.  
 It uses Xamarin, it corresponds to iPhone, Andoroid nad UWP.  
 This system uses Azure Mobile App Service.  
 Project Manager is Seiji Noro(Exceedone Co., Ltd).  
