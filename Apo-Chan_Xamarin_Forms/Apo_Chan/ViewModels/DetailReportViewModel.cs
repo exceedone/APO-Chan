@@ -10,16 +10,8 @@ using System.Linq;
 
 namespace Apo_Chan.ViewModels
 {
-    public class DetailReportViewModel : BindableBase, INavigatedAware
+    public class DetailReportViewModel : BaseViewModel, INavigatedAware
     {
-        private INavigationService navigationService;
-
-        private IPageDialogService dialogService;
-
-        public DelegateCommand UpdateCommand { get; private set; }
-
-        public DelegateCommand DeleteCommand { get; private set; }
-
         private ReportItem report;
         public ReportItem Report
         {
@@ -33,12 +25,14 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+        public DelegateCommand UpdateCommand { get; private set; }
+
+        public DelegateCommand DeleteCommand { get; private set; }
+
         //constructor
         public DetailReportViewModel(INavigationService navigationService, IPageDialogService dialogService)
+            : base(navigationService, dialogService)
         {
-            this.navigationService = navigationService;
-            this.dialogService = dialogService;
-
             UpdateCommand = new DelegateCommand(updateReport);
             DeleteCommand = new DelegateCommand(deleteReport);
         }
@@ -56,7 +50,6 @@ namespace Apo_Chan.ViewModels
                     }
                     catch (Exception e)
                     {
-
                         System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                     }
 
@@ -76,7 +69,6 @@ namespace Apo_Chan.ViewModels
                 }
                 catch (Exception e)
                 {
-
                     System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                 }
                 await navigationService.GoBackAsync();

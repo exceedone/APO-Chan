@@ -59,6 +59,34 @@ namespace Apo_Chan.Test
                     ReportStartDate = new DateTime(2017,8,16), ReportStartTime = new TimeSpan(14,00,0),
                     ReportTitle = "Push GitHub"
                 },
+                new ReportItem()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    RefUserId = userId,
+                    ReportStartDate = new DateTime(2017,8,22), ReportStartTime = new TimeSpan(14,00,0),
+                    ReportTitle = "Test report #7"
+                },
+                new ReportItem()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    RefUserId = userId,
+                    ReportStartDate = new DateTime(2017,8,22), ReportStartTime = new TimeSpan(14,00,0),
+                    ReportTitle = "Test report #8"
+                },
+                new ReportItem()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    RefUserId = userId,
+                    ReportStartDate = new DateTime(2017,8,22), ReportStartTime = new TimeSpan(14,00,0),
+                    ReportTitle = "Test report #9"
+                },
+                new ReportItem()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    RefUserId = userId,
+                    ReportStartDate = new DateTime(2017,8,22), ReportStartTime = new TimeSpan(14,00,0),
+                    ReportTitle = "Test report #10"
+                },
             };
         }
 

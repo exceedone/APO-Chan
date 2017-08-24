@@ -3,17 +3,15 @@ using Apo_Chan.Managers;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Apo_Chan.ViewModels
 {
-    public class NewReportViewModel : BindableBase
+    public class NewReportViewModel : BaseViewModel
     {
-        private INavigationService navigationService;
-        public DelegateCommand SubmitCommand { get; private set; }
-
         private ReportItem report;
         public ReportItem Report
         {
@@ -27,10 +25,12 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+        public DelegateCommand SubmitCommand { get; private set; }
+
         //constructor
-        public NewReportViewModel(INavigationService navigationService)
+        public NewReportViewModel(INavigationService navigationService, IPageDialogService dialogService)
+            : base(navigationService, dialogService)
         {
-            this.navigationService = navigationService;
             Report = new ReportItem
             {
                 Id = null,
@@ -48,17 +48,20 @@ namespace Apo_Chan.ViewModels
         {
             if (isValidReport())
             {
-                try
+                var accepted = await dialogService.DisplayAlertAsync("Confirmation", "Do you want to submit this report?", "Confirm", "Cancel");
+                if (accepted)
                 {
-                    await ReportManager.DefaultManager.SaveTaskAsync(Report);
-                }
-                catch (Exception e)
-                {
+                    try
+                    {
+                        await ReportManager.DefaultManager.SaveTaskAsync(Report);
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                    }
 
-                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                    await navigationService.GoBackAsync();
                 }
-                
-                await navigationService.GoBackAsync();
             }
         }
 
