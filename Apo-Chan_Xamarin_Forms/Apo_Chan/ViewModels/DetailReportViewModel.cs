@@ -12,6 +12,7 @@ namespace Apo_Chan.ViewModels
 {
     public class DetailReportViewModel : BaseViewModel, INavigatedAware
     {
+        #region Variable and Property
         private ReportItem report;
         public ReportItem Report
         {
@@ -28,15 +29,18 @@ namespace Apo_Chan.ViewModels
         public DelegateCommand UpdateCommand { get; private set; }
 
         public DelegateCommand DeleteCommand { get; private set; }
+        #endregion
 
-        //constructor
+        #region Constructor
         public DetailReportViewModel(INavigationService navigationService, IPageDialogService dialogService)
             : base(navigationService, dialogService)
         {
             UpdateCommand = new DelegateCommand(updateReport);
             DeleteCommand = new DelegateCommand(deleteReport);
         }
+        #endregion
 
+        #region Function
         private async void updateReport()
         {
             if (isValidReport())
@@ -106,5 +110,6 @@ namespace Apo_Chan.ViewModels
                 }
             }
         }
+        #endregion
     }
 }

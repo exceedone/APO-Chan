@@ -92,6 +92,7 @@ namespace Apo_Chan.Droid
         public async Task SignOutAsync()
         {
             await App.CurrentClient.LogoutAsync();
+            await App.CurrentClient.RefreshUserAsync();
 
         }
     }

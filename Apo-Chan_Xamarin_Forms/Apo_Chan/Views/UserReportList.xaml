@@ -9,14 +9,14 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Name="previousButton" Order="Primary" Priority="0"
                      Icon="button_previous.png"
-                     Clicked="OnPreviousButtonClicked"/>
+                     Command="{Binding PrevMonthReportCommand}"/>
 
         <ToolbarItem Name="monthLabel" Order="Primary" Priority="1"
                      Text="{Binding CurrentDate, StringFormat='{0:yyyy/MM}'}" />
 
         <ToolbarItem Name="nextButton" Order="Primary" Priority="2"
                      Icon="button_next.png"
-                     Clicked="OnNextButtonClicked"/>
+                     Command="{Binding NextMonthReportCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid RowSpacing="0">

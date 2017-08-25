@@ -11,14 +11,16 @@ namespace Apo_Chan.ViewModels
 {
     public class SignInViewModel : BindableBase
     {
+        #region Variable and Property
         private bool authenticated;
         private INavigationService navigationService;
 
         public DelegateCommand NavigateSignInCommand { get; private set; }
         public DelegateCommand NavigateSignInGoogleCommand { get; private set; }
         public DelegateCommand NavigateSignOutCommand { get; private set; }
+        #endregion
 
-        //constructor
+        #region Constructor
         public SignInViewModel(INavigationService navigationService)
         {
             this.authenticated = false;
@@ -26,9 +28,10 @@ namespace Apo_Chan.ViewModels
             NavigateSignInCommand = new DelegateCommand(NavigateSignIn);
             NavigateSignInGoogleCommand = new DelegateCommand(NavigateSignInGoogle);
             NavigateSignOutCommand = new DelegateCommand(NavigateSignOut);
-
         }
+        #endregion
 
+        #region Function
         private async void NavigateSignIn()
         {
             if (App.Authenticator != null)
@@ -63,8 +66,7 @@ namespace Apo_Chan.ViewModels
             //    await navigationService.NavigateAsync("SignIn");
             //}
         }
-
-
+        #endregion
 
     }
 }

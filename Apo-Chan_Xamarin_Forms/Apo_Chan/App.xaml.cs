@@ -22,7 +22,6 @@ namespace Apo_Chan
         {
             client = new MobileServiceClient(Constants.ApplicationURL);
             //MainPage = new Test.TestPage();
-            MainPage = new Test.TestPage();
         }
 
         public static MobileServiceClient CurrentClient

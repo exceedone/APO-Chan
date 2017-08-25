@@ -36,7 +36,7 @@ namespace Apo_Chan.Managers
                 defaultInstance = value;
             }
         }
-        public async Task<ObservableCollection<ReportItem>> GetItemsAsync(bool syncItems = false)
+        public async Task<ObservableCollection<ReportItem>> GetItemsAsync(int year, int month, bool syncItems = false)
         {
             // get from Azure Mobile Apps
             try
@@ -50,8 +50,11 @@ namespace Apo_Chan.Managers
                 // Get UserItem
                 UserItem user = UserItem.GetCachedUserItem();
                 IEnumerable<ReportItem> items = await this.dataTable
-                    .Where(x => x.RefUserId == user.Id)
-                    .ToEnumerableAsync();
+                    .Where(x => 
+                        x.RefUserId == user.Id 
+                        && !x.Deleted 
+                        && (x.ReportStartDate.Year == year && x.ReportStartDate.Month == month) || (x.ReportEndDate.Year == year && x.ReportEndDate.Month == month)
+                    ).ToEnumerableAsync();
 
                 return new ObservableCollection<ReportItem>(items);
             }

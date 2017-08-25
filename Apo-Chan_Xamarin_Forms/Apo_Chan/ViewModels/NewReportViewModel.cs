@@ -12,6 +12,7 @@ namespace Apo_Chan.ViewModels
 {
     public class NewReportViewModel : BaseViewModel
     {
+        #region Variable and Property
         private ReportItem report;
         public ReportItem Report
         {
@@ -26,8 +27,9 @@ namespace Apo_Chan.ViewModels
         }
 
         public DelegateCommand SubmitCommand { get; private set; }
+        #endregion
 
-        //constructor
+        #region Constructor
         public NewReportViewModel(INavigationService navigationService, IPageDialogService dialogService)
             : base(navigationService, dialogService)
         {
@@ -43,7 +45,9 @@ namespace Apo_Chan.ViewModels
 
             SubmitCommand = new DelegateCommand(submitReport);
         }
+        #endregion
 
+        #region Function
         private async void submitReport()
         {
             if (isValidReport())
@@ -75,5 +79,6 @@ namespace Apo_Chan.ViewModels
 
             return isValid;
         }
+        #endregion
     }
 }
