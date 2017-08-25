@@ -10,7 +10,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;NETSTANDARD1_4;</DefineConstants>
+    <DefineConstants>DEBUG;NETSTANDARD1_4;TEST_LOCAL;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>

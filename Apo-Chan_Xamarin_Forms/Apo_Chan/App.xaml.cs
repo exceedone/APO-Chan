@@ -33,8 +33,11 @@ namespace Apo_Chan
         {
             InitializeComponent();
 
+#if TEST_LOCAL
+            NavigationService.NavigateAsync("NavigationPage/UserReportList");
+#else
             NavigationService.NavigateAsync("NavigationPage/SignIn");
-            //NavigationService.NavigateAsync("NavigationPage/UserReportList");
+#endif
         }
 
         protected override void RegisterTypes()
@@ -49,12 +52,6 @@ namespace Apo_Chan
         public static void Init(IAuthenticate authenticator)
         {
             Authenticator = authenticator;
-        }
-
-        private void ExecuteGoBack(object sender, System.EventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("-------------------[Debug] ExecuteGoBack 2");
-            //NavigationService.GoBackAsync();
         }
     }
 }

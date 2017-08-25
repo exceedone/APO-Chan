@@ -10,45 +10,28 @@
                 <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                       ColumnSpacing="0" RowSpacing="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-
-                    <!-- Begin Header -->
-                    <AbsoluteLayout x:Name="mainToolbar"  Grid.Row="0" BackgroundColor="#90CAF9">
-                        <Image Source="button_back.png" WidthRequest="50" HeightRequest="50"
-                               IsVisible="{TemplateBinding BindingContext.HasBackButton}"
-                               AbsoluteLayout.LayoutFlags="PositionProportional">
-                            <AbsoluteLayout.LayoutBounds>
-                                <OnPlatform x:TypeArguments="Rectangle"
-                                            iOS="0, .1, 50, 50"
-                                            Android="0, .1, 50, 50"
-                                            WinPhone="0, .1, 50, 50" />
-                            </AbsoluteLayout.LayoutBounds>
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer Command="{TemplateBinding BindingContext.GoBackCommand}" />
-                            </Image.GestureRecognizers>
-                        </Image>
-                        <Frame BackgroundColor="#64B5F6"           
-                               Padding="0,0,0,0" HasShadow="True"
-                               AbsoluteLayout.LayoutFlags="All">
-                            <AbsoluteLayout.LayoutBounds>
-                                <OnPlatform x:TypeArguments="Rectangle"
-                                            iOS="0, 1, 1, .1"
-                                            Android="0, 1, 1, .1"
-                                            WinPhone="0, 1, 1, .1" />
-                            </AbsoluteLayout.LayoutBounds>
-                        </Frame>
-                    </AbsoluteLayout>
-                    <!-- End Header -->
-
-                    <!-- Begin Content -->
-                    <ScrollView Grid.Column="0" Grid.Row="1">
+                    <ContentView Grid.Row="0">
                         <ContentPresenter VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
-                    </ScrollView>
-                    <!-- End Content -->
+                    </ContentView>
+                    <ActivityIndicator Grid.Row="0"
+                                       HorizontalOptions="Center" VerticalOptions="Center"
+                                       Color="Color.Accent"
+                                       x:Name="syncIndicator"
+                                       IsVisible="{TemplateBinding BindingContext.IsBusy}"
+                                       IsRunning="{TemplateBinding BindingContext.IsBusy}" >
+                    </ActivityIndicator>
                 </Grid>
             </ControlTemplate>
+
+            <Color x:Key="BarColor">#2196F3</Color>
+            <Color x:Key="BarOutlineColor">#3E2723</Color>
+            <Color x:Key="AccentColor">#82B1FF</Color>
+            <Color x:Key="BackColor">#FAFAFA</Color>
+            <Color x:Key="TextColor">#212121</Color>
+            <Color x:Key="SubTextColor">#424242</Color>
+
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>

@@ -3,67 +3,101 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
-             Title="Detail Report"
+             NavigationPage.HasNavigationBar="False"
              x:Class="Apo_Chan.Views.DetailReport">
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical"
-                     HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                     Padding="5,0,5,0"
-                     BackgroundColor="GhostWhite">
-            <StackLayout x:Name="startDateTimeLayout" Orientation="Horizontal"
-                         HorizontalOptions="FillAndExpand"
-                         Spacing="40"
-                         Padding="0,10,0,5">
-                <DatePicker Date="{Binding Report.ReportStartDate}"
-                            WidthRequest="140"
-                            HorizontalOptions="Start"/>
-                <TimePicker Time="{Binding Report.ReportStartTime}"
-                            WidthRequest="100"
-                            HorizontalOptions="End"/>
-            </StackLayout>
+        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+              ColumnSpacing="0" RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <StackLayout x:Name="endDateTimeLayout" Orientation="Horizontal"
-                         HorizontalOptions="FillAndExpand"
-                         Spacing="40"
-                         Padding="0,5,0,5">
-                <DatePicker Date="{Binding Report.ReportEndDate}"
-                            WidthRequest="140"
-                            HorizontalOptions="Start"/>
-                <TimePicker Time="{Binding Report.ReportEndTime}"
-                            WidthRequest="100"
-                            HorizontalOptions="End"/>
-            </StackLayout>
+            <AbsoluteLayout Grid.Row="0"
+                            BackgroundColor="{StaticResource BarColor}"
+                            Padding="0,0,0,0">
+                <Button Image="button_back.png" BackgroundColor="{StaticResource BarColor}"
+                        Command="{Binding GoBackCommand}"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        AbsoluteLayout.LayoutBounds ="0, 0, 50, 50">
+                </Button>
+                <Label Text="Detail Report" FontSize="Medium"
+                       VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                       AbsoluteLayout.LayoutBounds =".5, 0, 100, 50">
+                </Label>
+                <Frame BackgroundColor="{StaticResource BarColor}"
+                       Padding="0,0,0,0"
+                       CornerRadius="0" OutlineColor="{StaticResource BarOutlineColor}"
+                       AbsoluteLayout.LayoutFlags="All"
+                       AbsoluteLayout.LayoutBounds ="0, 1, 1, .02">
+                </Frame>
+            </AbsoluteLayout>
 
-            <StackLayout x:Name="titleLayout" Orientation="Vertical"
-                         HorizontalOptions="FillAndExpand"
-                         Padding="0,5,0,5">
-                <Label Text="Title"/>
-                <Entry Text="{Binding Report.ReportTitle}" 
-                       HorizontalOptions="FillAndExpand"/>
-            </StackLayout>
-
-            <StackLayout x:Name="commentLayout" Orientation="Vertical"
+            <StackLayout Orientation="Vertical" Grid.Row="1"
                          HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                         Padding="0,5,0,10">
-                <Label Text="Comment"/>
-                <Editor Text="{Binding Report.ReportComment}"
-                        HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
-            </StackLayout>
+                         Padding="5,0,5,0"
+                         BackgroundColor="{StaticResource BackColor}">
+                <StackLayout x:Name="startDateTimeLayout" Orientation="Horizontal"
+                             HorizontalOptions="FillAndExpand"
+                             Spacing="40"
+                             Padding="0,10,0,5">
+                    <DatePicker Date="{Binding Report.ReportStartDate}"
+                                WidthRequest="140"
+                                HorizontalOptions="Start"/>
+                    <TimePicker Time="{Binding Report.ReportStartTime}"
+                                WidthRequest="100"
+                                HorizontalOptions="End"/>
+                </StackLayout>
 
-            <StackLayout x:Name="actionLayout" Orientation="Horizontal"
-                         HorizontalOptions="FillAndExpand" VerticalOptions="End"
-                         Padding="0,0,0,0">
-                <Button x:Name="updateButton"
-                        VerticalOptions="Center" HorizontalOptions="StartAndExpand"
-                        BackgroundColor="GhostWhite"
-                        Image="button_update_A.png" Scale="0.8"
-                        Command="{Binding UpdateCommand}"/>
-                <Button x:Name="deleteButton"
-                        VerticalOptions="Center" HorizontalOptions="EndAndExpand"
-                        BackgroundColor="GhostWhite"
-                        Image="button_delete_A.png" Scale="0.8"
-                        Command="{Binding DeleteCommand}"/>
+                <StackLayout x:Name="endDateTimeLayout" Orientation="Horizontal"
+                             HorizontalOptions="FillAndExpand"
+                             Spacing="40"
+                             Padding="0,5,0,5">
+                    <DatePicker Date="{Binding Report.ReportEndDate}"
+                                WidthRequest="140"
+                                HorizontalOptions="Start"/>
+                    <TimePicker Time="{Binding Report.ReportEndTime}"
+                                WidthRequest="100"
+                                HorizontalOptions="End"/>
+                </StackLayout>
+
+                <StackLayout x:Name="titleLayout" Orientation="Vertical"
+                             HorizontalOptions="FillAndExpand"
+                             Padding="0,5,0,5">
+                    <Label Text="Title"/>
+                    <Entry Text="{Binding Report.ReportTitle}" 
+                           HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
+
+                <StackLayout x:Name="commentLayout" Orientation="Vertical"
+                             HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                             Padding="0,5,0,10">
+                    <Label Text="Comment"/>
+                    <Editor Text="{Binding Report.ReportComment}"
+                            HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                </StackLayout>
+
+                <StackLayout x:Name="actionLayout" Orientation="Horizontal"
+                             HorizontalOptions="FillAndExpand" VerticalOptions="End"
+                             Padding="0,0,0,0">
+                    <Button x:Name="updateButton"
+                            VerticalOptions="Center" HorizontalOptions="StartAndExpand"
+                            BackgroundColor="{StaticResource BackColor}"
+                            Image="button_update_A.png" Scale="0.8"
+                            Command="{Binding UpdateCommand}"/>
+                    <Button x:Name="deleteButton"
+                            VerticalOptions="Center" HorizontalOptions="EndAndExpand"
+                            BackgroundColor="{StaticResource BackColor}"
+                            Image="button_delete_A.png" Scale="0.8"
+                            Command="{Binding DeleteCommand}"/>
+                </StackLayout>
             </StackLayout>
-        </StackLayout>
+            <ActivityIndicator Grid.Row="1"
+                               HorizontalOptions="Center" VerticalOptions="Center"
+                               Color="{StaticResource AccentColor}"
+                               IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" >
+            </ActivityIndicator>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
