@@ -25,12 +25,17 @@
                 </Grid>
             </ControlTemplate>
 
-            <Color x:Key="BarColor">#2196F3</Color>
+            <Color x:Key="BarColor">#3E50B4</Color>
             <Color x:Key="BarOutlineColor">#3E2723</Color>
-            <Color x:Key="AccentColor">#82B1FF</Color>
+            <Color x:Key="BarTextColor">#FAFAFA</Color>
+            <Color x:Key="AccentColor">#FF3F80</Color>
+            <Color x:Key="SeparatorColor">#3E2723</Color>
+            <Color x:Key="DateTimeColor">#3E50B4</Color>
             <Color x:Key="BackColor">#FAFAFA</Color>
             <Color x:Key="TextColor">#212121</Color>
-            <Color x:Key="SubTextColor">#424242</Color>
+            <Color x:Key="SubTextColor">#757575</Color>
+            <Color x:Key="DisableTextColor">#9E9E9E</Color>
+            <Color x:Key="DividerColor">#E0E0E0</Color>
 
         </ResourceDictionary>
     </Application.Resources>

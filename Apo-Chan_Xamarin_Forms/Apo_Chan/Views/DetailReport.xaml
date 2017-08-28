@@ -22,9 +22,10 @@
                         AbsoluteLayout.LayoutBounds ="0, 0, 50, 50">
                 </Button>
                 <Label Text="Detail Report" FontSize="Medium"
+                       TextColor="{StaticResource BarTextColor}"
                        VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                       AbsoluteLayout.LayoutBounds =".5, 0, 100, 50">
+                       AbsoluteLayout.LayoutBounds =".5, 0, 200, 50">
                 </Label>
                 <Frame BackgroundColor="{StaticResource BarColor}"
                        Padding="0,0,0,0"
