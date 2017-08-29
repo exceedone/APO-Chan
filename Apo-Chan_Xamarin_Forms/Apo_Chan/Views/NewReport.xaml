@@ -85,7 +85,7 @@
                     <Button x:Name="submitButton"
                             VerticalOptions="Center" HorizontalOptions="Center"
                             BackgroundColor="{StaticResource BackColor}"
-                            Image="button_submit_A.png" Scale="0.8"
+                            Image="button_submit.png"
                             Command="{Binding SubmitCommand}"/>
                 </StackLayout>
             </StackLayout>

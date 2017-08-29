@@ -17,7 +17,7 @@
             <AbsoluteLayout Grid.Row="0"
                             BackgroundColor="{StaticResource BarColor}"
                             Padding="0,0,0,0">
-                <Button Image="ic_chevron_left_white_48dp.png" BackgroundColor="{StaticResource BarColor}"
+                <Button Image="button_previous.png" BackgroundColor="{StaticResource BarColor}"
                         Command="{Binding PrevMonthReportCommand}"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AbsoluteLayout.LayoutBounds =".2, 0, 50, 50">
@@ -28,7 +28,7 @@
                        AbsoluteLayout.LayoutFlags="PositionProportional"
                        AbsoluteLayout.LayoutBounds =".5, 0, 300, 50">
                 </Label>
-                <Button Image="ic_chevron_right_white_48dp.png" BackgroundColor="{StaticResource BarColor}"
+                <Button Image="button_next.png" BackgroundColor="{StaticResource BarColor}"
                         Command="{Binding NextMonthReportCommand}"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AbsoluteLayout.LayoutBounds =".8, 0, 50, 50">
@@ -87,7 +87,7 @@
             <Button x:Name="addButton" Grid.Row="1"
                     VerticalOptions="End" HorizontalOptions="End"
                     BackgroundColor="{StaticResource BackColor}"
-                    Image="button_add_accent.png"
+                    Image="button_add.png"
                     Command="{Binding AddNewReportCommand}"/>
             <ActivityIndicator Grid.Row="1"
                                HorizontalOptions="Center" VerticalOptions="Center"

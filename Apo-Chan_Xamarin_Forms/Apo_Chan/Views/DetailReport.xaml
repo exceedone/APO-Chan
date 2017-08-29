@@ -79,20 +79,24 @@
                             HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
                 </StackLayout>
 
-                <StackLayout x:Name="actionLayout" Orientation="Horizontal"
-                             HorizontalOptions="FillAndExpand" VerticalOptions="End"
-                             Padding="0,0,0,0">
+                <AbsoluteLayout x:Name="actionLayout"
+                                HorizontalOptions="FillAndExpand" VerticalOptions="End"
+                                Padding="0,0,0,0">
                     <Button x:Name="updateButton"
-                            VerticalOptions="Center" HorizontalOptions="StartAndExpand"
                             BackgroundColor="{StaticResource BackColor}"
-                            Image="button_update_A.png" Scale="0.8"
-                            Command="{Binding UpdateCommand}"/>
+                            Image="button_update.png"
+                            Command="{Binding UpdateCommand}"
+                            AbsoluteLayout.LayoutFlags="PositionProportional"
+                            AbsoluteLayout.LayoutBounds =".15, .05, 120, 60">
+                    </Button>
                     <Button x:Name="deleteButton"
-                            VerticalOptions="Center" HorizontalOptions="EndAndExpand"
                             BackgroundColor="{StaticResource BackColor}"
-                            Image="button_delete_A.png" Scale="0.8"
-                            Command="{Binding DeleteCommand}"/>
-                </StackLayout>
+                            Image="button_delete.png"
+                            Command="{Binding DeleteCommand}"
+                            AbsoluteLayout.LayoutFlags="PositionProportional"
+                            AbsoluteLayout.LayoutBounds =".85, .05, 120, 60">
+                    </Button>
+                </AbsoluteLayout>
             </StackLayout>
             <ActivityIndicator Grid.Row="1"
                                HorizontalOptions="Center" VerticalOptions="Center"
