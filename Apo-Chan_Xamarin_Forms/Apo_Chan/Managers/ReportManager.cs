@@ -1,7 +1,4 @@
-﻿/*
- * 
- */
-using Apo_Chan.Items;
+﻿using Apo_Chan.Items;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,8 +50,9 @@ namespace Apo_Chan.Managers
                     .Where(x => 
                         x.RefUserId == user.Id 
                         && !x.Deleted 
-                        && (x.ReportStartDate.Year == year && x.ReportStartDate.Month == month) || (x.ReportEndDate.Year == year && x.ReportEndDate.Month == month)
-                    ).ToEnumerableAsync();
+                        && ((x.ReportStartDate.Year == year && x.ReportStartDate.Month == month) || (x.ReportEndDate.Year == year && x.ReportEndDate.Month == month))
+                    ).OrderBy(x => x.ReportStartDate).ThenBy(x => x.ReportEndDate).ThenBy(x => x.ReportStartTime).ThenBy(x => x.ReportEndTime)
+                    .ToEnumerableAsync();
 
                 return new ObservableCollection<ReportItem>(items);
             }

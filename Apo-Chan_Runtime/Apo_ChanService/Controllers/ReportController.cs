@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.OData;
@@ -9,7 +10,7 @@ using Apo_ChanService.Models;
 
 namespace Apo_ChanService.Controllers
 {
-    [Authorize]
+    [CustomAttributes.CustomAuthentize]
     public class ReportController : BaseController<ReportItem>
     {
         protected override void Initialize(HttpControllerContext controllerContext)

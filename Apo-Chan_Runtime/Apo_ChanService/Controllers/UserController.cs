@@ -9,7 +9,7 @@ using Apo_ChanService.Models;
 
 namespace Apo_ChanService.Controllers
 {
-    [Authorize]
+    [CustomAttributes.CustomAuthentize]
     public class UserController : BaseController<UserItem>
     {
         protected override void Initialize(HttpControllerContext controllerContext)

@@ -24,7 +24,7 @@ namespace Apo_ChanService
             new MobileAppConfiguration()
                 .UseDefaultConfiguration()
                 .ApplyTo(config);
-
+            
             // Use Entity Framework Code First to create database tables based on your DbContext
             Database.SetInitializer(new Apo_ChanInitializer());
 

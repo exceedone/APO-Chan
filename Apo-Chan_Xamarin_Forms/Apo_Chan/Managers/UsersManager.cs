@@ -61,54 +61,5 @@ namespace Apo_Chan.Managers
             return null;
         }
 
-        /// <summary>
-        /// Save userinfo
-        /// (1) Get UserTable Id by UserProviderId and ProviderType
-        /// (2) If (1) is null, insert new data
-        /// (3) cashe
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="token"></param>
-        public static async Task CacheUserToken(UserItem user)
-        {
-            if (user != null && string.IsNullOrWhiteSpace(user.Id))
-            {
-                // (1)
-                UserItem item = null;
-                try
-                {
-                    // get user id.
-                    item = await DefaultManager.GetItemAsync(user.UserProviderId, user.ProviderType);
-                }
-                catch
-                { }
-                // (2)if item is null(first access), insert user item
-                if (item == null)
-                {
-                    try
-                    {
-                        await UsersManager.DefaultManager.SaveTaskAsync(user);
-                    }
-                    catch (Microsoft.WindowsAzure.MobileServices.MobileServiceInvalidOperationException mex)
-                    { }
-                    catch (Exception ex)
-                    { }
-                }
-                else
-                {
-                    user.Id = item.Id;
-                }
-            }
-
-            // (3) set cached
-            Application.Current.Properties.Clear();
-            Application.Current.Properties.Add("UserInfo", Newtonsoft.Json.Linq.JObject.FromObject(user).ToString());
-            // not send API properties
-            Application.Current.Properties.AddOrSkip("AccessToken", user.AccessToken);
-            Application.Current.Properties.AddOrSkip("RefreshToken", user.RefreshToken);
-            Application.Current.Properties.AddOrSkip("AMSToken", user.AMSToken);
-
-        }
-
     }
 }

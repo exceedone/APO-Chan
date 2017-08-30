@@ -19,15 +19,5 @@ namespace Apo_Chan.Views
 
             reportList.RefreshCommand.Execute(null);
         }
-
-        private async void OnPreviousButtonClicked(object sender, EventArgs e)
-        {
-            await DisplayAlert("OnPreviousButtonClicked", "Not implemented!", "OK");
-        }
-
-        private async void OnNextButtonClicked(object sender, EventArgs e)
-        {
-            await DisplayAlert("OnNextButtonClicked", "Not implemented!", "OK");
-        }
     }
 }

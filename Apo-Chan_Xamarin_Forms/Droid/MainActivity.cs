@@ -73,7 +73,7 @@ namespace Apo_Chan.Droid
                     providerObj.SetUserProfile(user, json);
 
                     success = true;
-                    await UsersManager.CacheUserToken(user);
+                    await UserItem.SetUserToken(user);
                 }
             }
             catch (Exception ex)
@@ -92,8 +92,6 @@ namespace Apo_Chan.Droid
         public async Task SignOutAsync()
         {
             await App.CurrentClient.LogoutAsync();
-            await App.CurrentClient.RefreshUserAsync();
-
         }
     }
 }

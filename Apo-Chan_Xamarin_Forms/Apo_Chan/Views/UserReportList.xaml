@@ -17,6 +17,9 @@
         <ToolbarItem Name="nextButton" Order="Primary" Priority="2"
                      Icon="button_next.png"
                      Command="{Binding NextMonthReportCommand}"/>
+        <ToolbarItem Name="setting" Order="Primary" Priority="3"
+                     Icon="button_setting.png"
+                     Command="{Binding SettingCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid RowSpacing="0">

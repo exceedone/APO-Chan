@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
+using System.Configuration;
+using System.Web.Http.Controllers;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.Entity.ModelConfiguration.Configuration;
 
@@ -34,6 +37,23 @@ namespace Apo_ChanService.Models
                     format = "yyyy-MM-dd";
                 }
                 base.DateTimeFormat = format;
+            }
+        }
+
+        public class CustomAuthentizeAttribute : AuthorizeAttribute
+        {
+            protected override bool IsAuthorized(HttpActionContext actionContext)
+            {
+                // get web.config value.
+                bool isAuthentize = (bool)Convert.ChangeType(ConfigurationManager.AppSettings["IsAuthentize"], typeof(bool));
+
+                // if "isAuthentize" is false, always OK, so return true
+                if (!isAuthentize)
+                {
+                    return true;
+                }
+
+                return base.IsAuthorized(actionContext);
             }
         }
     }

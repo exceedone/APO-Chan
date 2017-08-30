@@ -3,10 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Apo_Chan.Views.SignIn">
     <ContentPage.Content>
-        <StackLayout>
-            <Button x:Name="loginOffice365" Text="Sign-in Office365" MinimumHeightRequest="30" Command="{Binding NavigateSignInCommand}"/>
-            <Button x:Name="loginGoogle" Text="Sign-in Google" MinimumHeightRequest="30" Command="{Binding NavigateSignInGoogleCommand}"/>
-            <Button x:Name="logout" Text="Sign-Out" MinimumHeightRequest="30" Command="{Binding NavigateSignOutCommand}"/>
-        </StackLayout>
+        <Grid RowSpacing="0">
+            <StackLayout>
+                <Button x:Name="loginOffice365" Text="Sign-in Office365" MinimumHeightRequest="30" Command="{Binding NavigateSignInCommand}"/>
+                <Button x:Name="loginGoogle" Text="Sign-in Google" MinimumHeightRequest="30" Command="{Binding NavigateSignInGoogleCommand}"/>
+            </StackLayout>
+            <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
+                               HorizontalOptions="Center" VerticalOptions="Center"
+                               Color="Color.Accent"
+                               x:Name="syncIndicator" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
