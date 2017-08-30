@@ -40,15 +40,15 @@ namespace Apo_Chan
         {
             InitializeComponent();
 
-            if (await BaseAuthProvider.FirstProcess())
-            {
-                await NavigationService.NavigateAsync("NavigationPage/UserReportList");
-            }
-            else
-            {
-                await NavigationService.NavigateAsync("NavigationPage/SignIn");
-            }
-            //await NavigationService.NavigateAsync("NavigationPage/SignIn");
+            //if (await BaseAuthProvider.FirstProcess())
+            //{
+            //    await NavigationService.NavigateAsync("NavigationPage/UserReportList");
+            //}
+            //else
+            //{
+            //    await NavigationService.NavigateAsync("NavigationPage/SignIn");
+            //}
+            await NavigationService.NavigateAsync("NavigationPage/SignIn");
         }
 
         protected override void RegisterTypes()

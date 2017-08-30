@@ -43,7 +43,7 @@
                         <ViewCell>
                             <StackLayout Orientation="Vertical"
                                          HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                                         Padding="10,20,0,0">
+                                         Padding="5,10,5,10">
                                 <Label HorizontalOptions="Start" VerticalOptions="StartAndExpand"
                                            HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
                                            FontAttributes="Bold" TextColor="#212121"
