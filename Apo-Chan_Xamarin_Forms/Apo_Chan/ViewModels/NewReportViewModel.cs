@@ -36,7 +36,11 @@ namespace Apo_Chan.ViewModels
             Report = new ReportItem
             {
                 Id = null,
+#if TEST_LOCAL
+                RefUserId = string.Empty,
+#else
                 RefUserId = GlobalAttributes.refUserId,
+#endif
                 ReportStartDate = DateTime.UtcNow.ToLocalTime(),
                 ReportStartTime = DateTime.UtcNow.ToLocalTime().TimeOfDay,
                 ReportEndDate = DateTime.UtcNow.ToLocalTime(),
@@ -45,9 +49,9 @@ namespace Apo_Chan.ViewModels
 
             SubmitCommand = new DelegateCommand(submitReport);
         }
-        #endregion
+#endregion
 
-        #region Function
+#region Function
         private async void submitReport()
         {
             if (isValidReport())
@@ -55,6 +59,7 @@ namespace Apo_Chan.ViewModels
                 var accepted = await dialogService.DisplayAlertAsync("Confirmation", "Do you want to submit this report?", "Confirm", "Cancel");
                 if (accepted)
                 {
+                    IsBusy = true;
                     try
                     {
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
@@ -65,6 +70,7 @@ namespace Apo_Chan.ViewModels
                     }
 
                     await navigationService.GoBackAsync();
+                    IsBusy = false;
                 }
             }
         }
@@ -79,6 +85,6 @@ namespace Apo_Chan.ViewModels
 
             return isValid;
         }
-        #endregion
+#endregion
     }
 }

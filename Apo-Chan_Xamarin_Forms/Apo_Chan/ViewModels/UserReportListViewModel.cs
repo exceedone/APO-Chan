@@ -73,12 +73,12 @@ namespace Apo_Chan.ViewModels
             await setItemsAsync();
         }
 
-        private async void NavigateNewReport()
+        public async void NavigateNewReport()
         {
             await navigationService.NavigateAsync("NewReport");
         }
 
-        private void NavigateDetailReport(ReportItem item)
+        public void NavigateDetailReport(ReportItem item)
         {
             navigationService.NavigateAsync("DetailReport?Id=" + item.Id);
         }
@@ -96,27 +96,6 @@ namespace Apo_Chan.ViewModels
             {
                 System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
             }
-
-            #region delete
-            //--- hsato: delete.
-            //--- GlobalAttributes.refUserId get only.
-            //--- only notdeleted items because getting mobile apps items only notdeleted.
-            //if (allReports != null)
-            //{
-            //    if (allReports.Count > 0)
-            //    {
-            //        //GlobalAttributes.refUserId = allReports[0].RefUserId;
-            //    }
-            //    ReportItems.Clear();
-            //    foreach (var item in allReports)
-            //    {
-            //        if (!item.Deleted)
-            //        {
-            //            ReportItems.Add(item);
-            //        }
-            //    }
-            //}
-            #endregion
 
             ReportItems.Clear();
             ReportItems = allReports;

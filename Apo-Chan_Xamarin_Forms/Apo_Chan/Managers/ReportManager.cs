@@ -66,5 +66,33 @@ namespace Apo_Chan.Managers
             }
             return null;
         }
+
+#if TEST_LOCAL
+        public async Task<ObservableCollection<ReportItem>> GetItemsAsync(int year, int month)
+        {
+            return await Test.TestReportLocalStore.GetItems(year, month);
+        }
+        public new async Task SaveTaskAsync(ReportItem item)
+        {
+            if (item.Id == null)
+            {
+                await Test.TestReportLocalStore.InsertItem(item);
+            }
+            else
+            {
+                await Test.TestReportLocalStore.UpdateItem(item);
+            }
+        }
+
+        public new async Task DeleteAsync(ReportItem item)
+        {
+            await Test.TestReportLocalStore.DeleteItem(item);
+        }
+
+        public new async Task<ReportItem> LookupAsync(string id)
+        {
+            return await Test.TestReportLocalStore.GetItem(id);
+        }
+#endif
     }
 }

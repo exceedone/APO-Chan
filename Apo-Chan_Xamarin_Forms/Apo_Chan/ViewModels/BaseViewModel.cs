@@ -1,7 +1,7 @@
-﻿using Prism.Mvvm;
+﻿using Prism.Commands;
+using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
-using Prism.Commands;
 
 namespace Apo_Chan.ViewModels
 {
@@ -26,6 +26,8 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+        public DelegateCommand GoBackCommand { get; set; }
+
 
         #region Constructor
         public BaseViewModel(INavigationService navigationService, IPageDialogService dialogService)
@@ -34,6 +36,7 @@ namespace Apo_Chan.ViewModels
             this.dialogService = dialogService;
 
             this.SettingCommand = new DelegateCommand(setting);
+            this.GoBackCommand = new DelegateCommand(ExecuteGoBack);
         }
         #endregion
 
@@ -42,6 +45,10 @@ namespace Apo_Chan.ViewModels
         private async void setting()
         {
             await this.navigationService.NavigateAsync("Setting");
+        }
+        private async void ExecuteGoBack()
+        {
+            await navigationService.GoBackAsync();
         }
         #endregion
     }

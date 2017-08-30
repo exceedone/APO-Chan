@@ -48,6 +48,7 @@ namespace Apo_Chan.ViewModels
                 var accepted = await dialogService.DisplayAlertAsync("Confirmation", "Do you want to update the report?", "Confirm", "Cancel");
                 if (accepted)
                 {
+                    IsBusy = true;
                     try
                     {
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
@@ -58,6 +59,7 @@ namespace Apo_Chan.ViewModels
                     }
 
                     await navigationService.GoBackAsync();
+                    IsBusy = false;
                 }
             }
         }
@@ -67,6 +69,7 @@ namespace Apo_Chan.ViewModels
             var accepted = await dialogService.DisplayAlertAsync("Confirmation", "Do you want to delete the report?", "Confirm", "Cancel");
             if (accepted)
             {
+                IsBusy = true;
                 try
                 {
                     await ReportManager.DefaultManager.DeleteAsync(Report);
@@ -76,6 +79,7 @@ namespace Apo_Chan.ViewModels
                     System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                 }
                 await navigationService.GoBackAsync();
+                IsBusy = false;
             }
         }
 
@@ -99,6 +103,7 @@ namespace Apo_Chan.ViewModels
         {
             if (parameters.ContainsKey("Id"))
             {
+                IsBusy = true;
                 try
                 {
                     Report = await ReportManager.DefaultManager.LookupAsync((string)parameters["Id"]);
@@ -108,6 +113,7 @@ namespace Apo_Chan.ViewModels
 
                     System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                 }
+                IsBusy = false;
             }
         }
         #endregion

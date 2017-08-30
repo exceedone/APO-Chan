@@ -5,11 +5,13 @@
              ControlTemplate="{StaticResource MainPageTemplate}"
              x:Class="Apo_Chan.Test.TestPage">
     <ContentPage.Content>
+        <StackLayout>
         <ListView x:Name="reportList"
-                    SeparatorColor="Color.Accent"
-                    BackgroundColor="GhostWhite"
-                    HasUnevenRows="True"
-                    ItemsSource="{Binding ReportItems}">
+                  SeparatorColor="Color.Accent"
+                  BackgroundColor="Wheat"
+                  HasUnevenRows="True"
+                  ItemSelected="ExecuteGoBack"
+                  ItemsSource="{Binding ReportItems}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -36,5 +38,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Label Text="aaaaaaaaa"/>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
