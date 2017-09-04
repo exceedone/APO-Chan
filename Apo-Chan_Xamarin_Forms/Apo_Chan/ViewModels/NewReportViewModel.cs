@@ -36,11 +36,7 @@ namespace Apo_Chan.ViewModels
             Report = new ReportItem
             {
                 Id = null,
-#if TEST_LOCAL
-                RefUserId = string.Empty,
-#else
                 RefUserId = GlobalAttributes.refUserId,
-#endif
                 ReportStartDate = DateTime.UtcNow.ToLocalTime(),
                 ReportStartTime = DateTime.UtcNow.ToLocalTime().TimeOfDay,
                 ReportEndDate = DateTime.UtcNow.ToLocalTime(),

@@ -10,7 +10,7 @@
             </StackLayout>
             <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
                                HorizontalOptions="Center" VerticalOptions="Center"
-                               Color="Color.Accent"
+                               Color="{StaticResource AccentColor}"
                                x:Name="syncIndicator" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
         </Grid>
     </ContentPage.Content>

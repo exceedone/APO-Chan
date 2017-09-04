@@ -4,13 +4,8 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
-             NavigationPage.HasNavigationBar="True"
+             NavigationPage.HasNavigationBar="False"
              x:Class="Apo_Chan.Views.UserReportList">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Name="setting" Order="Primary" Priority="3"
-                     Icon="button_setting.png"
-                     Command="{Binding SettingCommand}"/>
-    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
               ColumnSpacing="0" RowSpacing="0">
@@ -37,6 +32,11 @@
                         Command="{Binding NextMonthReportCommand}"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AbsoluteLayout.LayoutBounds =".8, 0, 50, 50">
+                </Button>
+                <Button Image="button_setting.png" BackgroundColor="{StaticResource BarColor}"
+                        Command="{Binding SettingCommand}"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        AbsoluteLayout.LayoutBounds =".95, 0, 50, 50">
                 </Button>
                 <Frame BackgroundColor="{StaticResource BarColor}"
                        Padding="0,0,0,0"

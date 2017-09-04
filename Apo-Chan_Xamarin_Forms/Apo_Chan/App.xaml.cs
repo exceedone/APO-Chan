@@ -21,12 +21,10 @@ namespace Apo_Chan
         public App() : base(null)
         {
             //client = new MobileServiceClient(Constants.ApplicationURL);
-            //MainPage = new Test.TestPage();
         }
         public App(IPlatformInitializer initializer = null) : base(initializer)
         {
             //client = new MobileServiceClient(Constants.ApplicationURL);
-            //MainPage = new Test.TestPage();
         }
 
         public static MobileServiceClient CurrentClient
@@ -65,12 +63,6 @@ namespace Apo_Chan
         public static void Init(IAuthenticate authenticator)
         {
             Authenticator = authenticator;
-        }
-
-        private void ExecuteGoBack(object sender, System.EventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("-------------------[Debug] ExecuteGoBack 2");
-            //NavigationService.GoBackAsync();
         }
     }
 }
