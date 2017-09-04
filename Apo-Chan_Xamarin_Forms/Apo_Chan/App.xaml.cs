@@ -10,6 +10,7 @@ namespace Apo_Chan
     public interface IAuthenticate
     {
         Task<bool> AuthenticateAsync(Constants.EProviderType providerType);
+        Task<bool> SignOutAsync();
     }
 
     public partial class App : PrismApplication

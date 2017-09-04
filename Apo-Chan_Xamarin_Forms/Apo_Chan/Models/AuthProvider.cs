@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Apo_Chan.Managers;
 using Microsoft.WindowsAzure.MobileServices;
+using Xamarin.Auth;
 
 namespace Apo_Chan.Models
 {
@@ -45,15 +46,26 @@ namespace Apo_Chan.Models
                 return false;
             }
 
-            //JObject jo = new JObject();
-            //jo.Add("access_token", user.AMSToken);
             try
             {
-                // TODO:check access_token lifetime.
-
-
                 // login using access token
+                //JObject jo = new JObject();
+                //jo.Add("access_token", user.AMSToken);
                 //var loginuser = await App.CurrentClient.LoginAsync(user.EProviderType.MobileServiceAuthenticationProvider(), jo);
+
+                // if past expires_on, refresh token
+                //if (!user.ExpiresOn.HasValue || user.ExpiresOn.Value < DateTime.Now)
+                //{
+                //    var client = new HttpClient();
+                //    client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", user.AMSToken);
+                //    var response = await client.GetStringAsync(Constants.ApplicationURL + "/.auth/refresh");
+                //    AuthenticationObj mobileServiceUser = JsonConvert.DeserializeObject<AuthenticationObj>(response);
+                //    user.AMSToken = mobileServiceUser.authenticationToken;
+                //    BaseAuthProvider provider = BaseAuthProvider.GetAuthProvider(user.EProviderType);
+                //    string json = await provider.GetProfileJson(user.AMSToken);
+                //    provider.SetUserProfile(user, json);
+                //    await user.SetUserToken();
+                //}
 
                 // get provider user profile.
                 //BaseAuthProvider providerObj = BaseAuthProvider.GetAuthProvider((Constants.EProviderType)Enum.Parse(typeof(Constants.EProviderType), user.ProviderType.ToString()));
@@ -103,6 +115,10 @@ namespace Apo_Chan.Models
             user.Email = jobj.user_id;
             user.AccessToken = jobj.access_token;
             user.RefreshToken = jobj.refresh_token;
+            if (jobj.expires_on.HasValue)
+            {
+                user.ExpiresOn = jobj.expires_on.Value.ToLocalTime();
+            }
 
             foreach (var claim in jobj.user_claims)
             {
@@ -127,6 +143,10 @@ namespace Apo_Chan.Models
             user.Email = jobj.user_id;
             user.AccessToken = jobj.access_token;
             user.RefreshToken = jobj.refresh_token;
+            if (jobj.expires_on.HasValue)
+            {
+                user.ExpiresOn = jobj.expires_on.Value.ToLocalTime();
+            }
 
             foreach (var claim in jobj.user_claims)
             {
@@ -140,20 +160,6 @@ namespace Apo_Chan.Models
                 }
             }
         }
-
-        public class ProviderProfileObj
-        {
-            public string user_id { get; set; }
-            public string access_token { get; set; }
-            public string refresh_token { get; set; }
-            public List<ProviderProfileClaimObj> user_claims { get; set; }
-
-            public class ProviderProfileClaimObj
-            {
-                public string typ { get; set; }
-                public string val { get; set; }
-            }
-        }
     }
 
     public class ProviderProfileObj
@@ -161,6 +167,7 @@ namespace Apo_Chan.Models
         public string user_id { get; set; }
         public string access_token { get; set; }
         public string refresh_token { get; set; }
+        public DateTime? expires_on { get; set; }
         public List<ProviderProfileClaimObj> user_claims { get; set; }
 
         public class ProviderProfileClaimObj
@@ -168,5 +175,9 @@ namespace Apo_Chan.Models
             public string typ { get; set; }
             public string val { get; set; }
         }
+    }
+    public class AuthenticationObj
+    {
+        public string authenticationToken { get; set; }
     }
 }

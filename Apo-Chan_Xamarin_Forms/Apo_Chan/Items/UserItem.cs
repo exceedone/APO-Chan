@@ -44,6 +44,11 @@ namespace Apo_Chan.Items
         //[JsonProperty(PropertyName = "AMSToken")]
         public string AMSToken { get; set; }
 
+        /// <summary>
+        /// Token Expires DateTime
+        /// </summary>
+        public DateTime? ExpiresOn { get; set; }
+
         public Constants.EProviderType EProviderType
         {
             get
@@ -62,13 +67,18 @@ namespace Apo_Chan.Items
                 return null;
             }
             var json = Application.Current.Properties.GetOrDefault("UserInfo") as string;
-            try { 
-            UserItem user = JsonConvert.DeserializeObject<UserItem>(json);
-            user.AccessToken = Convert.ToString(Application.Current.Properties.GetOrDefault("AccessToken"));
-            user.RefreshToken = Convert.ToString(Application.Current.Properties.GetOrDefault("RefreshToken"));
-            user.AMSToken = Convert.ToString(Application.Current.Properties.GetOrDefault("AMSToken"));
-
-            return user;
+            try
+            {
+                UserItem user = JsonConvert.DeserializeObject<UserItem>(json);
+                user.AccessToken = Convert.ToString(Application.Current.Properties.GetOrDefault("AccessToken"));
+                user.RefreshToken = Convert.ToString(Application.Current.Properties.GetOrDefault("RefreshToken"));
+                user.AMSToken = Convert.ToString(Application.Current.Properties.GetOrDefault("AMSToken"));
+                string d = Convert.ToString(Application.Current.Properties.GetOrDefault("ExpiresOn"));
+                if (!string.IsNullOrWhiteSpace(d))
+                {
+                    user.ExpiresOn = Convert.ToDateTime(d);
+                }
+                return user;
             }
             catch
             {
@@ -84,25 +94,25 @@ namespace Apo_Chan.Items
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="token"></param>
-        public static async Task SetUserToken(UserItem user)
+        public async Task SetUserToken()
         {
-            if (user != null && string.IsNullOrWhiteSpace(user.Id))
+            if (this != null && string.IsNullOrWhiteSpace(this.Id))
             {
                 // (1)
                 UserItem item = null;
                 try
                 {
-                    // get user id.
-                    item = await UsersManager.DefaultManager.GetItemAsync(user.UserProviderId, user.ProviderType);
+                    // get this id.
+                    item = await UsersManager.DefaultManager.GetItemAsync(this.UserProviderId, this.ProviderType);
                 }
                 catch
                 { }
-                // (2)if item is null(first access), insert user item
+                // (2)if item is null(first access), insert this item
                 if (item == null)
                 {
                     try
                     {
-                        await UsersManager.DefaultManager.SaveTaskAsync(user);
+                        await UsersManager.DefaultManager.SaveTaskAsync(this);
                     }
                     catch (Microsoft.WindowsAzure.MobileServices.MobileServiceInvalidOperationException mex)
                     { }
@@ -111,17 +121,21 @@ namespace Apo_Chan.Items
                 }
                 else
                 {
-                    user.Id = item.Id;
+                    this.Id = item.Id;
                 }
             }
 
             // (3) set cached
             ClearUserToken();
-            Application.Current.Properties.Add("UserInfo", Newtonsoft.Json.Linq.JObject.FromObject(user).ToString());
+            Application.Current.Properties.Add("UserInfo", Newtonsoft.Json.Linq.JObject.FromObject(this).ToString());
             // not send API properties
-            Application.Current.Properties.AddOrSkip("AccessToken", user.AccessToken);
-            Application.Current.Properties.AddOrSkip("RefreshToken", user.RefreshToken);
-            Application.Current.Properties.AddOrSkip("AMSToken", user.AMSToken);
+            Application.Current.Properties.AddOrSkip("AccessToken", this.AccessToken);
+            Application.Current.Properties.AddOrSkip("RefreshToken", this.RefreshToken);
+            Application.Current.Properties.AddOrSkip("AMSToken", this.AMSToken);
+            if (this.ExpiresOn.HasValue)
+            {
+                Application.Current.Properties.AddOrSkip("ExpiresOn", this.ExpiresOn.Value.ToString());
+            }
             // await Application.Current.SavePropertiesAsync();
         }
 

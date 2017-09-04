@@ -47,15 +47,16 @@ namespace Apo_Chan.ViewModels
         private async void navigateSignOut()
         {
             this.IsBusy = true;
+            bool isLogOut = false;
             if (App.Authenticator != null)
             {
-                await this.navigationService.NavigateAsync("/NavigationPage/SignIn");
+                isLogOut = await App.Authenticator.SignOutAsync();
+                if (isLogOut)
+                {
+                    await this.navigationService.NavigateAsync("/NavigationPage/SignIn");
+                }
             }
-            //// Set syncItems to true to synchronize the data on startup when offline is enabled.
-            //if (authenticated == true)
-            //{
-            //    await navigationService.NavigateAsync("SignIn");
-            //}
+
             this.IsBusy = false;
         }
 
