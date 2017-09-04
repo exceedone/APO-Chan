@@ -1,12 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False"
              x:Class="Apo_Chan.Views.SignIn">
     <ContentPage.Content>
         <Grid RowSpacing="0">
-            <StackLayout>
-                <Button x:Name="loginOffice365" Text="Sign-in Office365" MinimumHeightRequest="30" Command="{Binding NavigateSignInCommand}"/>
-                <Button x:Name="loginGoogle" Text="Sign-in Google" MinimumHeightRequest="30" Command="{Binding NavigateSignInGoogleCommand}"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <AbsoluteLayout Grid.Row="0"
+                            BackgroundColor="{StaticResource BarColor}"
+                            Padding="0,0,0,0">
+                <Label Text="Sign In" FontSize="Medium"
+                       TextColor="{StaticResource BarTextColor}"
+                       VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                       AbsoluteLayout.LayoutBounds =".5, 0, 200, 50">
+                </Label>
+                <Frame BackgroundColor="{StaticResource BarColor}"
+                       Padding="0,0,0,0"
+                       CornerRadius="0" OutlineColor="{StaticResource BarOutlineColor}"
+                       AbsoluteLayout.LayoutFlags="All"
+                       AbsoluteLayout.LayoutBounds ="0, 1, 1, .02">
+                </Frame>
+            </AbsoluteLayout>
+
+            <StackLayout Grid.Row="1"
+                         Padding="10,20,10,20"
+                         BackgroundColor="{StaticResource BackColor}">
+                <Button x:Name="loginOffice365" Text="Office365" MinimumHeightRequest="30" Command="{Binding NavigateSignInCommand}"
+                            BackgroundColor="{StaticResource BarColor}" 
+                       TextColor="{StaticResource BarTextColor}"/>
+                <Button x:Name="loginGoogle" Text="Google" MinimumHeightRequest="30" Command="{Binding NavigateSignInGoogleCommand}"
+                            BackgroundColor="{StaticResource BarColor}"
+                       TextColor="{StaticResource BarTextColor}"/>
             </StackLayout>
             <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
                                HorizontalOptions="Center" VerticalOptions="Center"
