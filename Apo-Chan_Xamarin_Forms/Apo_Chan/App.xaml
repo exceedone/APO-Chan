@@ -10,32 +10,41 @@
                 <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                       ColumnSpacing="0" RowSpacing="0">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <ContentView Grid.Row="0">
+                    <AbsoluteLayout Grid.Row="0"
+                                    BackgroundColor="{StaticResource BarColor}"
+                                    Padding="0,0,0,0">
+                        <Frame Padding="0,0,0,0" CornerRadius="0"
+                               BackgroundColor="{StaticResource BarOutlineColor}"
+                               OutlineColor="{StaticResource BarOutlineColor}"
+                               AbsoluteLayout.LayoutFlags="All"
+                               AbsoluteLayout.LayoutBounds ="0, 1, 1, .04">
+                        </Frame>
+                    </AbsoluteLayout>
+                    <ContentView Grid.Row="1">
                         <ContentPresenter VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
                     </ContentView>
-                    <ActivityIndicator Grid.Row="0"
+                    <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
                                        HorizontalOptions="Center" VerticalOptions="Center"
                                        Color="Color.Accent"
-                                       x:Name="syncIndicator"
                                        IsVisible="{TemplateBinding BindingContext.IsBusy}"
                                        IsRunning="{TemplateBinding BindingContext.IsBusy}" >
                     </ActivityIndicator>
                 </Grid>
             </ControlTemplate>
 
-            <Color x:Key="BarColor">#3E50B4</Color>
-            <Color x:Key="BarOutlineColor">#3E2723</Color>
+            <Color x:Key="BarColor">#3F51B5</Color>
+            <Color x:Key="BarOutlineColor">#424242</Color>
             <Color x:Key="BarTextColor">#FAFAFA</Color>
             <Color x:Key="AccentColor">#FF3F80</Color>
-            <Color x:Key="SeparatorColor">#3E2723</Color>
-            <Color x:Key="DateTimeColor">#3E50B4</Color>
+            <Color x:Key="SeparatorColor">#9E9E9E</Color>
+            <Color x:Key="DateTimeColor">#3F51B5</Color>
             <Color x:Key="BackColor">#FAFAFA</Color>
             <Color x:Key="TextColor">#212121</Color>
             <Color x:Key="SubTextColor">#757575</Color>
             <Color x:Key="DisableTextColor">#9E9E9E</Color>
-            <Color x:Key="DividerColor">#E0E0E0</Color>
 
         </ResourceDictionary>
     </Application.Resources>

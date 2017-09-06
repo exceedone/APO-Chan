@@ -26,7 +26,7 @@ namespace Apo_Chan.ViewModels
             }
         }
 
-        public DelegateCommand GoBackCommand { get; set; }
+        public DelegateCommand GoBackCommand { get; private set; }
 
 
         #region Constructor
@@ -36,7 +36,7 @@ namespace Apo_Chan.ViewModels
             this.dialogService = dialogService;
 
             this.SettingCommand = new DelegateCommand(setting);
-            this.GoBackCommand = new DelegateCommand(ExecuteGoBack);
+            this.GoBackCommand = new DelegateCommand(executeGoBack);
         }
         #endregion
 
@@ -46,7 +46,7 @@ namespace Apo_Chan.ViewModels
         {
             await this.navigationService.NavigateAsync("Setting");
         }
-        private async void ExecuteGoBack()
+        private async void executeGoBack()
         {
             await navigationService.GoBackAsync();
         }

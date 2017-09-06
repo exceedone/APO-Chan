@@ -19,11 +19,11 @@
                        AbsoluteLayout.LayoutFlags="PositionProportional"
                        AbsoluteLayout.LayoutBounds =".5, 0, 200, 50">
                 </Label>
-                <Frame BackgroundColor="{StaticResource BarColor}"
-                       Padding="0,0,0,0"
-                       CornerRadius="0" OutlineColor="{StaticResource BarOutlineColor}"
+                <Frame Padding="0,0,0,0" CornerRadius="0"
+                       BackgroundColor="{StaticResource BarOutlineColor}"
+                       OutlineColor="{StaticResource BarOutlineColor}"
                        AbsoluteLayout.LayoutFlags="All"
-                       AbsoluteLayout.LayoutBounds ="0, 1, 1, .02">
+                       AbsoluteLayout.LayoutBounds ="0, 1, 1, .04">
                 </Frame>
             </AbsoluteLayout>
 
