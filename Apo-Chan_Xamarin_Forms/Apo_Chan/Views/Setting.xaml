@@ -17,7 +17,7 @@
                             BackgroundColor="{StaticResource BarColor}"
                             Padding="0,0,0,0">
                 <Button Image="button_back.png"
-                        Scale="0.75"
+                        Scale="0.8"
                         BackgroundColor="{StaticResource BarColor}"
                         Command="{Binding GoBackCommand}"
                         AbsoluteLayout.LayoutFlags="PositionProportional"

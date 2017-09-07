@@ -6,6 +6,7 @@ using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Apo_Chan.ViewModels
@@ -89,7 +90,6 @@ namespace Apo_Chan.ViewModels
             isValid = Report.ReportStartDate != null && Report.ReportStartTime != null;
             isValid &= Report.ReportEndDate != null && Report.ReportEndTime != null;
             isValid &= Report.ReportTitle != null;
-            isValid &= Report.ReportComment != null;
 
             return isValid;
         }
@@ -114,6 +114,35 @@ namespace Apo_Chan.ViewModels
                     System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                 }
                 IsBusy = false;
+                Report.PropertyChanged += checkDateTime;
+            }
+            else
+            {
+                await dialogService.DisplayAlertAsync("Error", "Failed to load the detail page!", "OK");
+                await navigationService.GoBackAsync();
+            }
+        }
+
+        private async void checkDateTime(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ReportStartDate" || e.PropertyName == "ReportStartTime" ||
+                e.PropertyName == "ReportEndDate" || e.PropertyName == "ReportEndTime")
+            {
+                if (Report.ReportStartDate.CompareTo(Report.ReportEndDate) > 0)
+                {
+                    await dialogService.DisplayAlertAsync("Error", "The start date is later than the end date!", "OK");
+                    Report.ReportEndDate = Report.ReportStartDate;
+                }
+                else if ((Report.ReportStartDate.CompareTo(Report.ReportEndDate) == 0)
+                      && (Report.ReportStartTime.CompareTo(Report.ReportEndTime) > 0))
+                {
+                    await dialogService.DisplayAlertAsync("Error", "The start time is later than the end time!", "OK");
+                    Report.ReportEndTime = Report.ReportStartTime.Add(TimeSpan.FromMinutes(30));
+                }
+            }
+            else
+            {
+                return;
             }
         }
         #endregion

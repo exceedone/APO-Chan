@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.WindowsAzure.MobileServices;
+using Prism.Mvvm;
 
 namespace Apo_Chan.Items
 {
-    public abstract class BaseItem
+    public abstract class BaseItem: BindableBase
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }

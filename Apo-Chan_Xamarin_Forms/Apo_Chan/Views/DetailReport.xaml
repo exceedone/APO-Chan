@@ -17,7 +17,7 @@
                             BackgroundColor="{StaticResource BarColor}"
                             Padding="0,0,0,0">
                 <Button Image="button_back.png"
-                        Scale="0.75"
+                        Scale="0.8"
                         BackgroundColor="{StaticResource BarColor}"
                         Command="{Binding GoBackCommand}"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
@@ -49,6 +49,7 @@
                                 WidthRequest="140"
                                 HorizontalOptions="Start"/>
                     <TimePicker Time="{Binding Report.ReportStartTime}"
+                                x:Name="startTime"
                                 WidthRequest="100"
                                 HorizontalOptions="End"/>
                 </StackLayout>
@@ -61,6 +62,7 @@
                                 WidthRequest="140"
                                 HorizontalOptions="Start"/>
                     <TimePicker Time="{Binding Report.ReportEndTime}"
+                                x:Name="endTime"
                                 WidthRequest="100"
                                 HorizontalOptions="End"/>
                 </StackLayout>
