@@ -98,7 +98,14 @@ namespace Apo_Chan.ViewModels
             }
 
             ReportItems.Clear();
-            ReportItems = allReports;
+            //ReportItems = allReports;
+            foreach (var item in allReports)
+            {
+                item.ReportStartDate = item.ReportStartDate.ToLocalTime();
+                item.ReportEndDate = item.ReportEndDate.ToLocalTime();
+
+                ReportItems.Add(item);
+            }
 
             IsBusy = false;
         }

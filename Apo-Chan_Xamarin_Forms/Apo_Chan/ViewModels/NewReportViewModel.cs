@@ -38,10 +38,10 @@ namespace Apo_Chan.ViewModels
             {
                 Id = null,
                 RefUserId = GlobalAttributes.refUserId,
-                ReportStartDate = DateTime.UtcNow.ToLocalTime(),
-                ReportStartTime = DateTime.UtcNow.ToLocalTime().TimeOfDay,
-                ReportEndDate = DateTime.UtcNow.ToLocalTime(),
-                ReportEndTime = DateTime.UtcNow.ToLocalTime().AddMinutes(30).TimeOfDay,
+                ReportStartDate = DateTime.Today,
+                ReportStartTime = DateTime.Now.TimeOfDay,
+                ReportEndDate = DateTime.Today,
+                ReportEndTime = DateTime.Now.AddMinutes(30).TimeOfDay,
             };
 
             SubmitCommand = new DelegateCommand(submitReport);
@@ -58,17 +58,21 @@ namespace Apo_Chan.ViewModels
                 if (accepted)
                 {
                     IsBusy = true;
+                    Report.PropertyChanged -= checkDateTime;
                     try
                     {
+                        //using UTC when saving DateTime
+                        Report.ReportEndDate = Report.ReportEndDate.Add(Report.ReportEndTime).ToUniversalTime();
+                        Report.ReportStartDate = Report.ReportStartDate.Add(Report.ReportStartTime).ToUniversalTime();
+
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
                     }
                     catch (Exception e)
                     {
                         System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                     }
-
-                    await navigationService.GoBackAsync();
                     IsBusy = false;
+                    await navigationService.GoBackAsync();
                 }
             }
         }
