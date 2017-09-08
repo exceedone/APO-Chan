@@ -93,6 +93,8 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geolocation\GeolocationSingleUpdateDelegate.cs" />
+    <Compile Include="Geolocation\Geolocator.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
   </ItemGroup>

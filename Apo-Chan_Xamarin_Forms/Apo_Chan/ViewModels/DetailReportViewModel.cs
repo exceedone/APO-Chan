@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using XLabs.Platform.Services.Geolocation;
 
 namespace Apo_Chan.ViewModels
 {
@@ -30,6 +31,21 @@ namespace Apo_Chan.ViewModels
         public DelegateCommand UpdateCommand { get; private set; }
 
         public DelegateCommand DeleteCommand { get; private set; }
+
+        private IGeolocator _geolocator;
+        private IGeolocator Geolocator
+        {
+            get
+            {
+                if (_geolocator == null)
+                {
+                    _geolocator = Xamarin.Forms.DependencyService.Get<IGeolocator>();// ?? Resolver.Resolve<IGeolocator>();
+                    //_geolocator.PositionError += OnListeningError;
+                    //_geolocator.PositionChanged += OnPositionChanged;
+                }
+                return _geolocator;
+            }
+        }
         #endregion
 
         #region Constructor
@@ -57,6 +73,7 @@ namespace Apo_Chan.ViewModels
                 {
                     IsBusy = true;
                     Report.PropertyChanged -= checkDateTime;
+                    //Position pos = await Geolocator.GetPositionAsync(5000);
                     try
                     {
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);

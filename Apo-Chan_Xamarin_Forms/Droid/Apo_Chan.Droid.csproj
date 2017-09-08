@@ -64,6 +64,9 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geolocation\GeolocationContinuousListener.cs" />
+    <Compile Include="Geolocation\GeolocationSingleListener.cs" />
+    <Compile Include="Geolocation\Geolocator.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
