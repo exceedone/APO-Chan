@@ -54,17 +54,19 @@ namespace Apo_Chan.ViewModels
         {
             if (isValidReport())
             {
-                var accepted = await dialogService.DisplayAlertAsync("Confirmation", "Do you want to submit this report?", "Confirm", "Cancel");
+                var accepted = await dialogService.DisplayAlertAsync
+                    (
+                        "Confirmation",
+                        "Do you want to submit this report?",
+                        "Confirm",
+                        "Cancel"
+                    );
                 if (accepted)
                 {
                     IsBusy = true;
                     Report.PropertyChanged -= checkDateTime;
                     try
                     {
-                        //using UTC when saving DateTime
-                        Report.ReportEndDate = Report.ReportEndDate.Add(Report.ReportEndTime).ToUniversalTime();
-                        Report.ReportStartDate = Report.ReportStartDate.Add(Report.ReportStartTime).ToUniversalTime();
-
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
                     }
                     catch (Exception e)
@@ -94,13 +96,23 @@ namespace Apo_Chan.ViewModels
             {
                 if (Report.ReportStartDate.CompareTo(Report.ReportEndDate) > 0)
                 {
-                    await dialogService.DisplayAlertAsync("Error", "The start date is later than the end date!", "OK");
+                    await dialogService.DisplayAlertAsync
+                        (
+                            "Error",
+                            "The start date is later than the end date!",
+                            "OK"
+                        );
                     Report.ReportEndDate = Report.ReportStartDate;
                 }
                 else if ((Report.ReportStartDate.CompareTo(Report.ReportEndDate) == 0)
                       && (Report.ReportStartTime.CompareTo(Report.ReportEndTime) > 0))
                 {
-                    await dialogService.DisplayAlertAsync("Error", "The start time is later than the end time!", "OK");
+                    await dialogService.DisplayAlertAsync
+                        (
+                            "Error",
+                            "The start time is later than the end time!",
+                            "OK"
+                        );
                     Report.ReportEndTime = Report.ReportStartTime.Add(TimeSpan.FromMinutes(30));
                 }
             }

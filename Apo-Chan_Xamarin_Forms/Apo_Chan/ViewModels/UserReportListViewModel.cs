@@ -90,7 +90,11 @@ namespace Apo_Chan.ViewModels
             ObservableCollection<ReportItem> allReports = null;
             try
             {
-                allReports = await ReportManager.DefaultManager.GetItemsAsync(this.CurrentDate.Year, this.CurrentDate.Month);
+                allReports = await ReportManager.DefaultManager.GetItemsAsync
+                    (
+                        this.CurrentDate.Year,
+                        this.CurrentDate.Month
+                    );
             }
             catch (Exception e)
             {
@@ -98,14 +102,7 @@ namespace Apo_Chan.ViewModels
             }
 
             ReportItems.Clear();
-            //ReportItems = allReports;
-            foreach (var item in allReports)
-            {
-                item.ReportStartDate = item.ReportStartDate.ToLocalTime();
-                item.ReportEndDate = item.ReportEndDate.ToLocalTime();
-
-                ReportItems.Add(item);
-            }
+            ReportItems = allReports;
 
             IsBusy = false;
         }

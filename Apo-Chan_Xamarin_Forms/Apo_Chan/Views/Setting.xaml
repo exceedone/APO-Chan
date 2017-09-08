@@ -10,8 +10,8 @@
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="3*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <AbsoluteLayout Grid.Row="0"
                             BackgroundColor="{StaticResource BarColor}"

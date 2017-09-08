@@ -54,7 +54,28 @@ namespace Apo_Chan.Managers
                     ).OrderBy(x => x.ReportStartDate).ThenBy(x => x.ReportEndDate).ThenBy(x => x.ReportStartTime).ThenBy(x => x.ReportEndTime)
                     .ToEnumerableAsync();
 
-                return new ObservableCollection<ReportItem>(items);
+                //Fix issue#2 - BEGIN
+                ObservableCollection<ReportItem> reports = new ObservableCollection<ReportItem>();
+                foreach (var item in items)
+                {
+                    item.ReportEndDate = DateTime.SpecifyKind
+                        (
+                            item.ReportEndDate.Date.Add(item.ReportEndTime),
+                            DateTimeKind.Utc
+                        ).ToLocalTime();
+                    item.ReportStartDate = DateTime.SpecifyKind
+                        (
+                            item.ReportStartDate.Date.Add(item.ReportStartTime),
+                            DateTimeKind.Utc
+                        ).ToLocalTime();
+                    item.ReportEndTime = item.ReportEndDate.TimeOfDay;
+                    item.ReportStartTime = item.ReportStartDate.TimeOfDay;
+
+                    reports.Add(item);
+                }
+                //Fix issue#2 - END
+
+                return reports;
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
@@ -66,5 +87,39 @@ namespace Apo_Chan.Managers
             }
             return null;
         }
+
+        //Fix issue#2 - BEGIN
+        public new async Task SaveTaskAsync(ReportItem report)
+        {
+            report.ReportEndDate
+                = report.ReportEndDate.Date.Add(report.ReportEndTime).ToUniversalTime();
+            report.ReportStartDate
+                = report.ReportStartDate.Date.Add(report.ReportStartTime).ToUniversalTime();
+            report.ReportEndTime = report.ReportEndDate.TimeOfDay;
+            report.ReportStartTime = report.ReportStartDate.TimeOfDay;
+
+            await base.SaveTaskAsync(report);
+        }
+
+        public new async Task<ReportItem> LookupAsync(string id)
+        {
+            ReportItem report = await base.LookupAsync(id);
+
+            report.ReportEndDate = DateTime.SpecifyKind
+                (
+                    report.ReportEndDate.Date.Add(report.ReportEndTime),
+                    DateTimeKind.Utc
+                ).ToLocalTime();
+            report.ReportStartDate = DateTime.SpecifyKind
+                (
+                    report.ReportStartDate.Date.Add(report.ReportStartTime),
+                    DateTimeKind.Utc
+                ).ToLocalTime();
+            report.ReportEndTime = report.ReportEndDate.TimeOfDay;
+            report.ReportStartTime = report.ReportStartDate.TimeOfDay;
+
+            return report;
+        }
+        //Fix issue#2 - END
     }
 }
