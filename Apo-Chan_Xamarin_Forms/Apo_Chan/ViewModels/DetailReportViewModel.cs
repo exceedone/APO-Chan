@@ -32,18 +32,32 @@ namespace Apo_Chan.ViewModels
 
         public DelegateCommand DeleteCommand { get; private set; }
 
-        private IGeolocator _geolocator;
+        private IGeolocator geolocator;
         private IGeolocator Geolocator
         {
             get
             {
-                if (_geolocator == null)
+                if (geolocator == null)
                 {
-                    _geolocator = Xamarin.Forms.DependencyService.Get<IGeolocator>();// ?? Resolver.Resolve<IGeolocator>();
-                    //_geolocator.PositionError += OnListeningError;
-                    //_geolocator.PositionChanged += OnPositionChanged;
+                    geolocator = Xamarin.Forms.DependencyService.Get<IGeolocator>();
+                    //geolocator.PositionError += OnListeningError;
+                    //geolocator.PositionChanged += OnPositionChanged;
                 }
-                return _geolocator;
+                return geolocator;
+            }
+        }
+        private Position position;
+        private Position Position
+        {
+            set
+            {
+                SetProperty(ref this.position, value);
+                if (Report != null)
+                {
+                    Report.ReportLat = this.position.Latitude;
+                    Report.ReportLon = this.position.Longitude;
+                }
+                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + position.Latitude + ";" + position.Longitude);
             }
         }
         #endregion
@@ -54,6 +68,19 @@ namespace Apo_Chan.ViewModels
         {
             UpdateCommand = new DelegateCommand(updateReport);
             DeleteCommand = new DelegateCommand(deleteReport);
+        }
+
+        private async void getPosition()
+        {
+            Geolocator.DesiredAccuracy = 100;
+            try
+            {
+                Position = await Geolocator.GetPositionAsync(10000);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+            }
         }
         #endregion
 
@@ -73,7 +100,6 @@ namespace Apo_Chan.ViewModels
                 {
                     IsBusy = true;
                     Report.PropertyChanged -= checkDateTime;
-                    //Position pos = await Geolocator.GetPositionAsync(5000);
                     try
                     {
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
@@ -136,6 +162,7 @@ namespace Apo_Chan.ViewModels
                 try
                 {
                     Report = await ReportManager.DefaultManager.LookupAsync((string)parameters["Id"]);
+                    getPosition();
                 }
                 catch (Exception e)
                 {

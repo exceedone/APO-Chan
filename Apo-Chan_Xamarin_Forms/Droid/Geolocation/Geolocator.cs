@@ -29,11 +29,6 @@ using Android.Locations;
 using Android.OS;
 using Java.Lang;
 
-//-->>added 2017-09-08
-using XLabs.Platform.Services.Geolocation;
-[assembly: Xamarin.Forms.Dependency(typeof(Geolocator))]
-//--<<added 2017-09-08
-
 namespace XLabs.Platform.Services.Geolocation
 {
 	/// <summary>

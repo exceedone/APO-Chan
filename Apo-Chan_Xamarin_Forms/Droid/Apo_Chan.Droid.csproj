@@ -64,9 +64,11 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geolocation\FusedListener.cs" />
     <Compile Include="Geolocation\GeolocationContinuousListener.cs" />
     <Compile Include="Geolocation\GeolocationSingleListener.cs" />
     <Compile Include="Geolocation\Geolocator.cs" />
+    <Compile Include="Geolocation\FusedGeolocator.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,6 +103,9 @@
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>2.3.4.267</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.GooglePlayServices.Location">
+      <Version>29.0.0.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
