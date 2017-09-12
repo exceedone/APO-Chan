@@ -83,15 +83,15 @@
                             HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
                 </StackLayout>
 
-                <StackLayout x:Name="locaionLayout" Orientation="Vertical"
+                <StackLayout x:Name="locaionLayout" Orientation="Horizontal"
                              VerticalOptions="End"
                              Padding="0,5,0,5">
-                    <Label Text="Location"/>
-                    <StackLayout Orientation="Horizontal"
-                                 HorizontalOptions="FillAndExpand">
-                        <Label Text="{Binding Report.ReportLat, StringFormat='{0:0.0000}'}"/>
-                        <Label Text="{Binding Report.ReportLon, StringFormat='{0:0.0000}'}"/>
-                    </StackLayout>
+                    <Label Text="@"
+                           Font="Roboto" FontSize="14.0"
+                           TextColor="{StaticResource DisableTextColor}"/>
+                    <Label Text="{Binding Address}"
+                           Font="Roboto" FontSize="14.0"
+                           TextColor="{StaticResource TextColor}"/>
                 </StackLayout>
 
                 <AbsoluteLayout x:Name="actionLayout"

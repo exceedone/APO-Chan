@@ -43,7 +43,19 @@ namespace Apo_Chan.ViewModels
                     Report.ReportLat = this.position.Latitude;
                     Report.ReportLon = this.position.Longitude;
                 }
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + position.Latitude + ";" + position.Longitude);
+            }
+        }
+
+        private string address = string.Empty;
+        public string Address
+        {
+            get
+            {
+                return address;
+            }
+            set
+            {
+                SetProperty(ref this.address, value);
             }
         }
         #endregion
@@ -54,18 +66,6 @@ namespace Apo_Chan.ViewModels
         {
             UpdateCommand = new DelegateCommand(updateReport);
             DeleteCommand = new DelegateCommand(deleteReport);
-        }
-
-        private async void getPosition()
-        {
-            try
-            {
-                Position = await GlobalAttributes.Geolocator.GetPositionAsync(10000);
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
-            }
         }
         #endregion
 
@@ -156,6 +156,7 @@ namespace Apo_Chan.ViewModels
                 }
                 IsBusy = false;
                 Report.PropertyChanged += checkDateTime;
+                Report.PropertyChanged += checkLocation;
             }
             else
             {
@@ -194,6 +195,26 @@ namespace Apo_Chan.ViewModels
             else
             {
                 return;
+            }
+        }
+
+        private async void getPosition()
+        {
+            try
+            {
+                Position = await GlobalAttributes.Geolocator.GetPositionAsync(10000);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+            }
+        }
+
+        private async void checkLocation(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ReportLat")
+            {
+                Address = await GeoLocation.Geocoding.GetAddressAsync(position);
             }
         }
         #endregion

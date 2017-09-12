@@ -22,6 +22,16 @@ namespace Apo_Chan
             , Microsoft = 2
             , Office365 = 3
         }
+
+        /// <summary>
+        /// Google Maps Geocoding API - REST services
+        /// </summary>
+        public static string GoogleReverseGeocodingURI = "https://maps.googleapis.com/maps/api/geocode/json?latlng={1},{2}&key={0}";
+
+        /// <summary>
+        /// Google Maps Geocoding API Key
+        /// </summary>
+        public static string GoogleGeocodingAPIKey = "AIzaSyCxHoYGMlu-y0BvLFHaoO14zD0E3eWxbVQ";
     }
 }
 
