@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XLabs.Platform.Services.Geolocation;
 
 namespace Apo_Chan
 {
@@ -13,6 +14,21 @@ namespace Apo_Chan
             get
             {
                 return Apo_Chan.Items.UserItem.GetCachedUserItem().Id;
+            }
+        }
+
+        private static IGeolocator geolocator;
+        public static IGeolocator Geolocator
+        {
+            get
+            {
+                if (geolocator == null)
+                {
+                    geolocator = Xamarin.Forms.DependencyService.Get<IGeolocator>();
+                    //geolocator.PositionError += OnListeningError;
+                    //geolocator.PositionChanged += OnPositionChanged;
+                }
+                return geolocator;
             }
         }
     }

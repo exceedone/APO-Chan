@@ -32,20 +32,6 @@ namespace Apo_Chan.ViewModels
 
         public DelegateCommand DeleteCommand { get; private set; }
 
-        private IGeolocator geolocator;
-        private IGeolocator Geolocator
-        {
-            get
-            {
-                if (geolocator == null)
-                {
-                    geolocator = Xamarin.Forms.DependencyService.Get<IGeolocator>();
-                    //geolocator.PositionError += OnListeningError;
-                    //geolocator.PositionChanged += OnPositionChanged;
-                }
-                return geolocator;
-            }
-        }
         private Position position;
         private Position Position
         {
@@ -72,10 +58,9 @@ namespace Apo_Chan.ViewModels
 
         private async void getPosition()
         {
-            Geolocator.DesiredAccuracy = 100;
             try
             {
-                Position = await Geolocator.GetPositionAsync(10000);
+                Position = await GlobalAttributes.Geolocator.GetPositionAsync(10000);
             }
             catch (Exception e)
             {

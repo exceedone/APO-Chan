@@ -54,6 +54,7 @@ namespace Apo_Chan.Droid.Geolocation
 
         public void OnLocationChanged(Location location)
         {
+            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + location.ToString());
             if (location.Accuracy <= _desiredAccuracy)
             {
                 Finish(location);
@@ -116,10 +117,7 @@ namespace Apo_Chan.Droid.Geolocation
             p.Latitude = location.Latitude;
             p.Timestamp = Geolocator.GetTimestamp(location);
 
-            if (_finishedCallback != null)
-            {
-                _finishedCallback();
-            }
+            _finishedCallback?.Invoke();
 
             _completionSource.TrySetResult(p);
         }

@@ -38,8 +38,6 @@ namespace Apo_Chan.Droid.Geolocation
 
         private readonly string[] _providers;
 
-        private bool isConnected = false;
-
         private FusedListener fusedListener = null;
 
         public FusedGeolocator()
@@ -52,6 +50,7 @@ namespace Apo_Chan.Droid.Geolocation
                 .AddConnectionCallbacks(this)
                 .AddOnConnectionFailedListener(this)
                 .Build();
+
             mGoogleApiClient.Connect();
         }
 
@@ -152,7 +151,11 @@ namespace Apo_Chan.Droid.Geolocation
                     timeout,
                     () =>
                     {
-                        LocationServices.FusedLocationApi.RemoveLocationUpdates(mGoogleApiClient, fusedListener);
+                        if (mGoogleApiClient.IsConnected)
+                        {
+                            LocationServices.FusedLocationApi.RemoveLocationUpdates(mGoogleApiClient, fusedListener);
+                        }
+                        System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "FusedListener > FinishCallback");
                     });
 
                 if (cancelToken != CancellationToken.None)
@@ -161,21 +164,26 @@ namespace Apo_Chan.Droid.Geolocation
                         () =>
                         {
                             fusedListener.Cancel();
-
-                            LocationServices.FusedLocationApi.RemoveLocationUpdates(mGoogleApiClient, fusedListener);
+                            if (mGoogleApiClient.IsConnected)
+                            {
+                                LocationServices.FusedLocationApi.RemoveLocationUpdates(mGoogleApiClient, fusedListener);
+                            }
                         },
                         true);
                 }
 
-                //try
-                //{
-                //    LocationServices.FusedLocationApi.RequestLocationUpdates(mGoogleApiClient, mLocationRequest, fusedListener);
-                //}
-                //catch (SecurityException ex)
-                //{
-                //    tcs.SetException(new GeolocationException(GeolocationError.Unauthorized, ex));
-                //    return tcs.Task;
-                //}
+                if (mGoogleApiClient.IsConnected)
+                {
+                    try
+                    {
+                        LocationServices.FusedLocationApi.RequestLocationUpdates(mGoogleApiClient, mLocationRequest, fusedListener);
+                    }
+                    catch (SecurityException ex)
+                    {
+                        tcs.SetException(new GeolocationException(GeolocationError.Unauthorized, ex));
+                        return tcs.Task;
+                    }
+                }
 
                 return fusedListener.Task;
             }
@@ -287,9 +295,7 @@ namespace Apo_Chan.Droid.Geolocation
             mLocationRequest.SetPriority(LocationRequest.PriorityHighAccuracy);
             mLocationRequest.SetInterval(1000);
 
-            isConnected = true;
-
-            LocationServices.FusedLocationApi.RequestLocationUpdates(mGoogleApiClient, mLocationRequest, fusedListener);
+            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "GoogleApiClient > OnConnected");
         }
 
         public void OnConnectionSuspended(int cause)

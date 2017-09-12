@@ -48,6 +48,8 @@ namespace Apo_Chan
             //    await NavigationService.NavigateAsync("NavigationPage/SignIn");
             //}
             await NavigationService.NavigateAsync("NavigationPage/SignIn");
+
+            GlobalAttributes.Geolocator.DesiredAccuracy = 100;
         }
 
         protected override void RegisterTypes()
