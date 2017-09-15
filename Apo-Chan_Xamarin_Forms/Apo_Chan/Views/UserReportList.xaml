@@ -4,60 +4,34 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
-             NavigationPage.HasNavigationBar="False"
+             NavigationPage.HasNavigationBar="True"
+             ControlTemplate="{StaticResource MainPageTemplate}"
              x:Class="Apo_Chan.Views.UserReportList">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="previousButton" Order="Primary" Priority="0"
+                     Icon="button_previous.png"
+                     Command="{TemplateBinding BindingContext.PrevMonthReportCommand}"/>
+
+        <ToolbarItem Name="monthLabel" Order="Primary" Priority="1"
+                     Text="{TemplateBinding BindingContext.CurrentDate, StringFormat='{0:yyyy MMMM}'}" />
+
+        <ToolbarItem Name="nextButton" Order="Primary" Priority="2"
+                     Icon="button_next.png"
+                     Command="{TemplateBinding BindingContext.NextMonthReportCommand}"/>
+        <ToolbarItem Name="settingButton" Order="Primary" Priority="3"
+                     Icon="button_setting.png"
+                     Command="{TemplateBinding BindingContext.SettingCommand}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-              ColumnSpacing="0" RowSpacing="0">
+        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
-            <AbsoluteLayout Grid.Row="0"
-                            BackgroundColor="{StaticResource BarColor}"
-                            Padding="0,0,0,0">
-                <Button Image="button_previous.png"
-                        Scale="0.75"
-                        BackgroundColor="{StaticResource BarColor}"
-                        Command="{Binding PrevMonthReportCommand}"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds =".25, 0, 50, 50">
-                </Button>
-                <Label Text="{Binding CurrentDate, StringFormat='{0:yyyy MMMM}'}"
-                       TextColor="{StaticResource BarTextColor}"
-                       VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
-                       AbsoluteLayout.LayoutFlags="PositionProportional"
-                       AbsoluteLayout.LayoutBounds =".5, 0, 300, 50">
-                </Label>
-                <Button Image="button_next.png"
-                        Scale="0.75"
-                        BackgroundColor="{StaticResource BarColor}"
-                        Command="{Binding NextMonthReportCommand}"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds =".75, 0, 50, 50">
-                </Button>
-                <Button Image="button_setting.png"
-                        Scale="0.75"
-                        BackgroundColor="{StaticResource BarColor}"
-                        Command="{Binding SettingCommand}"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds =".95, 0, 50, 50">
-                </Button>
-                <Frame Padding="0,0,0,0" CornerRadius="0"
-                       BackgroundColor="{StaticResource BarOutlineColor}"
-                       OutlineColor="{StaticResource BarOutlineColor}"
-                       AbsoluteLayout.LayoutFlags="All"
-                       AbsoluteLayout.LayoutBounds ="0, 1, 1, .04">
-                </Frame>
-            </AbsoluteLayout>
-
             <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-                         Grid.Row="1" BackgroundColor="{StaticResource BackColor}"
+                         Grid.Row="0"
                          Padding="16,8,16,0">
                 <ListView x:Name="reportList"
-                          SeparatorColor="{StaticResource SeparatorColor}"
-                          BackgroundColor="{StaticResource BackColor}"
+                          SeparatorColor="{StaticResource DividerColor}"
                           HasUnevenRows="True"
                           RefreshCommand="{Binding RefreshCommand}"
                           ItemsSource="{Binding ReportItems}">
@@ -75,19 +49,19 @@
                                     <Label HorizontalOptions="Start"
                                            Font="Roboto" FontSize="16.0"
                                            Text="{Binding ReportTitle}"
-                                           TextColor="{StaticResource TextColor}">
+                                           TextColor="{StaticResource PrimaryTextColor}">
                                     </Label>
                                     <AbsoluteLayout Padding="0,0,0,0"
                                                     HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                                         <Label Font="Roboto" FontSize="14.0"
-                                               TextColor="{StaticResource DateTimeColor}"
+                                               TextColor="{StaticResource SecondaryTextColor}"
                                                Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"
                                                AbsoluteLayout.LayoutFlags="PositionProportional"
                                                AbsoluteLayout.LayoutBounds =".1, 0, 100, 16">
                                         </Label>
                                         <Label HorizontalOptions="Center"
                                                Font="Roboto" FontSize="14.0"
-                                               TextColor="{StaticResource DateTimeColor}"
+                                               TextColor="{StaticResource SecondaryTextColor}"
                                                Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"
                                                AbsoluteLayout.LayoutFlags="PositionProportional"
                                                AbsoluteLayout.LayoutBounds =".3, 0, 100, 16">
@@ -100,18 +74,12 @@
                 </ListView>
             </StackLayout>
 
-            <Button x:Name="addButton" Grid.Row="1"
+            <Button x:Name="addButton" Grid.Row="0"
                     VerticalOptions="End" HorizontalOptions="End"
-                    TranslationX="-30" TranslationY="-10"
+                    TranslationX="-10" TranslationY="-5"
                     BackgroundColor="Transparent"
                     Image="button_add.png"
-                    Clicked="OnAddButtonClicked"
                     Command="{Binding AddNewReportCommand}"/>
-            <ActivityIndicator Grid.Row="1"
-                               HorizontalOptions="Center" VerticalOptions="Center"
-                               Color="{StaticResource AccentColor}"
-                               IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" >
-            </ActivityIndicator>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

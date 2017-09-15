@@ -25,17 +25,19 @@ using Apo_Chan.Models;
 namespace Apo_Chan.Droid
 {
     [Activity(Label = "Apo-Chan",
-        Icon = "@drawable/icon",
+        Icon = "@drawable/ic_launcher",
         MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
-        Theme = "@android:style/Theme.Holo.Light")]
-    public class MainActivity : FormsApplicationActivity, IAuthenticate
+        Theme = "@style/MyTheme")]
+    public class MainActivity : FormsAppCompatActivity, IAuthenticate
     {
         // Define a authenticated user.
         private MobileServiceUser loginuser;
 
         protected override void OnCreate(Bundle bundle)
         {
+            FormsAppCompatActivity.ToolbarResource = Resource.Layout.Toolbar;
+
             base.OnCreate(bundle);
 
             // Initialize Azure Mobile Apps

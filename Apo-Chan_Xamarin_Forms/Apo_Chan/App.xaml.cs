@@ -50,6 +50,7 @@ namespace Apo_Chan
             await NavigationService.NavigateAsync("NavigationPage/SignIn");
 
             GlobalAttributes.Geolocator.DesiredAccuracy = 100;
+            //GlobalAttributes.Position = await GlobalAttributes.Geolocator.GetPositionAsync(10000);
         }
 
         protected override void RegisterTypes()

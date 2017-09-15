@@ -4,56 +4,33 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
-             NavigationPage.HasNavigationBar="False"
+             NavigationPage.HasNavigationBar="True"
+             Title="Settings"
+             ControlTemplate="{StaticResource MainPageTemplate}"
              x:Class="Apo_Chan.Views.Setting">
     <ContentPage.Content>
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <AbsoluteLayout Grid.Row="0"
-                            BackgroundColor="{StaticResource BarColor}"
-                            Padding="0,0,0,0">
-                <Button Image="button_back.png"
-                        Scale="0.8"
-                        BackgroundColor="{StaticResource BarColor}"
-                        Command="{Binding GoBackCommand}"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds ="0, 0, 50, 50">
-                </Button>
-                <Label Text="Settings" FontSize="Medium"
-                       TextColor="{StaticResource BarTextColor}"
-                       VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
-                       AbsoluteLayout.LayoutFlags="PositionProportional"
-                       AbsoluteLayout.LayoutBounds =".5, 0, 200, 50">
-                </Label>
-                <Frame Padding="0,0,0,0" CornerRadius="0"
-                       BackgroundColor="{StaticResource BarOutlineColor}"
-                       OutlineColor="{StaticResource BarOutlineColor}"
-                       AbsoluteLayout.LayoutFlags="All"
-                       AbsoluteLayout.LayoutBounds ="0, 1, 1, .04">
-                </Frame>
-            </AbsoluteLayout>
-
-            <StackLayout Grid.Row="1" Orientation="Vertical"
+            <StackLayout Grid.Row="0" Orientation="Vertical"
                          HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                         BackgroundColor="{StaticResource PrimaryLightColor}"
                          Padding="10,20,10,20">
                 <Image HorizontalOptions="Center" VerticalOptions="StartAndExpand" Source="icon_account.png"></Image>
                 <Label HorizontalOptions="Center" VerticalOptions="StartAndExpand"
                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
-                       FontAttributes="Bold" TextColor="{StaticResource TextColor}"
+                       FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"
                        Text="{Binding User.UserName }"/>
                 <Label HorizontalOptions="Center" VerticalOptions="StartAndExpand"
                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
-                       FontAttributes="Bold" TextColor="{StaticResource TextColor}"
+                       FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"
                        Text="{Binding User.Email}"/>
             </StackLayout>
 
-            <ListView Grid.Row="2" x:Name="settingItems"
-                      SeparatorColor="{StaticResource SeparatorColor}"
-                      BackgroundColor="{StaticResource BackColor}"
+            <ListView Grid.Row="1" x:Name="settingItems"
+                      SeparatorColor="{StaticResource DividerColor}"
                       HasUnevenRows="True"
                       RefreshCommand="{Binding RefreshCommand}"
                       ItemsSource="{Binding SettingItems}">
@@ -69,11 +46,11 @@
                                          Padding="5,10,5,10">
                                 <Label HorizontalOptions="Start" VerticalOptions="StartAndExpand"
                                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
-                                       FontAttributes="Bold" TextColor="{StaticResource TextColor}"
+                                       FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"
                                        Text="{Binding Title}"/>
                                 <Label HorizontalOptions="Center" VerticalOptions="StartAndExpand"
                                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
-                                       FontAttributes="Bold" TextColor="{StaticResource TextColor}"
+                                       FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"
                                        Text="{Binding Description}"/>
                                 <StackLayout.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding ItemTappedCommand}"></TapGestureRecognizer>
@@ -83,11 +60,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-            <ActivityIndicator Grid.Row="0" Grid.RowSpan="3"
-                               HorizontalOptions="Center" VerticalOptions="Center"
-                               Color="{StaticResource AccentColor}"
-                               x:Name="syncIndicator" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

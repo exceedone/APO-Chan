@@ -31,5 +31,18 @@ namespace Apo_Chan
                 return geolocator;
             }
         }
+
+        private static Position position;
+        public static Position Position
+        {
+            get
+            {
+                return position;
+            }
+            set
+            {
+                position = value;
+            }
+        }
     }
 }
