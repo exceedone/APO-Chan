@@ -151,11 +151,16 @@ namespace Apo_Chan.Droid.Geolocation
                     timeout,
                     () =>
                     {
-                        if (mGoogleApiClient.IsConnected)
+                        try
                         {
                             LocationServices.FusedLocationApi.RemoveLocationUpdates(mGoogleApiClient, fusedListener);
+                            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "FusedListener > FinishCallback");
                         }
-                        System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "FusedListener > FinishCallback");
+                        catch (System.Exception ex)
+                        {
+                            tcs.SetException(ex);
+                            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + ex.Message);
+                        }
                     });
 
                 if (cancelToken != CancellationToken.None)

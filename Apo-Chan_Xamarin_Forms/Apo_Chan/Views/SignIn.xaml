@@ -7,14 +7,12 @@
              x:Class="Apo_Chan.Views.SignIn">
     <ContentPage.Content>
             <StackLayout Padding="10,20,10,20">
-                <Button x:Name="loginOffice365" Text="Office365" MinimumHeightRequest="30"
-                        Command="{Binding NavigateSignInCommand}"
-                        BackgroundColor="{StaticResource PrimaryColor}" 
-                        TextColor="{StaticResource TextIconsColor}"/>
-                <Button x:Name="loginGoogle" Text="Google" MinimumHeightRequest="30"
-                        Command="{Binding NavigateSignInGoogleCommand}"
-                        BackgroundColor="{StaticResource PrimaryColor}"
-                        TextColor="{StaticResource TextIconsColor}"/>
+                <Button x:Name="loginOffice365" Text="Office365"
+                        Style="{StaticResource BlueButtonStyle}"
+                        Command="{Binding NavigateSignInCommand}"/>
+                <Button x:Name="loginGoogle" Text="Google"
+                        Style="{StaticResource BlueButtonStyle}"
+                        Command="{Binding NavigateSignInGoogleCommand}"/>
             </StackLayout>
     </ContentPage.Content>
 </ContentPage>

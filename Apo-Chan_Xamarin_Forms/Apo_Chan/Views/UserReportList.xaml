@@ -4,6 +4,7 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:fab="clr-namespace:FAB.Forms;assembly=FAB.Forms"
              NavigationPage.HasNavigationBar="True"
              ControlTemplate="{StaticResource MainPageTemplate}"
              x:Class="Apo_Chan.Views.UserReportList">
@@ -29,7 +30,7 @@
             </Grid.RowDefinitions>
             <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                          Grid.Row="0"
-                         Padding="16,8,16,0">
+                         Padding="0,0,0,8">
                 <ListView x:Name="reportList"
                           SeparatorColor="{StaticResource DividerColor}"
                           HasUnevenRows="True"
@@ -44,7 +45,7 @@
                         <DataTemplate>
                             <ViewCell>
                                 <StackLayout Orientation="Vertical"
-                                             Padding="0,10,0,10"
+                                             Padding="16,10,16,10"
                                              HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                                     <Label HorizontalOptions="Start"
                                            Font="Roboto" FontSize="16.0"
@@ -74,12 +75,15 @@
                 </ListView>
             </StackLayout>
 
-            <Button x:Name="addButton" Grid.Row="0"
-                    VerticalOptions="End" HorizontalOptions="End"
-                    TranslationX="-10" TranslationY="-5"
-                    BackgroundColor="Transparent"
-                    Image="button_add.png"
-                    Command="{Binding AddNewReportCommand}"/>
+            <fab:FloatingActionButton x:Name="addButtonF" Grid.Row="0"
+                                      VerticalOptions="End" HorizontalOptions="End"
+                                      TranslationX="-20" TranslationY="-20"
+                                      Source="button_add.png"
+                                      HasShadow="True" Size="Normal"
+                                      NormalColor="{StaticResource BlueButtonColor}"
+                                      RippleColor="{StaticResource AccentColor}"
+                                      Command="{Binding AddNewReportCommand}">
+            </fab:FloatingActionButton>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

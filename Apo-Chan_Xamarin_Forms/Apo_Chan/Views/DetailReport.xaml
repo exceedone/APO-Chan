@@ -66,22 +66,20 @@
 
             <AbsoluteLayout x:Name="actionLayout"
                             HorizontalOptions="FillAndExpand" VerticalOptions="End"
-                            Padding="0,0,0,0">
+                            Padding="0,0,0,8">
                 <Button x:Name="updateButton"
                         Text="Update"
-                        TextColor="{StaticResource TextIconsColor}"
-                        BackgroundColor="{StaticResource PrimaryDarkColor}"
+                        Style="{StaticResource WhiteButtonStyle}"
                         Command="{Binding UpdateCommand}"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds =".15, .05, 120, 50">
+                        AbsoluteLayout.LayoutBounds =".1, .05, 100, 50">
                 </Button>
                 <Button x:Name="deleteButton"
                         Text="Delete"
-                        TextColor="{StaticResource TextIconsColor}"
-                        BackgroundColor="{StaticResource AccentColor}"
+                        Style="{StaticResource RedButtonStyle}"
                         Command="{Binding DeleteCommand}"
                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AbsoluteLayout.LayoutBounds =".85, .05, 120, 50">
+                        AbsoluteLayout.LayoutBounds =".9, .05, 100, 50">
                 </Button>
             </AbsoluteLayout>
         </StackLayout>

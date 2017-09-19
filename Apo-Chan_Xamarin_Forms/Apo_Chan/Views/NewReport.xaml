@@ -53,13 +53,12 @@
 
             <StackLayout x:Name="actionLayout"
                          HorizontalOptions="FillAndExpand" VerticalOptions="End"
-                         Padding="0,0,0,0">
+                         Padding="0,0,0,8">
                 <Button x:Name="submitButton"
                         VerticalOptions="Center" HorizontalOptions="Center"
                         Text="Submit"
-                        HeightRequest="50" WidthRequest="120"
-                        TextColor="{StaticResource TextIconsColor}"
-                        BackgroundColor="{StaticResource PrimaryDarkColor}"
+                        HeightRequest="50" WidthRequest="100"
+                        Style="{StaticResource BlueButtonStyle}"
                         Command="{Binding SubmitCommand}"/>
             </StackLayout>
         </StackLayout>
