@@ -34,14 +34,20 @@ namespace Apo_Chan.ViewModels
         public NewReportViewModel(INavigationService navigationService, IPageDialogService dialogService)
             : base(navigationService, dialogService)
         {
+            // convert next 00, 10, 20, 30, 40, 50 minute
+            var foonow = DateTime.Now;
+            var now = new DateTime(foonow.Year, foonow.Month, foonow.Day, foonow.Hour, foonow.Minute, 0, 0, foonow.Kind);
+            now = now.AddMinutes(10 - (now.Minute % 10));
+            // get enddate
+            var endDate = now.AddHours(1);
             Report = new ReportItem
             {
                 Id = null,
                 RefUserId = GlobalAttributes.refUserId,
-                ReportStartDate = DateTime.Today,
-                ReportStartTime = DateTime.Now.TimeOfDay,
-                ReportEndDate = DateTime.Today,
-                ReportEndTime = DateTime.Now.AddMinutes(30).TimeOfDay,
+                ReportStartDate = now.Date,
+                ReportStartTime = now.TimeOfDay,
+                ReportEndDate = endDate.Date,
+                ReportEndTime = endDate.TimeOfDay,
             };
 
             SubmitCommand = new DelegateCommand(submitReport);

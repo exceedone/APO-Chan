@@ -8,21 +8,28 @@
         <!-- Application resource dictionary -->
         <ResourceDictionary>
             <ControlTemplate x:Key="MainPageTemplate">
-                <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-                      ColumnSpacing="0" RowSpacing="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                        <ContentView Grid.Row="0">
-                            <ContentPresenter VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
-                        </ContentView>
+                <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    <ContentView
+                        AbsoluteLayout.LayoutFlags="All"
+                        AbsoluteLayout.LayoutBounds="0,0,1,1"
+                        >
+                        <ContentPresenter VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                    </ContentView>
+                    <ContentView x:Name="actIndBackground"
+                         BackgroundColor="#222222" Opacity="0.7"
+                         AbsoluteLayout.LayoutFlags="All"
+                         AbsoluteLayout.LayoutBounds="0,0,1,1"
+                         IsVisible="{TemplateBinding BindingContext.IsBusy}">
+                    </ContentView>
                     <ActivityIndicator Grid.Row="0"
                                        HorizontalOptions="Center" VerticalOptions="Center"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
                                        Color="{StaticResource AccentColor}"
                                        IsVisible="{TemplateBinding BindingContext.IsBusy}"
                                        IsRunning="{TemplateBinding BindingContext.IsBusy}" >
                     </ActivityIndicator>
-                </Grid>
+                </AbsoluteLayout>
             </ControlTemplate>
 
             <!--Main Theme-->
