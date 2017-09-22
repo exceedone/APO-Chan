@@ -34,6 +34,7 @@
                 <ListView x:Name="reportList"
                           SeparatorColor="{StaticResource DividerColor}"
                           HasUnevenRows="True"
+                          CachingStrategy="RecycleElement"
                           RefreshCommand="{Binding RefreshCommand}"
                           ItemsSource="{Binding ReportItems}">
                     <ListView.Behaviors>

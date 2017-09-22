@@ -1,6 +1,10 @@
-﻿using Apo_Chan.Items;
+﻿using Apo_Chan.Geolocation;
+using Apo_Chan.Items;
 using Apo_Chan.Managers;
+using Apo_Chan.Models;
+using Plugin.Geolocator.Abstractions;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
@@ -24,6 +28,19 @@ namespace Apo_Chan.ViewModels
             set
             {
                 SetProperty(ref this.report, value);
+            }
+        }
+
+        private string reprotAddress = string.Empty;
+        public string ReportAddress
+        {
+            get
+            {
+                return reprotAddress;
+            }
+            set
+            {
+                SetProperty(ref this.reprotAddress, value);
             }
         }
 
@@ -52,6 +69,12 @@ namespace Apo_Chan.ViewModels
 
             SubmitCommand = new DelegateCommand(submitReport);
             Report.PropertyChanged += checkDateTime;
+
+            GeoEvent.DefaultInstance.Subscribe(updateLocation);
+            if (GeoService.DefaultInstance.IsAvailable)
+            {
+                InitLocationServiceAsync();
+            }
         }
 #endregion
 
@@ -126,6 +149,16 @@ namespace Apo_Chan.ViewModels
             {
                 return;
             }
+        }
+
+        private async void updateLocation(Position position)
+        {
+            if (Report != null)
+            {
+                Report.ReportLat = position.Latitude;
+                Report.ReportLon = position.Longitude;
+            }
+            ReportAddress = await GeoService.DefaultInstance.GetAddressFromPositionAsync(position);
         }
         #endregion
     }

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Apo_Chan.Geolocation;
+using Plugin.Geolocator.Abstractions;
+using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XLabs.Platform.Services.Geolocation;
 
 namespace Apo_Chan
 {
@@ -17,32 +19,6 @@ namespace Apo_Chan
             }
         }
 
-        private static IGeolocator geolocator;
-        public static IGeolocator Geolocator
-        {
-            get
-            {
-                if (geolocator == null)
-                {
-                    geolocator = Xamarin.Forms.DependencyService.Get<IGeolocator>();
-                    //geolocator.PositionError += OnListeningError;
-                    //geolocator.PositionChanged += OnPositionChanged;
-                }
-                return geolocator;
-            }
-        }
-
-        private static Position position;
-        public static Position Position
-        {
-            get
-            {
-                return position;
-            }
-            set
-            {
-                position = value;
-            }
-        }
+        public static Position currentPosition { get; set; }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
+using Plugin.Geolocator.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using XLabs.Platform.Services.Geolocation;
 
-namespace Apo_Chan.GeoLocation
+namespace Apo_Chan.Geolocation
 {
     public class Geocoding
     {

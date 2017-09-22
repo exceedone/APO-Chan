@@ -53,13 +53,13 @@
                         HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
             </StackLayout>
 
-            <StackLayout x:Name="locaionLayout" Orientation="Horizontal"
+            <StackLayout x:Name="locationLayout" Orientation="Horizontal"
                          VerticalOptions="End"
                          Padding="0,5,0,5">
                 <Label Text="@"
                        Font="Roboto" FontSize="14.0"
                        TextColor="{StaticResource SecondaryTextColor}"/>
-                <Label Text="{Binding Address}"
+                <Label Text="{Binding ReportAddress}"
                        Font="Roboto" FontSize="14.0"
                        TextColor="{StaticResource PrimaryTextColor}"/>
             </StackLayout>

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * Reference from: 
+ * https://github.com/XLabs/Xamarin-Forms-Labs/wiki/Geolocator
+ */
+
+using System;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 
-using XLabs.Platform.Services.Geolocation;
 using Android.Gms.Common.Apis;
 using Android.Gms.Common;
 using Android.Gms.Location;
@@ -19,31 +18,27 @@ using Apo_Chan.Droid.Geolocation;
 
 using Android.Locations;
 using Java.Lang;
+using Plugin.Geolocator.Abstractions;
+using Apo_Chan.Geolocation;
 
 [assembly: Xamarin.Forms.Dependency(typeof(FusedGeolocator))]
 
 namespace Apo_Chan.Droid.Geolocation
 {
-    public class FusedGeolocator : Java.Lang.Object, IGeolocator, GoogleApiClient.IConnectionCallbacks, GoogleApiClient.IOnConnectionFailedListener
+    public class FusedGeolocator : Java.Lang.Object, IFusedGeolocator, GoogleApiClient.IConnectionCallbacks, GoogleApiClient.IOnConnectionFailedListener
     {
         private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        private Position _lastPosition;
+        //private readonly LocationManager _manager;
 
-        private GeolocationContinuousListener _listener;
-
-        private readonly LocationManager _manager;
-
-        private readonly object _positionSync = new object();
-
-        private readonly string[] _providers;
+        //private readonly string[] _providers;
 
         private FusedListener fusedListener = null;
 
         public FusedGeolocator()
         {
-            _manager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
-            _providers = _manager.GetProviders(false).Where(s => s != LocationManager.PassiveProvider).ToArray();
+            //_manager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
+            //_providers = _manager.GetProviders(false).Where(s => s != LocationManager.PassiveProvider).ToArray();
 
             mGoogleApiClient = new GoogleApiClient.Builder((Activity)Xamarin.Forms.Forms.Context)
                 .AddApi(LocationServices.API)
@@ -52,14 +47,6 @@ namespace Apo_Chan.Droid.Geolocation
                 .Build();
 
             mGoogleApiClient.Connect();
-        }
-
-        public bool IsListening
-        {
-            get
-            {
-                return _listener != null;
-            }
         }
 
         public double DesiredAccuracy { get; set; }
@@ -76,7 +63,7 @@ namespace Apo_Chan.Droid.Geolocation
         {
             get
             {
-                return _providers.Length > 0;
+                return LocationServices.FusedLocationApi.GetLocationAvailability(mGoogleApiClient).IsLocationAvailable;
             }
         }
 
@@ -84,26 +71,9 @@ namespace Apo_Chan.Droid.Geolocation
         {
             get
             {
-                return _providers.Any(_manager.IsProviderEnabled);
+                return true;
+                //return _providers.Any(_manager.IsProviderEnabled);
             }
-        }
-
-        public void StopListening()
-        {
-            if (_listener == null)
-            {
-                return;
-            }
-
-            _listener.PositionChanged -= OnListenerPositionChanged;
-            _listener.PositionError -= OnListenerPositionError;
-
-            for (var i = 0; i < _providers.Length; ++i)
-            {
-                _manager.RemoveUpdates(_listener);
-            }
-
-            _listener = null;
         }
 
         public event EventHandler<PositionErrorEventArgs> PositionError;
@@ -144,145 +114,58 @@ namespace Apo_Chan.Droid.Geolocation
 
             var tcs = new TaskCompletionSource<Position>();
 
-            if (!IsListening)
-            {
-                fusedListener = new FusedListener(
-                    (float)DesiredAccuracy,
-                    timeout,
-                    () =>
-                    {
-                        try
-                        {
-                            LocationServices.FusedLocationApi.RemoveLocationUpdates(mGoogleApiClient, fusedListener);
-                            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "FusedListener > FinishCallback");
-                        }
-                        catch (System.Exception ex)
-                        {
-                            tcs.SetException(ex);
-                            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + ex.Message);
-                        }
-                    });
-
-                if (cancelToken != CancellationToken.None)
-                {
-                    cancelToken.Register(
-                        () =>
-                        {
-                            fusedListener.Cancel();
-                            if (mGoogleApiClient.IsConnected)
-                            {
-                                LocationServices.FusedLocationApi.RemoveLocationUpdates(mGoogleApiClient, fusedListener);
-                            }
-                        },
-                        true);
-                }
-
-                if (mGoogleApiClient.IsConnected)
+            fusedListener = new FusedListener(
+                (float)DesiredAccuracy,
+                timeout,
+                () =>
                 {
                     try
                     {
-                        LocationServices.FusedLocationApi.RequestLocationUpdates(mGoogleApiClient, mLocationRequest, fusedListener);
+                        LocationServices.FusedLocationApi.RemoveLocationUpdates(mGoogleApiClient, fusedListener);
+                        System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "FusedListener > FinishCallback");
                     }
-                    catch (SecurityException ex)
+                    catch (System.Exception ex)
                     {
-                        tcs.SetException(new GeolocationException(GeolocationError.Unauthorized, ex));
-                        return tcs.Task;
+                        tcs.SetException(ex);
+                        System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + ex.Message);
                     }
-                }
+                });
 
-                return fusedListener.Task;
-            }
-
-            // If we're already listening, just use the current listener
-            lock (_positionSync)
+            if (cancelToken != CancellationToken.None)
             {
-                if (_lastPosition == null)
-                {
-                    if (cancelToken != CancellationToken.None)
+                cancelToken.Register(
+                    () =>
                     {
-                        cancelToken.Register(() => tcs.TrySetCanceled());
-                    }
+                        fusedListener.Cancel();
+                        if (mGoogleApiClient.IsConnected)
+                        {
+                            LocationServices.FusedLocationApi.RemoveLocationUpdates(mGoogleApiClient, fusedListener);
+                        }
+                    },
+                    true);
+            }
 
-                    EventHandler<PositionEventArgs> gotPosition = null;
-                    gotPosition = (s, e) =>
-                    {
-                        tcs.TrySetResult(e.Position);
-                        PositionChanged -= gotPosition;
-                    };
-
-                    PositionChanged += gotPosition;
-                }
-                else
+            if (mGoogleApiClient.IsConnected)
+            {
+                try
                 {
-                    tcs.SetResult(_lastPosition);
+                    LocationServices.FusedLocationApi.RequestLocationUpdates(mGoogleApiClient, mLocationRequest, fusedListener);
                 }
-            }
-
-            return tcs.Task;
-        }
-
-        public void StartListening(uint minTime, double minDistance)
-        {
-            StartListening(minTime, minDistance, false);
-        }
-
-        public void StartListening(uint minTime, double minDistance, bool includeHeading)
-        {
-            if (minTime < 0)
-            {
-                throw new ArgumentOutOfRangeException("minTime");
-            }
-            if (minDistance < 0)
-            {
-                throw new ArgumentOutOfRangeException("minDistance");
-            }
-            if (IsListening)
-            {
-                throw new InvalidOperationException("This Geolocator is already listening");
-            }
-
-            _listener = new GeolocationContinuousListener(_manager, TimeSpan.FromMilliseconds(minTime), _providers);
-            _listener.PositionChanged += OnListenerPositionChanged;
-            _listener.PositionError += OnListenerPositionError;
-
-            var looper = Looper.MyLooper() ?? Looper.MainLooper;
-            for (var i = 0; i < _providers.Length; ++i)
-            {
-                _manager.RequestLocationUpdates(_providers[i], minTime, (float)minDistance, _listener, looper);
-            }
-        }
-
-        private void OnListenerPositionChanged(object sender, PositionEventArgs e)
-        {
-            if (!IsListening) // ignore anything that might come in afterwards
-            {
-                return;
-            }
-
-            lock (_positionSync)
-            {
-                _lastPosition = e.Position;
-
-                var changed = PositionChanged;
-                if (changed != null)
+                catch (SecurityException ex)
                 {
-                    changed(this, e);
+                    tcs.SetException(new GeolocationException(GeolocationError.Unauthorized, ex));
+                    return tcs.Task;
                 }
             }
-        }
-
-        private void OnListenerPositionError(object sender, PositionErrorEventArgs e)
-        {
-            StopListening();
-
-            var error = PositionError;
-            if (error != null)
+            else
             {
-                error(this, e);
+                System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "Google Api Client not connected");
             }
+
+            return fusedListener.Task;
         }
 
-        internal static DateTimeOffset GetTimestamp(Location location)
+        internal static DateTimeOffset GetTimestamp(Android.Locations.Location location)
         {
             return new DateTimeOffset(Epoch.AddMilliseconds(location.Time));
         }

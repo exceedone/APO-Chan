@@ -1,46 +1,25 @@
-﻿// ***********************************************************************
-// Assembly         : XLabs.Platform
-// Author           : XLabs Team
-// Created          : 12-27-2015
-// 
-// Last Modified By : XLabs Team
-// Last Modified On : 01-04-2016
-// ***********************************************************************
-// <copyright file="IGeolocator.cs" company="XLabs Team">
-//     Copyright (c) XLabs Team. All rights reserved.
-// </copyright>
-// <summary>
-//       This project is licensed under the Apache 2.0 license
-//       https://github.com/XLabs/Xamarin-Forms-Labs/blob/master/LICENSE
-//       
-//       XLabs is a open source project that aims to provide a powerfull and cross 
-//       platform set of controls tailored to work with Xamarin Forms.
-// </summary>
-// ***********************************************************************
-// 
+﻿/*
+ * Reference from: 
+ * https://github.com/XLabs/Xamarin-Forms-Labs/wiki/Geolocator
+ */
 
+using Plugin.Geolocator.Abstractions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace XLabs.Platform.Services.Geolocation
+namespace Apo_Chan.Geolocation
 {
 	/// <summary>
 	///     Interface IGeolocator
 	/// </summary>
-	public interface IGeolocator
+	public interface IFusedGeolocator
 	{
 		/// <summary>
 		///     Gets or sets the desired accuracy.
 		/// </summary>
 		/// <value>The desired accuracy.</value>
 		double DesiredAccuracy { get; set; }
-
-		/// <summary>
-		///     Gets a value indicating whether this instance is listening.
-		/// </summary>
-		/// <value><c>true</c> if this instance is listening; otherwise, <c>false</c>.</value>
-		bool IsListening { get; }
 
 		/// <summary>
 		///     Gets a value indicating whether [supports heading].
@@ -116,25 +95,5 @@ namespace XLabs.Platform.Services.Geolocation
 		/// <param name="includeHeading">if set to <c>true</c> [include heading].</param>
 		/// <returns>Task&lt;Position&gt;.</returns>
 		Task<Position> GetPositionAsync(int timeout, CancellationToken cancelToken, bool includeHeading);
-
-		/// <summary>
-		///     Start listening to location changes
-		/// </summary>
-		/// <param name="minTime">Minimum interval in milliseconds</param>
-		/// <param name="minDistance">Minimum distance in meters</param>
-		void StartListening(uint minTime, double minDistance);
-
-		/// <summary>
-		///     Start listening to location changes
-		/// </summary>
-		/// <param name="minTime">Minimum interval in milliseconds</param>
-		/// <param name="minDistance">Minimum distance in meters</param>
-		/// <param name="includeHeading">Include heading information</param>
-		void StartListening(uint minTime, double minDistance, bool includeHeading);
-
-		/// <summary>
-		///     Stop listening to location changes
-		/// </summary>
-		void StopListening();
 	}
 }

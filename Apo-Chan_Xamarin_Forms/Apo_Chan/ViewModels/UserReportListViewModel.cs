@@ -78,9 +78,9 @@ namespace Apo_Chan.ViewModels
             await navigationService.NavigateAsync("NewReport");
         }
 
-        public void NavigateDetailReport(ReportItem item)
+        public async void NavigateDetailReport(ReportItem item)
         {
-            navigationService.NavigateAsync("DetailReport?Id=" + item.Id);
+            await navigationService.NavigateAsync("DetailReport?Id=" + item.Id);
         }
 
         private async Task setItemsAsync()

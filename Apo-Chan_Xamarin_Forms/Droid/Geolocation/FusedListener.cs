@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿/*
+ * Reference from: 
+ * https://github.com/XLabs/Xamarin-Forms-Labs/wiki/Geolocator
+ */
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+
+using System;
+
 using Android.Locations;
 using System.Threading.Tasks;
-using XLabs.Platform.Services.Geolocation;
 using System.Threading;
-using Android.Gms.Common.Apis;
-using Android.Gms.Location;
-using Android.Gms.Common;
+using Plugin.Geolocator.Abstractions;
 
 namespace Apo_Chan.Droid.Geolocation
 {
@@ -115,7 +109,7 @@ namespace Apo_Chan.Droid.Geolocation
 
             p.Longitude = location.Longitude;
             p.Latitude = location.Latitude;
-            p.Timestamp = Geolocator.GetTimestamp(location);
+            p.Timestamp = FusedGeolocator.GetTimestamp(location);
 
             _finishedCallback?.Invoke();
 

@@ -1,6 +1,8 @@
 ﻿using Apo_Chan.Items;
 using Apo_Chan.Managers;
+using Apo_Chan.Geolocation;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
@@ -8,7 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using XLabs.Platform.Services.Geolocation;
+using Plugin.Geolocator.Abstractions;
+using System.Threading.Tasks;
+using Apo_Chan.Models;
 
 namespace Apo_Chan.ViewModels
 {
@@ -32,30 +36,16 @@ namespace Apo_Chan.ViewModels
 
         public DelegateCommand DeleteCommand { get; private set; }
 
-        private Position position;
-        private Position Position
-        {
-            set
-            {
-                SetProperty(ref this.position, value);
-                if (Report != null)
-                {
-                    Report.ReportLat = this.position.Latitude;
-                    Report.ReportLon = this.position.Longitude;
-                }
-            }
-        }
-
-        private string address = string.Empty;
-        public string Address
+        private string reprotAddress = string.Empty;
+        public string ReportAddress
         {
             get
             {
-                return address;
+                return reprotAddress;
             }
             set
             {
-                SetProperty(ref this.address, value);
+                SetProperty(ref this.reprotAddress, value);
             }
         }
         #endregion
@@ -66,6 +56,12 @@ namespace Apo_Chan.ViewModels
         {
             UpdateCommand = new DelegateCommand(updateReport);
             DeleteCommand = new DelegateCommand(deleteReport);
+
+            GeoEvent.DefaultInstance.Subscribe(updateLocation);
+            if (GeoService.DefaultInstance.IsAvailable)
+            {
+                InitLocationServiceAsync();
+            }
         }
         #endregion
 
@@ -147,7 +143,6 @@ namespace Apo_Chan.ViewModels
                 try
                 {
                     Report = await ReportManager.DefaultManager.LookupAsync((string)parameters["Id"]);
-                    getPosition();
                 }
                 catch (Exception e)
                 {
@@ -156,7 +151,6 @@ namespace Apo_Chan.ViewModels
                 }
                 IsBusy = false;
                 Report.PropertyChanged += checkDateTime;
-                Report.PropertyChanged += checkLocation;
             }
             else
             {
@@ -198,24 +192,14 @@ namespace Apo_Chan.ViewModels
             }
         }
 
-        private async void getPosition()
+        private async void updateLocation(Position position)
         {
-            try
+            if (Report != null)
             {
-                Position = await GlobalAttributes.Geolocator.GetPositionAsync(10000);
+                Report.ReportLat = position.Latitude;
+                Report.ReportLon = position.Longitude;
             }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
-            }
-        }
-
-        private async void checkLocation(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "ReportLat")
-            {
-                Address = await GeoLocation.Geocoding.GetAddressAsync(position);
-            }
+            ReportAddress = await GeoService.DefaultInstance.GetAddressFromPositionAsync(position);
         }
         #endregion
     }

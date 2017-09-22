@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
-namespace Apo_Chan.GeoLocation
+namespace Apo_Chan.Geolocation
 {
     public class GeocodingResponse
     {

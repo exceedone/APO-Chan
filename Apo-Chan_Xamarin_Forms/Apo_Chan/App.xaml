@@ -36,14 +36,14 @@
             <Color x:Key="PrimaryColor">#3F51B5</Color>
             <Color x:Key="PrimaryDarkColor">#303F9F</Color>
             <Color x:Key="PrimaryLightColor">#C5CAE9</Color>
-            <Color x:Key="AccentColor">#FF5252</Color>
+            <Color x:Key="AccentColor">#FF4081</Color>
             <Color x:Key="PrimaryTextColor">#212121</Color>
             <Color x:Key="SecondaryTextColor">#757575</Color>
             <Color x:Key="TextIconsColor">#FFFFFF</Color>
             <Color x:Key="DividerColor">#BDBDBD</Color>
 
             <!--Button Style-->
-            <Color x:Key="BlueButtonColor">#304FFE</Color>
+            <Color x:Key="BlueButtonColor">#3D5AFE</Color>
             <Style x:Key="RedButtonStyle" TargetType="Button">
                 <Setter Property="MinimumWidthRequest" Value="88" />
                 <Setter Property="MinimumHeightRequest" Value="36" />

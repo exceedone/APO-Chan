@@ -21,6 +21,7 @@ using Xamarin.Auth;
 using Apo_Chan.Managers;
 using Apo_Chan.Items;
 using Apo_Chan.Models;
+using Plugin.Permissions;
 
 namespace Apo_Chan.Droid
 {
@@ -95,6 +96,12 @@ namespace Apo_Chan.Droid
         {
             await App.CurrentClient.LogoutAsync();
             return true;
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        {
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
     }
