@@ -26,7 +26,7 @@ namespace Apo_Chan.Droid
 {
     [Activity(Label = "Apo-Chan",
         Icon = "@drawable/ic_launcher",
-        MainLauncher = true,
+        //MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
         Theme = "@style/MyTheme")]
     public class MainActivity : FormsAppCompatActivity, IAuthenticate
