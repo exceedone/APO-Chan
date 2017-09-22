@@ -3,16 +3,9 @@ using Apo_Chan.Views;
 using Xamarin.Forms;
 using Microsoft.WindowsAzure.MobileServices;
 using Apo_Chan.Models;
-using System.Threading.Tasks;
 
 namespace Apo_Chan
 {
-    public interface IAuthenticate
-    {
-        Task<bool> AuthenticateAsync(Constants.EProviderType providerType);
-        Task<bool> SignOutAsync();
-    }
-
     public partial class App : PrismApplication
     {
         private static MobileServiceClient client;

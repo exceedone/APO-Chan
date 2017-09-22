@@ -47,11 +47,16 @@
                                 <Label HorizontalOptions="Start" VerticalOptions="StartAndExpand"
                                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
                                        FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"
-                                       Text="{Binding Title}"/>
-                                <Label HorizontalOptions="Center" VerticalOptions="StartAndExpand"
+                                       Text="{Binding Title}"
+                                       FontSize="Medium"
+                                       Margin="5,0,5,0"/>
+                                <Label VerticalOptions="StartAndExpand"
                                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
-                                       FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"
-                                       Text="{Binding Description}"/>
+                                       TextColor="{StaticResource PrimaryTextColor}"
+                                       Text="{Binding Description}"
+                                       FontSize="Small"
+                                       Margin="20,0,20,0"
+                                       />
                                 <StackLayout.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding ItemTappedCommand}"></TapGestureRecognizer>
                                 </StackLayout.GestureRecognizers>

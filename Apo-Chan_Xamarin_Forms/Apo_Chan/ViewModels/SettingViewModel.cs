@@ -40,6 +40,8 @@ namespace Apo_Chan.ViewModels
 
             SettingItems = new ObservableCollection<SettingMenuVMItem>();
             SettingItems.Add(new SettingMenuVMItem("SignOut", "SignOut From APO-Chan.", navigateSignOut));
+            SettingItems.Add(new SettingMenuVMItem("See the Source Code", "Access GitHub to see the source code of APO-Chan.", openGithub));
+            SettingItems.Add(new SettingMenuVMItem("About us", "Access ExceedOne Homepage.", openExcedOne));
         }
         #endregion
 
@@ -59,6 +61,24 @@ namespace Apo_Chan.ViewModels
 
             this.IsBusy = false;
         }
+
+        /// <summary>
+        /// Open browser
+        /// </summary>
+        private void openGithub()
+        {
+            Device.OpenUri(new Uri(Constants.GitHubURL));
+        }
+
+        /// <summary>
+        /// Open browser
+        /// </summary>
+        private void openExcedOne()
+        {
+            Device.OpenUri(new Uri(Constants.ExcedOneURL));
+        }
+
+
 
         #endregion
 

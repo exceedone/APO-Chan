@@ -32,6 +32,19 @@ namespace Apo_Chan
         /// Google Maps Geocoding API Key
         /// </summary>
         public static string GoogleGeocodingAPIKey = "AIzaSyCxHoYGMlu-y0BvLFHaoO14zD0E3eWxbVQ";
+
+        /// <summary>
+        /// GitHub URL(APO-Chan)
+        /// </summary>
+        public static string GitHubURL = "https://github.com/exceedone/APO-Chan";
+
+
+        /// <summary>
+        /// ExceedOne Company URL
+        /// </summary>
+        public static string ExcedOneURL = "http://www.exceedone.co.jp/";
+
+
     }
 }
 
