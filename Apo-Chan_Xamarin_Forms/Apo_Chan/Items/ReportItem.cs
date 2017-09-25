@@ -16,6 +16,7 @@ namespace Apo_Chan.Items
         private TimeSpan reportEndTime;
         private double reportLat;
         private double reportLon;
+        private string reportAddress;
 
         [JsonProperty(PropertyName = "refUserId")]
         public string RefUserId
@@ -131,6 +132,19 @@ namespace Apo_Chan.Items
             set
             {
                 SetProperty(ref this.reportLon, value);
+            }
+        }
+
+        [JsonProperty(PropertyName = "reportAddress")]
+        public string ReportAddress
+        {
+            get
+            {
+                return reportAddress;
+            }
+            set
+            {
+                SetProperty(ref this.reportAddress, value);
             }
         }
     }

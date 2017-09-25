@@ -49,6 +49,9 @@ namespace Apo_ChanService.DataObjects
         [CustomAttributes.DecimalPrecision(10, 7)]
         public decimal? ReportLon { get; set; }
 
+        [MaxLength(512)]
+        public string ReportAddress { get; set; }
+
         public DateTimeOffset? DeletedAt { get; set; }
 
         /// <summary>
