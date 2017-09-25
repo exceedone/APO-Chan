@@ -3,11 +3,7 @@ using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
-using Prism.Events;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -15,6 +11,22 @@ namespace Apo_Chan.Geolocation
 {
     public sealed class GeoService
     {
+        private IGeolocator Geolocator
+        {
+            get
+            {
+                return CrossGeolocator.Current;
+            }
+        }
+
+        private IFusedGeolocator FusedGeolocator
+        {
+            get
+            {
+                return DependencyService.Get<IFusedGeolocator>();
+            }
+        }
+
         private static GeoService defaultInstance;
 
         static GeoService()
@@ -36,38 +48,8 @@ namespace Apo_Chan.Geolocation
 
         public static void Init()
         {
-            //Init instance to start Google API Client for FusedGeolocator
+            //Init instance to connect Google API Client for FusedGeolocator
             DefaultInstance.FusedGeolocator.DesiredAccuracy = 100;
-        }
-
-        public bool IsAvailable
-        {
-            get
-            {
-                //v4.0.1
-                //if (!CrossGeolocator.IsSupported)
-                //{
-                //    return false;
-                //}
-
-                return CrossGeolocator.Current.IsGeolocationAvailable;
-            }
-        }
-
-        private IGeolocator Geolocator
-        {
-            get
-            {
-                return CrossGeolocator.Current;
-            }
-        }
-
-        private IFusedGeolocator FusedGeolocator
-        {
-            get
-            {
-                return Xamarin.Forms.DependencyService.Get<IFusedGeolocator>();
-            }
         }
 
         private async Task<bool> checkPermissionsAsync(Func<string, Task> alertOnViewModel)

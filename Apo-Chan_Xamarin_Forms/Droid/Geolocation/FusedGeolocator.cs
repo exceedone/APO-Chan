@@ -63,7 +63,15 @@ namespace Apo_Chan.Droid.Geolocation
         {
             get
             {
-                return LocationServices.FusedLocationApi.GetLocationAvailability(mGoogleApiClient).IsLocationAvailable;
+                if (mGoogleApiClient.IsConnected)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                //return _providers.Length > 0;
             }
         }
 
@@ -71,7 +79,7 @@ namespace Apo_Chan.Droid.Geolocation
         {
             get
             {
-                return true;
+                return false;//do not use this
                 //return _providers.Any(_manager.IsProviderEnabled);
             }
         }
@@ -188,7 +196,7 @@ namespace Apo_Chan.Droid.Geolocation
 
         public void OnConnectionSuspended(int cause)
         {
-            throw new NotImplementedException();
+            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "GoogleApiClient > Connection Suspended");
         }
 
         /*
@@ -196,7 +204,7 @@ namespace Apo_Chan.Droid.Geolocation
          */
         public void OnConnectionFailed(ConnectionResult result)
         {
-            throw new NotImplementedException();
+            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "GoogleApiClient > Connection Failed");
         }
 
     }

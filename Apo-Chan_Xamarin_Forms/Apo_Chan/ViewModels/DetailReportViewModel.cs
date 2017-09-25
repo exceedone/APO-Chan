@@ -13,6 +13,7 @@ using System.Linq;
 using Plugin.Geolocator.Abstractions;
 using System.Threading.Tasks;
 using Apo_Chan.Models;
+using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
 {
@@ -32,22 +33,35 @@ namespace Apo_Chan.ViewModels
             }
         }
 
-        public DelegateCommand UpdateCommand { get; private set; }
-
-        public DelegateCommand DeleteCommand { get; private set; }
-
-        private string reprotAddress = string.Empty;
-        public string ReportAddress
+        private string locationInfo = string.Empty;
+        public string LocationInfo
         {
             get
             {
-                return reprotAddress;
+                return locationInfo;
             }
             set
             {
-                SetProperty(ref this.reprotAddress, value);
+                SetProperty(ref this.locationInfo, value);
             }
         }
+
+        private ImageSource gpsImage;
+        public ImageSource GpsImage
+        {
+            get
+            {
+                return gpsImage;
+            }
+            set
+            {
+                SetProperty(ref this.gpsImage, value);
+            }
+        }
+
+        public DelegateCommand UpdateCommand { get; private set; }
+        public DelegateCommand DeleteCommand { get; private set; }
+        public DelegateCommand UpdateLocationCommand { get; private set; }
         #endregion
 
         #region Constructor
@@ -56,12 +70,7 @@ namespace Apo_Chan.ViewModels
         {
             UpdateCommand = new DelegateCommand(updateReport);
             DeleteCommand = new DelegateCommand(deleteReport);
-
-            GeoEvent.DefaultInstance.Subscribe(updateLocation);
-            if (GeoService.DefaultInstance.IsAvailable)
-            {
-                InitLocationServiceAsync();
-            }
+            UpdateLocationCommand = new DelegateCommand(updateLocation);
         }
         #endregion
 
@@ -80,7 +89,7 @@ namespace Apo_Chan.ViewModels
                 if (accepted)
                 {
                     IsBusy = true;
-                    Report.PropertyChanged -= checkDateTime;
+                    Report.PropertyChanged -= OnDateTimeChanged;
                     try
                     {
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
@@ -149,8 +158,9 @@ namespace Apo_Chan.ViewModels
 
                     System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                 }
+                UpdateLocationCommand.Execute();
                 IsBusy = false;
-                Report.PropertyChanged += checkDateTime;
+                Report.PropertyChanged += OnDateTimeChanged;
             }
             else
             {
@@ -159,32 +169,34 @@ namespace Apo_Chan.ViewModels
             }
         }
 
-        private async void checkDateTime(object sender, PropertyChangedEventArgs e)
+        private async void OnDateTimeChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ReportStartDate" || e.PropertyName == "ReportStartTime" ||
                 e.PropertyName == "ReportEndDate" || e.PropertyName == "ReportEndTime")
             {
-                if (Report.ReportStartDate.CompareTo(Report.ReportEndDate) > 0)
+                DateTime start = new DateTime
+                    (
+                        Report.ReportStartDate.Year, Report.ReportStartDate.Month, Report.ReportStartDate.Day,
+                        Report.ReportStartTime.Hours, Report.ReportStartTime.Minutes, Report.ReportStartTime.Seconds
+                    );
+                DateTime end = new DateTime
+                    (
+                        Report.ReportEndDate.Year, Report.ReportEndDate.Month, Report.ReportEndDate.Day,
+                        Report.ReportEndTime.Hours, Report.ReportEndTime.Minutes, Report.ReportEndTime.Seconds
+                    );
+                if (!Extension.CheckDateTime(ref start, ref end))
                 {
                     await dialogService.DisplayAlertAsync
                         (
                             "Error",
-                            "The start date is later than the end date!",
+                            "The end time is earlier than the start time!",
                             "OK"
                         );
-                    Report.ReportEndDate = Report.ReportStartDate;
                 }
-                else if ((Report.ReportStartDate.CompareTo(Report.ReportEndDate) == 0)
-                      && (Report.ReportStartTime.CompareTo(Report.ReportEndTime) > 0))
-                {
-                    await dialogService.DisplayAlertAsync
-                        (
-                            "Error",
-                            "The start time is later than the end time!",
-                            "OK"
-                        );
-                    Report.ReportEndTime = Report.ReportStartTime.Add(TimeSpan.FromMinutes(30));
-                }
+                Report.ReportStartDate = start.Date;
+                Report.ReportStartTime = start.TimeOfDay;
+                Report.ReportEndDate = end.Date;
+                Report.ReportEndTime = end.TimeOfDay;
             }
             else
             {
@@ -192,14 +204,26 @@ namespace Apo_Chan.ViewModels
             }
         }
 
-        private async void updateLocation(Position position)
+        private void updateLocation()
         {
             if (Report != null)
             {
-                Report.ReportLat = position.Latitude;
-                Report.ReportLon = position.Longitude;
+                if (Report.ReportLat == 0 && Report.ReportLon == 0)
+                {
+                    GpsImage = "ic_gps_off.png";
+                    LocationInfo = "No location information.";
+                    return;
+                }
+                if (Report.ReportAddress == null || Report.ReportAddress.CompareTo(string.Empty) == 0)
+                {
+                    LocationInfo = "Location acquired but address not found.";
+                }
+                else
+                {
+                    LocationInfo = Report.ReportAddress;
+                }
+                GpsImage = "ic_gps_on.png";
             }
-            ReportAddress = await GeoService.DefaultInstance.GetAddressFromPositionAsync(position);
         }
         #endregion
     }

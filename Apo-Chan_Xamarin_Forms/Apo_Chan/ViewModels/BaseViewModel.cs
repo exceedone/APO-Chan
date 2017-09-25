@@ -56,8 +56,10 @@ namespace Apo_Chan.ViewModels
 
         protected async void InitLocationServiceAsync()
         {
+            IsBusy = true;
             System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + "initLocationServiceAsync()");
             await GeoService.DefaultInstance.GetPositionAsync(alertGeoServiceStatusAsync);
+            IsBusy = false;
         }
 
         private async Task alertGeoServiceStatusAsync(string message)

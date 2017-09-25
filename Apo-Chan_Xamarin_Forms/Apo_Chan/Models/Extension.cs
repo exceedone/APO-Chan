@@ -43,5 +43,21 @@ namespace Apo_Chan.Models
             if (!dict.ContainsKey(key)) { return default(T2); }
             return dict[key];
         }
+
+        public static bool CheckDateTime(ref DateTime start, ref DateTime end)
+        {
+            if (end.Date.CompareTo(start.Date) < 0)
+            {
+                end = new DateTime(start.Year, start.Month, start.Day, end.Hour, end.Minute, end.Second);
+                return false;
+            }
+            else if ((end.Date.CompareTo(start.Date) == 0)
+                  && (end.TimeOfDay.CompareTo(start.TimeOfDay) < 0))
+            {
+                end = start.Add(TimeSpan.FromHours(1));
+                return false;
+            }
+            return true;
+        }
     }
 }
