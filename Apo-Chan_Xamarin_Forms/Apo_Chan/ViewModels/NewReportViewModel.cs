@@ -32,16 +32,29 @@ namespace Apo_Chan.ViewModels
             }
         }
 
-        private string locationInfo = string.Empty;
-        public string LocationInfo
+        private string locationText = string.Empty;
+        public string LocationText
         {
             get
             {
-                return locationInfo;
+                return locationText;
             }
             set
             {
-                SetProperty(ref this.locationInfo, value);
+                SetProperty(ref this.locationText, value);
+            }
+        }
+
+        private Color locationTextColor;
+        public Color LocationTextColor
+        {
+            get
+            {
+                return locationTextColor;
+            }
+            set
+            {
+                SetProperty(ref this.locationTextColor, value);
             }
         }
 
@@ -177,12 +190,14 @@ namespace Apo_Chan.ViewModels
             if (result != null)
             {
                 Report.ReportAddress = result;
-                LocationInfo = Report.ReportAddress;
+                LocationText = Report.ReportAddress;
+                LocationTextColor = (Color)App.Current.Resources["PrimaryTextColor"];
             }
             else
             {
                 Report.ReportAddress = string.Empty;
-                LocationInfo = "Location acquired but address not found.";
+                LocationText = "Location acquired but address not found.";
+                LocationTextColor = (Color)App.Current.Resources["SecondaryTextColor"];
             }
             GpsImage = "ic_gps_new.png";
 
@@ -195,7 +210,8 @@ namespace Apo_Chan.ViewModels
             if (gpsStatus == 0)
             {
                 GpsImage = "ic_gps_off.png";
-                LocationInfo = "Please tap here to add location.";
+                LocationText = "Please tap here to add location.";
+                LocationTextColor = (Color)App.Current.Resources["SecondaryTextColor"];
             }
             else if (gpsStatus % 2 == 1)
             {
@@ -212,7 +228,8 @@ namespace Apo_Chan.ViewModels
                 Report.ReportLat = 0;
                 Report.ReportLon = 0;
                 GpsImage = "ic_gps_off.png";
-                LocationInfo = "No location information.";
+                LocationText = "No location information.";
+                LocationTextColor = (Color)App.Current.Resources["SecondaryTextColor"];
             }
             gpsStatus++;
         }

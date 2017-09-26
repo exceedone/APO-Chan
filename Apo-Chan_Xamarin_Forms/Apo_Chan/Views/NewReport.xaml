@@ -58,9 +58,9 @@
                        Source="{Binding GpsImage}">
                 </Image>
                 <Label HorizontalOptions="StartAndExpand"
-                       Text="{Binding LocationInfo}"
-                       Font="Roboto" FontSize="12.0"
-                       TextColor="{Binding PrimaryTextColor}">
+                       Text="{Binding LocationText}"
+                       FontFamily="Roboto" FontSize="13"
+                       TextColor="{Binding LocationTextColor}">
                 </Label>
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding UpdateLocationCommand}">
