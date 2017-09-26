@@ -24,12 +24,11 @@
                      Command="{TemplateBinding BindingContext.SettingCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-                         Grid.Row="0"
+            <StackLayout Grid.Row="0"
                          Padding="0,0,0,8">
                 <ListView x:Name="reportList"
                           SeparatorColor="{StaticResource DividerColor}"
@@ -46,27 +45,23 @@
                         <DataTemplate>
                             <ViewCell>
                                 <StackLayout Orientation="Vertical"
-                                             Padding="16,10,16,10"
-                                             HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                                    <Label HorizontalOptions="Start"
-                                           Font="Roboto" FontSize="16.0"
+                                             Padding="16,8,16,8">
+                                    <Label Font="Roboto" FontSize="16.0"
                                            Text="{Binding ReportTitle}"
                                            TextColor="{StaticResource PrimaryTextColor}">
                                     </Label>
-                                    <AbsoluteLayout Padding="0,0,0,0"
-                                                    HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                    <AbsoluteLayout Padding="0,0,0,0">
                                         <Label Font="Roboto" FontSize="14.0"
                                                TextColor="{StaticResource SecondaryTextColor}"
                                                Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"
                                                AbsoluteLayout.LayoutFlags="PositionProportional"
-                                               AbsoluteLayout.LayoutBounds =".1, 0, 100, 16">
+                                               AbsoluteLayout.LayoutBounds =".05, 0">
                                         </Label>
-                                        <Label HorizontalOptions="Center"
-                                               Font="Roboto" FontSize="14.0"
+                                        <Label Font="Roboto" FontSize="14.0"
                                                TextColor="{StaticResource SecondaryTextColor}"
                                                Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"
                                                AbsoluteLayout.LayoutFlags="PositionProportional"
-                                               AbsoluteLayout.LayoutBounds =".3, 0, 100, 16">
+                                               AbsoluteLayout.LayoutBounds =".45, 0">
                                         </Label>
                                     </AbsoluteLayout>
                                 </StackLayout>

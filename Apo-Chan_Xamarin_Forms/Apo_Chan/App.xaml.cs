@@ -3,7 +3,9 @@ using Apo_Chan.Views;
 using Xamarin.Forms;
 using Microsoft.WindowsAzure.MobileServices;
 using Apo_Chan.Models;
+using Xamarin.Forms.Xaml;
 
+[assembly: XamlCompilation (XamlCompilationOptions.Compile)]
 namespace Apo_Chan
 {
     public partial class App : PrismApplication

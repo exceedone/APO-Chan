@@ -9,59 +9,57 @@
              x:Class="Apo_Chan.Views.NewReport">
     <ContentPage.Content>
         <StackLayout Orientation="Vertical"
-                     HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                      Padding="16,0,16,0">
-            <StackLayout x:Name="startDateTimeLayout" Orientation="Horizontal"
-                         HorizontalOptions="FillAndExpand"
-                         Spacing="40"
-                         Padding="0,10,0,5">
+            <AbsoluteLayout x:Name="startDateTimeLayout"
+                            Padding="0,10,0,5">
+                <Label Text="Start"
+                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                       AbsoluteLayout.LayoutBounds ="0, .6"/>
                 <DatePicker Date="{Binding Report.ReportStartDate}"
-                            WidthRequest="140"
-                            HorizontalOptions="Start"/>
+                            Format="dd/MM/yyyy"
+                            AbsoluteLayout.LayoutFlags="PositionProportional"
+                            AbsoluteLayout.LayoutBounds =".2, .5"/>
                 <TimePicker Time="{Binding Report.ReportStartTime}"
-                            WidthRequest="100"
-                            HorizontalOptions="End"/>
-            </StackLayout>
+                            Format="hh:mm tt"
+                            AbsoluteLayout.LayoutFlags="PositionProportional"
+                            AbsoluteLayout.LayoutBounds =".7, .5"/>
+            </AbsoluteLayout>
 
-            <StackLayout x:Name="endDateTimeLayout" Orientation="Horizontal"
-                         HorizontalOptions="FillAndExpand"
-                         Spacing="40"
-                         Padding="0,5,0,5">
+            <AbsoluteLayout x:Name="endDateTimeLayout"
+                            Padding="0,5,0,5">
+                <Label Text="End"
+                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                       AbsoluteLayout.LayoutBounds ="0, .6"/>
                 <DatePicker Date="{Binding Report.ReportEndDate}"
-                            WidthRequest="140"
-                            HorizontalOptions="Start"/>
+                            Format="dd/MM/yyyy"
+                            AbsoluteLayout.LayoutFlags="PositionProportional"
+                            AbsoluteLayout.LayoutBounds =".2, .5"/>
                 <TimePicker Time="{Binding Report.ReportEndTime}"
-                            WidthRequest="100"
-                            HorizontalOptions="End"/>
-            </StackLayout>
+                            Format="hh:mm tt"
+                            AbsoluteLayout.LayoutFlags="PositionProportional"
+                            AbsoluteLayout.LayoutBounds =".7, .5"/>
+            </AbsoluteLayout>
 
             <StackLayout x:Name="titleLayout" Orientation="Vertical"
-                         HorizontalOptions="FillAndExpand"
                          Padding="0,5,0,5">
                 <Label Text="Title"/>
-                <Entry Text="{Binding Report.ReportTitle}"
-                       HorizontalOptions="FillAndExpand"/>
+                <Entry Text="{Binding Report.ReportTitle}"/>
             </StackLayout>
 
             <StackLayout x:Name="commentLayout" Orientation="Vertical"
-                         HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                         VerticalOptions="FillAndExpand"
                          Padding="0,5,0,10">
                 <Label Text="Comment"/>
                 <Editor Text="{Binding Report.ReportComment}"
-                        HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                        VerticalOptions="FillAndExpand"/>
             </StackLayout>
 
             <StackLayout x:Name="locationLayout" Orientation="Horizontal"
-                         VerticalOptions="End"
                          Padding="0,5,0,5">
-                <Image HorizontalOptions="Start"
-                       Source="{Binding GpsImage}">
-                </Image>
-                <Label HorizontalOptions="StartAndExpand"
-                       Text="{Binding LocationText}"
+                <Image Source="{Binding GpsImage}"/>
+                <Label Text="{Binding LocationText}"
                        FontFamily="Roboto" FontSize="13"
-                       TextColor="{Binding LocationTextColor}">
-                </Label>
+                       TextColor="{Binding LocationTextColor}"/>
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding UpdateLocationCommand}">
                     </TapGestureRecognizer>
@@ -69,8 +67,7 @@
             </StackLayout>
 
             <StackLayout x:Name="actionLayout"
-                         HorizontalOptions="FillAndExpand" VerticalOptions="End"
-                         Padding="0,0,0,8">
+                         Padding="0,8,0,8">
                 <Button x:Name="submitButton"
                         VerticalOptions="Center" HorizontalOptions="Center"
                         Text="Submit"
