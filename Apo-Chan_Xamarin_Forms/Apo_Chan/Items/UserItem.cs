@@ -45,6 +45,10 @@ namespace Apo_Chan.Items
         public string AMSToken { get; set; }
 
         /// <summary>
+        /// Mobile service User ID
+        /// </summary>
+        public string AMSUserId { get; set; }
+        /// <summary>
         /// Token Expires DateTime
         /// </summary>
         public DateTime? ExpiresOn { get; set; }
@@ -56,6 +60,15 @@ namespace Apo_Chan.Items
                 return (Constants.EProviderType)Enum.Parse(typeof(Constants.EProviderType), this.ProviderType.ToString());
             }
         }
+
+        public MobileServiceUser MobileServiceUser
+        {
+            get
+            {
+                return new MobileServiceUser(this.AMSUserId) { MobileServiceAuthenticationToken = this.AMSToken };
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -73,6 +86,7 @@ namespace Apo_Chan.Items
                 user.AccessToken = Convert.ToString(Application.Current.Properties.GetOrDefault("AccessToken"));
                 user.RefreshToken = Convert.ToString(Application.Current.Properties.GetOrDefault("RefreshToken"));
                 user.AMSToken = Convert.ToString(Application.Current.Properties.GetOrDefault("AMSToken"));
+                user.AMSUserId = Convert.ToString(Application.Current.Properties.GetOrDefault("AMSUserId"));
                 string d = Convert.ToString(Application.Current.Properties.GetOrDefault("ExpiresOn"));
                 if (!string.IsNullOrWhiteSpace(d))
                 {
@@ -132,6 +146,7 @@ namespace Apo_Chan.Items
             Application.Current.Properties.AddOrSkip("AccessToken", this.AccessToken);
             Application.Current.Properties.AddOrSkip("RefreshToken", this.RefreshToken);
             Application.Current.Properties.AddOrSkip("AMSToken", this.AMSToken);
+            Application.Current.Properties.AddOrSkip("AMSUserId", this.AMSUserId);
             if (this.ExpiresOn.HasValue)
             {
                 Application.Current.Properties.AddOrSkip("ExpiresOn", this.ExpiresOn.Value.ToString());
@@ -144,6 +159,7 @@ namespace Apo_Chan.Items
             Application.Current.Properties.Clear();
             // await Application.Current.SavePropertiesAsync();
         }
+
     }
 
 }

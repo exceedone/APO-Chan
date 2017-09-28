@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Sync;
@@ -19,7 +20,7 @@ namespace Apo_Chan.Managers
     public abstract partial class BaseManager<T1> where T1 : BaseItem
     {
         protected static BaseManager<T1> defaultInstance;
-        
+
 #if OFFLINE_SYNC_ENABLED
         protected IMobileServiceSyncTable<T1> dataTable;
 #else
@@ -40,21 +41,9 @@ namespace Apo_Chan.Managers
 
             this.dataTable = client.GetSyncTable<T1>();
 #else
-            this.dataTable =  App.CurrentClient.GetTable<T1>();
+            this.dataTable = App.CurrentClient.GetTable<T1>();
 #endif
         }
-
-        //public static BaseManager<T1> DefaultManager
-        //{
-        //    get
-        //    {
-        //        return defaultInstance;
-        //    }
-        //    private set
-        //    {
-        //        defaultInstance = value;
-        //    }
-        //}
 
         public bool IsOfflineEnabled
         {

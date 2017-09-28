@@ -26,20 +26,58 @@ namespace Apo_Chan.Models
         /// <returns></returns>
         public async Task<string> GetProfileJson(string amsAccessToken)
         {
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", amsAccessToken);
-            var response = await client.GetStringAsync(Constants.ApplicationURL + "/.auth/me");
-            return response;
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", amsAccessToken);
+                var response = await client.GetStringAsync(Constants.ApplicationURL + "/.auth/me");
+                return response;
+            }
+        }
+
+        /// <summary>
+        /// Refresh AMS token, Access token if past expires_on
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<bool> RefreshProfile()
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    var user = GlobalAttributes.User;
+                    // if past expires_on, refresh token
+                    if (!user.ExpiresOn.HasValue || user.ExpiresOn.Value < DateTime.Now)
+                    {
+                        client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", user.AMSToken);
+                        var response = await client.GetStringAsync(Constants.ApplicationURL + "/.auth/refresh");
+
+                        JObject jObject = JObject.Parse(response);
+                        user.AMSToken = Convert.ToString(jObject["authenticationToken"]);
+                        App.CurrentClient.CurrentUser.MobileServiceAuthenticationToken = user.AMSToken;
+
+                        BaseAuthProvider provider = BaseAuthProvider.GetAuthProvider(user.EProviderType);
+                        string json = await provider.GetProfileJson(user.AMSToken);
+                        provider.SetUserProfile(user, json);
+                        await user.SetUserToken();
+                    }
+
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
         }
 
         /// <summary>
         /// First Process
         /// </summary>
         /// <returns>true: has userinfo false: none userinfo</returns>
-        public async static Task<bool> FirstProcess()
+        public static bool FirstProcess()
         {
             // First, get user info.
-            UserItem user = UserItem.GetCachedUserItem();
+            UserItem user = GlobalAttributes.User;
             // If user info is null, return false.
             if (user == null)
             {
@@ -48,6 +86,7 @@ namespace Apo_Chan.Models
 
             try
             {
+                App.CurrentClient.CurrentUser = user.MobileServiceUser;
                 // login using access token
                 //JObject jo = new JObject();
                 //jo.Add("access_token", user.AMSToken);
@@ -56,15 +95,12 @@ namespace Apo_Chan.Models
                 // if past expires_on, refresh token
                 //if (!user.ExpiresOn.HasValue || user.ExpiresOn.Value < DateTime.Now)
                 //{
-                //    var client = new HttpClient();
-                //    client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", user.AMSToken);
-                //    var response = await client.GetStringAsync(Constants.ApplicationURL + "/.auth/refresh");
-                //    AuthenticationObj mobileServiceUser = JsonConvert.DeserializeObject<AuthenticationObj>(response);
-                //    user.AMSToken = mobileServiceUser.authenticationToken;
-                //    BaseAuthProvider provider = BaseAuthProvider.GetAuthProvider(user.EProviderType);
-                //    string json = await provider.GetProfileJson(user.AMSToken);
-                //    provider.SetUserProfile(user, json);
-                //    await user.SetUserToken();
+                //AuthenticationObj mobileServiceUser = JsonConvert.DeserializeObject<AuthenticationObj>(response);
+                //user.AMSToken = mobileServiceUser.authenticationToken;
+                //BaseAuthProvider provider = BaseAuthProvider.GetAuthProvider(user.EProviderType);
+                //string json = await provider.GetProfileJson(user.AMSToken);
+                //provider.SetUserProfile(user, json);
+                //await user.SetUserToken();
                 //}
 
                 // get provider user profile.

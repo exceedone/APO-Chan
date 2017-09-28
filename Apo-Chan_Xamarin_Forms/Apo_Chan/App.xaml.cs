@@ -34,15 +34,15 @@ namespace Apo_Chan
         {
             InitializeComponent();
 
-            //if (await BaseAuthProvider.FirstProcess())
-            //{
-            //    await NavigationService.NavigateAsync("NavigationPage/UserReportList");
-            //}
-            //else
-            //{
-            //    await NavigationService.NavigateAsync("NavigationPage/SignIn");
-            //}
-            await NavigationService.NavigateAsync("NavigationPage/SignIn");
+            if (BaseAuthProvider.FirstProcess())
+            {
+                await NavigationService.NavigateAsync("NavigationPage/UserReportList");
+            }
+            else
+            {
+                await NavigationService.NavigateAsync("NavigationPage/SignIn");
+            }
+            //await NavigationService.NavigateAsync("NavigationPage/SignIn");
             Geolocation.GeoService.Init();
         }
 

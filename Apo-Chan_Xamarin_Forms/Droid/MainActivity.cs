@@ -67,6 +67,8 @@ namespace Apo_Chan.Droid
                     {
                         AMSToken = loginuser.MobileServiceAuthenticationToken
                         ,
+                        AMSUserId = loginuser.UserId
+                        ,
                         ProviderType = providerType.GetHashCode()
                     };
 

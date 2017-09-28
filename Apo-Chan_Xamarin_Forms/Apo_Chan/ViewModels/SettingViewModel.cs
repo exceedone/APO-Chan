@@ -36,7 +36,7 @@ namespace Apo_Chan.ViewModels
         public SettingViewModel(INavigationService navigationService, IPageDialogService dialogService)
             : base(navigationService, dialogService)
         {
-            this.User = UserItem.GetCachedUserItem();
+            this.User = GlobalAttributes.User;
 
             SettingItems = new ObservableCollection<SettingMenuVMItem>();
             SettingItems.Add(new SettingMenuVMItem("SignOut", "SignOut From APO-Chan.", navigateSignOut));
@@ -55,6 +55,7 @@ namespace Apo_Chan.ViewModels
                 isLogOut = await App.Authenticator.SignOutAsync();
                 if (isLogOut)
                 {
+                    UserItem.ClearUserToken();
                     await this.navigationService.NavigateAsync("/NavigationPage/SignIn");
                 }
             }

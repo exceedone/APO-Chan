@@ -1,4 +1,5 @@
 ﻿using Apo_Chan.Items;
+using Apo_Chan.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +23,8 @@ namespace Apo_Chan.Managers
             defaultInstance = new ReportManager();
         }
 
+        public ReportManager() : base() { }
+
         public static ReportManager DefaultManager
         {
             get
@@ -44,12 +47,11 @@ namespace Apo_Chan.Managers
                     await this.SyncAsync();
                 }
 #endif
-                // Get UserItem
-                UserItem user = UserItem.GetCachedUserItem();
+                await BaseAuthProvider.RefreshProfile();
                 IEnumerable<ReportItem> items = await this.dataTable
-                    .Where(x => 
-                        x.RefUserId == user.Id 
-                        && !x.Deleted 
+                    .Where(x =>
+                        x.RefUserId == GlobalAttributes.User.Id
+                        && !x.Deleted
                         && ((x.ReportStartDate.Year == year && x.ReportStartDate.Month == month) || (x.ReportEndDate.Year == year && x.ReportEndDate.Month == month))
                     ).OrderBy(x => x.ReportStartDate).ThenBy(x => x.ReportEndDate).ThenBy(x => x.ReportStartTime).ThenBy(x => x.ReportEndTime)
                     .ToEnumerableAsync();
@@ -91,6 +93,7 @@ namespace Apo_Chan.Managers
         //Fix issue#2 - BEGIN
         public new async Task SaveTaskAsync(ReportItem report)
         {
+            await BaseAuthProvider.RefreshProfile();
             report.ReportEndDate
                 = report.ReportEndDate.Date.Add(report.ReportEndTime).ToUniversalTime();
             report.ReportStartDate
@@ -103,6 +106,7 @@ namespace Apo_Chan.Managers
 
         public new async Task<ReportItem> LookupAsync(string id)
         {
+            await BaseAuthProvider.RefreshProfile();
             ReportItem report = await base.LookupAsync(id);
 
             report.ReportEndDate = DateTime.SpecifyKind

@@ -25,6 +25,7 @@ namespace Apo_Chan.Managers
         {
             defaultInstance = new UsersManager();
         }
+        public UsersManager() : base() { }
 
         public static UsersManager DefaultManager
         {
@@ -43,6 +44,7 @@ namespace Apo_Chan.Managers
             // get from Azure Mobile Apps
             try
             {
+                await BaseAuthProvider.RefreshProfile();
                 IEnumerable<UserItem> items = await this.dataTable
                     .Where(x => x.UserProviderId == providerId)
                     .ToEnumerableAsync();

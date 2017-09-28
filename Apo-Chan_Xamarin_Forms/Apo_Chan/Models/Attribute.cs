@@ -7,15 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Apo_Chan.Items;
 namespace Apo_Chan
 {
     public static class GlobalAttributes
     {
+        public static UserItem User
+        {
+            get
+            {
+                return UserItem.GetCachedUserItem();
+            }
+        }
         public static string refUserId
         {
             get
             {
-                return Apo_Chan.Items.UserItem.GetCachedUserItem().Id;
+                return User.Id;
             }
         }
 
