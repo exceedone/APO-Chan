@@ -10,7 +10,7 @@ namespace Apo_Chan
         /// <summary>
         /// Application name.
         /// </summary>
-        public static string ApplicationName = "Apo-Chan";
+        public static string ApplicationName = "APO-Chan";
 
 
         /// <summary>

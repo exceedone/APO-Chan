@@ -1,11 +1,40 @@
-﻿using System;
+﻿using Apo_Chan.Items;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Apo_Chan.Models
 {
-    class Utils
+    public static class Utils
     {
+        /*===========================================================================*/
+        /**
+         * check if "end" DateTime is after "start" DateTime
+         *
+         * @param startDate Start date of appointment
+         * @param startTime Start time of appointment
+         * @param endDate End date of appointment
+         * @param endTime End time of appointment
+         * @return true if the end DateTime later than the start DateTime.
+         */
+        //
+        public static bool CheckDateTimeContinuity(ReportItem report)
+        {
+            DateTime start = new DateTime(report.ReportStartDate.Year, report.ReportStartDate.Month, report.ReportStartDate.Day,
+                report.ReportStartTime.Hours, report.ReportStartTime.Minutes, report.ReportStartTime.Seconds);
+
+            DateTime end = new DateTime(report.ReportEndDate.Year, report.ReportEndDate.Month, report.ReportEndDate.Day,
+                report.ReportEndTime.Hours, report.ReportEndTime.Minutes, report.ReportEndTime.Seconds);
+
+            if (end.CompareTo(start) < 0)
+            {
+                end = start.Add(TimeSpan.FromHours(1));
+                report.ReportEndDate = end.Date;
+                report.ReportEndTime = end.TimeOfDay;
+                return false;
+            }
+            return true;
+        }
     }
 
     public static class UnixTime

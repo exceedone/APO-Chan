@@ -9,15 +9,17 @@
         <StackLayout Padding="10,20,10,20">
             <Label Text="To use this application, please sign in to the following providers."/>
             <Button x:Name="loginOffice365" Text="Office365"
-                        Command="{Binding NavigateSignInCommand}"
-                        Image="ic_office365.png"
-                        ContentLayout="Top,10"
-                        />
+                    Command="{Binding NavigateSignInCommand}"
+                    Image="ic_office365.png"
+                    Style="{StaticResource WhiteButtonStyle}"
+                    ContentLayout="Top,10"
+                    />
             <Button x:Name="loginGoogle" Text="Google"
-                        Command="{Binding NavigateSignInGoogleCommand}"
-                        Image="ic_google.png"
-                        ContentLayout="Top,10"
-                        />
+                    Command="{Binding NavigateSignInGoogleCommand}"
+                    Image="ic_google.png"
+                    Style="{StaticResource WhiteButtonStyle}"
+                    ContentLayout="Top,10"
+                    />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

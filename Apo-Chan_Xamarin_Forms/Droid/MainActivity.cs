@@ -25,7 +25,7 @@ using Plugin.Permissions;
 
 namespace Apo_Chan.Droid
 {
-    [Activity(Label = "Apo-Chan",
+    [Activity(Label = "APO-Chan",
         Icon = "@drawable/ic_launcher",
         //MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,

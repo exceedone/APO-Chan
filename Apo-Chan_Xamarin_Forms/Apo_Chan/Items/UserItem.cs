@@ -147,15 +147,12 @@ namespace Apo_Chan.Items
             {
                 Username = this.AMSUserId
             };
-            account.Properties.Add("UserInfo", JObject.FromObject(this).ToString());
-            account.Properties.Add("AccessToken", this.AccessToken);
-            account.Properties.Add("RefreshToken", this.RefreshToken);
-            account.Properties.Add("AMSToken", this.AMSToken);
-            account.Properties.Add("AMSUserId", this.AMSUserId);
-            if (this.ExpiresOn.HasValue)
-            {
-                account.Properties.Add("ExpiresOn", this.ExpiresOn.Value.ToString());
-            }
+            account.Properties.AddOrSkip("UserInfo", JObject.FromObject(this).ToString());
+            account.Properties.AddOrSkip("AccessToken", this.AccessToken);
+            account.Properties.AddOrSkip("RefreshToken", this.RefreshToken);
+            account.Properties.AddOrSkip("AMSToken", this.AMSToken);
+            account.Properties.AddOrSkip("AMSUserId", this.AMSUserId);
+            account.Properties.AddOrSkip("ExpiresOn", this.ExpiresOn.Value.ToString());
             AccountStore.Create().Save(account, Constants.ApplicationName);
         }
 

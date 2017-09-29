@@ -187,17 +187,7 @@ namespace Apo_Chan.ViewModels
             if (e.PropertyName == "ReportStartDate" || e.PropertyName == "ReportStartTime" ||
                 e.PropertyName == "ReportEndDate" || e.PropertyName == "ReportEndTime")
             {
-                DateTime start = new DateTime
-                    (
-                        Report.ReportStartDate.Year, Report.ReportStartDate.Month, Report.ReportStartDate.Day,
-                        Report.ReportStartTime.Hours, Report.ReportStartTime.Minutes, Report.ReportStartTime.Seconds
-                    );
-                DateTime end = new DateTime
-                    (
-                        Report.ReportEndDate.Year, Report.ReportEndDate.Month, Report.ReportEndDate.Day,
-                        Report.ReportEndTime.Hours, Report.ReportEndTime.Minutes, Report.ReportEndTime.Seconds
-                    );
-                if (!Extension.CheckDateTime(ref start, ref end))
+                if (Utils.CheckDateTimeContinuity(Report))
                 {
                     await dialogService.DisplayAlertAsync
                         (
@@ -206,10 +196,6 @@ namespace Apo_Chan.ViewModels
                             "OK"
                         );
                 }
-                Report.ReportStartDate = start.Date;
-                Report.ReportStartTime = start.TimeOfDay;
-                Report.ReportEndDate = end.Date;
-                Report.ReportEndTime = end.TimeOfDay;
             }
             else
             {
