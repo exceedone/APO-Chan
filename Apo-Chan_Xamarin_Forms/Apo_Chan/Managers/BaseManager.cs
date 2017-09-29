@@ -19,6 +19,7 @@ namespace Apo_Chan.Managers
     /// </summary>
     public abstract partial class BaseManager<T1> where T1 : BaseItem
     {
+        protected UserItem user;
         protected static BaseManager<T1> defaultInstance;
 
 #if OFFLINE_SYNC_ENABLED
@@ -43,6 +44,7 @@ namespace Apo_Chan.Managers
 #else
             this.dataTable = App.CurrentClient.GetTable<T1>();
 #endif
+            this.user = GlobalAttributes.User;
         }
 
         public bool IsOfflineEnabled

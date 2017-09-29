@@ -50,7 +50,7 @@ namespace Apo_Chan.Managers
                 await BaseAuthProvider.RefreshProfile();
                 IEnumerable<ReportItem> items = await this.dataTable
                     .Where(x =>
-                        x.RefUserId == GlobalAttributes.User.Id
+                        x.RefUserId == this.user.Id
                         && !x.Deleted
                         && ((x.ReportStartDate.Year == year && x.ReportStartDate.Month == month) || (x.ReportEndDate.Year == year && x.ReportEndDate.Month == month))
                     ).OrderBy(x => x.ReportStartDate).ThenBy(x => x.ReportEndDate).ThenBy(x => x.ReportStartTime).ThenBy(x => x.ReportEndTime)

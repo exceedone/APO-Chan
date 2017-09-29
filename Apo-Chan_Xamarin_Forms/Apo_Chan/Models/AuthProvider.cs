@@ -83,42 +83,8 @@ namespace Apo_Chan.Models
             {
                 return false;
             }
-
-            try
-            {
-                App.CurrentClient.CurrentUser = user.MobileServiceUser;
-                // login using access token
-                //JObject jo = new JObject();
-                //jo.Add("access_token", user.AMSToken);
-                //var loginuser = await App.CurrentClient.LoginAsync(user.EProviderType.MobileServiceAuthenticationProvider(), jo);
-
-                // if past expires_on, refresh token
-                //if (!user.ExpiresOn.HasValue || user.ExpiresOn.Value < DateTime.Now)
-                //{
-                //AuthenticationObj mobileServiceUser = JsonConvert.DeserializeObject<AuthenticationObj>(response);
-                //user.AMSToken = mobileServiceUser.authenticationToken;
-                //BaseAuthProvider provider = BaseAuthProvider.GetAuthProvider(user.EProviderType);
-                //string json = await provider.GetProfileJson(user.AMSToken);
-                //provider.SetUserProfile(user, json);
-                //await user.SetUserToken();
-                //}
-
-                // get provider user profile.
-                //BaseAuthProvider providerObj = BaseAuthProvider.GetAuthProvider((Constants.EProviderType)Enum.Parse(typeof(Constants.EProviderType), user.ProviderType.ToString()));
-                //string json = await providerObj.GetProfileJson(user.AMSToken);
-                //providerObj.SetUserProfile(user, json);
-
-                //await UserItem.SetUserToken(user);
-                return true;
-                // TODO: if can get loginuser info
-            }
-            catch (Exception ex)
-            {
-                // if we cannot get userinfo, clear cache.
-                Debug.WriteLine(@"-------------------[Debug] AccessToken error: " + ex.Message);
-                UserItem.ClearUserToken();
-                return false;
-            }
+            App.CurrentClient.CurrentUser = user.MobileServiceUser;
+            return true;
         }
 
 
@@ -179,10 +145,6 @@ namespace Apo_Chan.Models
             user.Email = jobj.user_id;
             user.AccessToken = jobj.access_token;
             user.RefreshToken = jobj.refresh_token;
-            if (jobj.expires_on.HasValue)
-            {
-                user.ExpiresOn = jobj.expires_on.Value.ToLocalTime();
-            }
 
             foreach (var claim in jobj.user_claims)
             {
@@ -193,6 +155,10 @@ namespace Apo_Chan.Models
                 else if (claim.typ == "name")
                 {
                     user.UserName = claim.val;
+                }
+                else if (claim.typ == "exp")
+                {
+                    user.ExpiresOn = UnixTime.FromUnixTime(Convert.ToInt64(claim.val));// claim.val;
                 }
             }
         }
@@ -216,4 +182,5 @@ namespace Apo_Chan.Models
     {
         public string authenticationToken { get; set; }
     }
+
 }

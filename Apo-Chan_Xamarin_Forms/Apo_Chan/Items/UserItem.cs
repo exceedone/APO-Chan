@@ -8,6 +8,7 @@ using Xamarin.Auth;
 using Xamarin.Forms;
 using Apo_Chan.Models;
 using Apo_Chan.Managers;
+using Newtonsoft.Json.Linq;
 
 namespace Apo_Chan.Items
 {
@@ -75,26 +76,26 @@ namespace Apo_Chan.Items
         /// <returns>If Non-Cached -- null else UserItem object.</returns>
         public static UserItem GetCachedUserItem()
         {
-            if (!Application.Current.Properties.Any())
-            {
-                return null;
-            }
-            var json = Application.Current.Properties.GetOrDefault("UserInfo") as string;
             try
             {
-                UserItem user = JsonConvert.DeserializeObject<UserItem>(json);
-                user.AccessToken = Convert.ToString(Application.Current.Properties.GetOrDefault("AccessToken"));
-                user.RefreshToken = Convert.ToString(Application.Current.Properties.GetOrDefault("RefreshToken"));
-                user.AMSToken = Convert.ToString(Application.Current.Properties.GetOrDefault("AMSToken"));
-                user.AMSUserId = Convert.ToString(Application.Current.Properties.GetOrDefault("AMSUserId"));
-                string d = Convert.ToString(Application.Current.Properties.GetOrDefault("ExpiresOn"));
-                if (!string.IsNullOrWhiteSpace(d))
+                var account = AccountStore.Create().FindAccountsForService(Constants.ApplicationName).FirstOrDefault();
+                if (account != null)
                 {
-                    user.ExpiresOn = Convert.ToDateTime(d);
+                    UserItem user = JsonConvert.DeserializeObject<UserItem>(account.Properties["UserInfo"]);
+                    user.AccessToken = account.Properties["AccessToken"];
+                    user.RefreshToken = account.Properties["RefreshToken"];
+                    user.AMSToken = account.Properties["AMSToken"];
+                    user.AMSUserId = account.Properties["AMSUserId"];
+                    string d = account.Properties["ExpiresOn"];
+                    if (!string.IsNullOrWhiteSpace(d))
+                    {
+                        user.ExpiresOn = Convert.ToDateTime(d);
+                    }
+                    return user;
                 }
-                return user;
+                return null;
             }
-            catch
+            catch (Exception)
             {
                 return null;
             }
@@ -141,23 +142,33 @@ namespace Apo_Chan.Items
 
             // (3) set cached
             ClearUserToken();
-            Application.Current.Properties.Add("UserInfo", Newtonsoft.Json.Linq.JObject.FromObject(this).ToString());
-            // not send API properties
-            Application.Current.Properties.AddOrSkip("AccessToken", this.AccessToken);
-            Application.Current.Properties.AddOrSkip("RefreshToken", this.RefreshToken);
-            Application.Current.Properties.AddOrSkip("AMSToken", this.AMSToken);
-            Application.Current.Properties.AddOrSkip("AMSUserId", this.AMSUserId);
+
+            Account account = new Account
+            {
+                Username = this.AMSUserId
+            };
+            account.Properties.Add("UserInfo", JObject.FromObject(this).ToString());
+            account.Properties.Add("AccessToken", this.AccessToken);
+            account.Properties.Add("RefreshToken", this.RefreshToken);
+            account.Properties.Add("AMSToken", this.AMSToken);
+            account.Properties.Add("AMSUserId", this.AMSUserId);
             if (this.ExpiresOn.HasValue)
             {
-                Application.Current.Properties.AddOrSkip("ExpiresOn", this.ExpiresOn.Value.ToString());
+                account.Properties.Add("ExpiresOn", this.ExpiresOn.Value.ToString());
             }
-            // await Application.Current.SavePropertiesAsync();
+            AccountStore.Create().Save(account, Constants.ApplicationName);
         }
 
-        public static async void ClearUserToken()
+        public static void ClearUserToken()
         {
-            Application.Current.Properties.Clear();
-            // await Application.Current.SavePropertiesAsync();
+            var accounts = AccountStore.Create().FindAccountsForService(Constants.ApplicationName);
+            if (accounts != null)
+            {
+                foreach (var account in accounts)
+                {
+                    AccountStore.Create().Delete(account, Constants.ApplicationName);
+                }
+            }
         }
 
     }

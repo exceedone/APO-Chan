@@ -44,7 +44,8 @@ namespace Apo_Chan.Managers
             // get from Azure Mobile Apps
             try
             {
-                await BaseAuthProvider.RefreshProfile();
+                // not token update info
+                //await BaseAuthProvider.RefreshProfile();
                 IEnumerable<UserItem> items = await this.dataTable
                     .Where(x => x.UserProviderId == providerId)
                     .ToEnumerableAsync();
