@@ -82,11 +82,11 @@ namespace Apo_Chan.Items
                 if (account != null)
                 {
                     UserItem user = JsonConvert.DeserializeObject<UserItem>(account.Properties["UserInfo"]);
-                    user.AccessToken = account.Properties["AccessToken"];
-                    user.RefreshToken = account.Properties["RefreshToken"];
-                    user.AMSToken = account.Properties["AMSToken"];
-                    user.AMSUserId = account.Properties["AMSUserId"];
-                    string d = account.Properties["ExpiresOn"];
+                    user.AccessToken = account.Properties.GetOrDefault("AccessToken");
+                    user.RefreshToken = account.Properties.GetOrDefault("RefreshToken");
+                    user.AMSToken = account.Properties.GetOrDefault("AMSToken");
+                    user.AMSUserId = account.Properties.GetOrDefault("AMSUserId");
+                    string d = account.Properties.GetOrDefault("ExpiresOn");
                     if (!string.IsNullOrWhiteSpace(d))
                     {
                         user.ExpiresOn = Convert.ToDateTime(d);
@@ -152,7 +152,10 @@ namespace Apo_Chan.Items
             account.Properties.AddOrSkip("RefreshToken", this.RefreshToken);
             account.Properties.AddOrSkip("AMSToken", this.AMSToken);
             account.Properties.AddOrSkip("AMSUserId", this.AMSUserId);
-            account.Properties.AddOrSkip("ExpiresOn", this.ExpiresOn.Value.ToString());
+            if (this.ExpiresOn.HasValue)
+            {
+                account.Properties.AddOrSkip("ExpiresOn", this.ExpiresOn.Value.ToString());
+            }
             AccountStore.Create().Save(account, Constants.ApplicationName);
         }
 
