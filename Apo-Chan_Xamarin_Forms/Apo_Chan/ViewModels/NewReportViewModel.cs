@@ -148,7 +148,7 @@ namespace Apo_Chan.ViewModels
             if (e.PropertyName == "ReportStartDate" || e.PropertyName == "ReportStartTime" ||
                 e.PropertyName == "ReportEndDate" || e.PropertyName == "ReportEndTime")
             {
-                if (Utils.CheckDateTimeContinuity(Report))
+                if (!Utils.CheckDateTimeContinuity(Report))
                 {
                     await dialogService.DisplayAlertAsync
                         (

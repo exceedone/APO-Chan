@@ -29,6 +29,7 @@ namespace Apo_Chan.Droid
         Icon = "@drawable/ic_launcher",
         //MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        ScreenOrientation = ScreenOrientation.Portrait,
         Theme = "@style/MyTheme")]
     public class MainActivity : FormsAppCompatActivity, IAuthenticate
     {
