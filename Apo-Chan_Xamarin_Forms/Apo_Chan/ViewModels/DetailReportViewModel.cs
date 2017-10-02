@@ -101,6 +101,11 @@ namespace Apo_Chan.ViewModels
                     );
                 if (accepted)
                 {
+                    if (!GlobalAttributes.isConnectedInternet)
+                    {
+                        await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+                        return;
+                    }
                     IsBusy = true;
                     Report.PropertyChanged -= OnDateTimeChanged;
                     try
@@ -128,6 +133,11 @@ namespace Apo_Chan.ViewModels
                 );
             if (accepted)
             {
+                if (!GlobalAttributes.isConnectedInternet)
+                {
+                    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+                    return;
+                }
                 IsBusy = true;
                 try
                 {
@@ -171,9 +181,12 @@ namespace Apo_Chan.ViewModels
 
                     System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                 }
-                UpdateLocationCommand.Execute();
                 IsBusy = false;
-                Report.PropertyChanged += OnDateTimeChanged;
+                if (Report != null)
+                {
+                    UpdateLocationCommand.Execute();
+                    Report.PropertyChanged += OnDateTimeChanged;
+                }
             }
             else
             {

@@ -33,6 +33,11 @@ namespace Apo_Chan.ViewModels
         #region Function
         private async void NavigateSignIn()
         {
+            if (!GlobalAttributes.isConnectedInternet)
+            {
+                await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+                return;
+            }
             this.IsBusy = true;
             if (App.Authenticator != null)
                 authenticated = await App.Authenticator.AuthenticateAsync(Constants.EProviderType.Office365);
