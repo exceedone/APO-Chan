@@ -50,6 +50,8 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <ConsolePause>false</ConsolePause>
+    <AndroidSupportedAbis />
+    <AndroidLinkMode>None</AndroidLinkMode>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Apo_Chan\Apo_Chan.csproj">
