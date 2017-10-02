@@ -49,7 +49,14 @@ namespace Apo_Chan.Geolocation
         public static void Init()
         {
             //Init instance to connect Google API Client for FusedGeolocator
-            DefaultInstance.FusedGeolocator.DesiredAccuracy = 100;
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                DefaultInstance.FusedGeolocator.DesiredAccuracy = 100;
+            }
+            else
+            {
+                DefaultInstance.Geolocator.DesiredAccuracy = 100;
+            }
         }
 
         private async Task<bool> checkPermissionsAsync(Func<string, Task> alertOnViewModel)
