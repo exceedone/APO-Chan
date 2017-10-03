@@ -61,10 +61,10 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>URLスキーム</string>
+			<string>easyauth.callback</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>apo-chan</string>
+				<string>apochan-scheme</string>
 			</array>
 		</dict>
 	</array>
@@ -79,5 +79,9 @@
 			<string>ドキュメントの種類 1</string>
 		</dict>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>You are about to use location!</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This will be called if location is used behind the scenes</string>
 </dict>
 </plist>
