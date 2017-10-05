@@ -80,6 +80,20 @@
                                       RippleColor="{StaticResource AccentColor}"
                                       Command="{Binding AddNewReportCommand}">
             </fab:FloatingActionButton>
+
+            <Image Grid.Row="0"
+                   VerticalOptions="End" HorizontalOptions="End"
+                   TranslationX="-20" TranslationY="-20"
+                   Source="button_add_circle.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding AddNewReportCommand}"/>
+                </Image.GestureRecognizers>
+                <Image.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                      iOS="true"
+                      Android="false" />
+                </Image.IsVisible>
+            </Image>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
