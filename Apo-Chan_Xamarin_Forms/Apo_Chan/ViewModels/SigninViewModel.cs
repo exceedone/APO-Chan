@@ -51,6 +51,11 @@ namespace Apo_Chan.ViewModels
         }
         private async void NavigateSignInGoogle()
         {
+            if (!GlobalAttributes.isConnectedInternet)
+            {
+                await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+                return;
+            }
             this.IsBusy = true;
             if (App.Authenticator != null)
                 authenticated = await App.Authenticator.AuthenticateAsync(Constants.EProviderType.Google);

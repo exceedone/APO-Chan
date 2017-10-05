@@ -35,6 +35,25 @@ namespace Apo_Chan.Models
             }
             return true;
         }
+
+        public static void ConvertToLocalDateTime(ReportItem report)
+        {
+            report.ReportStartDate = report.ReportStartDate.ToUniversalTime().Date.Add(report.ReportStartTime).ToLocalTime();
+            report.ReportEndDate = report.ReportEndDate.ToUniversalTime().Date.Add(report.ReportEndTime).ToLocalTime();
+
+            report.ReportStartTime = report.ReportStartDate.TimeOfDay;
+            report.ReportEndTime = report.ReportEndDate.TimeOfDay;
+        }
+
+        public static void ConvertToUtcDateTime(ReportItem report)
+        {
+            report.ReportStartDate
+                = report.ReportStartDate.Date.Add(report.ReportStartTime).ToUniversalTime();
+            report.ReportEndDate
+                = report.ReportEndDate.Date.Add(report.ReportEndTime).ToUniversalTime();
+            report.ReportStartTime = report.ReportStartDate.TimeOfDay;
+            report.ReportEndTime = report.ReportEndDate.TimeOfDay;
+        }
     }
 
     public static class UnixTime
