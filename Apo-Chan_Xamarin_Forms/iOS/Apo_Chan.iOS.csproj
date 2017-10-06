@@ -83,9 +83,6 @@
     <BundleResource Include="Resources\Icon-Small-40%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <!-- <None Include="project.json" /> -->
@@ -177,9 +174,6 @@
     <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Splash-Logo_Retina.png">
       <InProject>false</InProject>
     </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Splash-Logo.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Icon-57.png" />

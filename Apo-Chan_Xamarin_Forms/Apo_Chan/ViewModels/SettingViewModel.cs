@@ -42,7 +42,7 @@ namespace Apo_Chan.ViewModels
             SettingItems.Add(new SettingMenuVMItem("SignOut", "SignOut From APO-Chan.", navigateSignOut));
             SettingItems.Add(new SettingMenuVMItem("See the Source Code", "Access GitHub to see the source code of APO-Chan.", openGithub));
             SettingItems.Add(new SettingMenuVMItem("About us", "Access ExceedOne Homepage.", openExcedOne));
-            SettingItems.Add(new SettingMenuVMItem("Version", "1.0.0", versionStub));
+            SettingItems.Add(new SettingMenuVMItem("Version", "1.0.1", versionStub));
         }
         #endregion
 
