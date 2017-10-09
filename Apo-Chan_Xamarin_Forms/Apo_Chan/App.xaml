@@ -86,7 +86,10 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource PrimaryColor}"/>
+                <Setter Property="BarTextColor" Value="{StaticResource TextIconsColor}"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>

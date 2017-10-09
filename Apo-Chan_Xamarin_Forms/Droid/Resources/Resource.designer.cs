@@ -4022,7 +4022,7 @@ namespace Apo_Chan.Droid
 			public const int button_add = 2130837579;
 			
 			// aapt resource value: 0x7f02004c
-			public const int button_back = 2130837580;
+			public const int button_add_center = 2130837580;
 			
 			// aapt resource value: 0x7f02004d
 			public const int button_next = 2130837581;

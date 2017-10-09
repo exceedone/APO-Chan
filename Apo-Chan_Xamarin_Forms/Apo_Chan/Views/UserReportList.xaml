@@ -24,67 +24,70 @@
                      Command="{TemplateBinding BindingContext.SettingCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <StackLayout Grid.Row="0"
-                         Padding="0,0,0,8">
-                <ListView x:Name="reportList"
-                          SeparatorColor="{StaticResource DividerColor}"
-                          HasUnevenRows="True"
-                          CachingStrategy="RecycleElement"
-                          RefreshCommand="{Binding RefreshCommand}"
-                          ItemsSource="{Binding ReportItems}">
-                    <ListView.Behaviors>
-                        <b:EventToCommandBehavior EventName="ItemTapped"
-                                                  Command="{Binding ItemTappedCommand}"
-                                                  EventArgsParameterPath="Item" />
-                    </ListView.Behaviors>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <StackLayout Orientation="Vertical"
-                                             Padding="16,8,16,8">
-                                    <Label Font="Roboto" FontSize="16.0"
-                                           Text="{Binding ReportTitle}"
-                                           TextColor="{StaticResource PrimaryTextColor}">
-                                    </Label>
-                                    <AbsoluteLayout Padding="0,0,0,0">
-                                        <Label Font="Roboto" FontSize="14.0"
-                                               TextColor="{StaticResource SecondaryTextColor}"
-                                               Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"
-                                               AbsoluteLayout.LayoutFlags="PositionProportional"
-                                               AbsoluteLayout.LayoutBounds =".05, 0">
-                                        </Label>
-                                        <Label Font="Roboto" FontSize="14.0"
-                                               TextColor="{StaticResource SecondaryTextColor}"
-                                               Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"
-                                               AbsoluteLayout.LayoutFlags="PositionProportional"
-                                               AbsoluteLayout.LayoutBounds =".45, 0">
-                                        </Label>
-                                    </AbsoluteLayout>
-                                </StackLayout>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackLayout>
+        <AbsoluteLayout>
+            <ListView x:Name="reportList"
+                      AbsoluteLayout.LayoutFlags="All"
+                      AbsoluteLayout.LayoutBounds="0,0,1,1"
+                      SeparatorColor="{StaticResource DividerColor}"
+                      HasUnevenRows="True"
+                      CachingStrategy="RecycleElement"
+                      RefreshCommand="{Binding RefreshCommand}"
+                      ItemsSource="{Binding ReportItems}">
+                <ListView.Behaviors>
+                    <b:EventToCommandBehavior EventName="ItemTapped"
+                                              Command="{Binding ItemTappedCommand}"
+                                              EventArgsParameterPath="Item" />
+                </ListView.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <AbsoluteLayout Padding="16,8,16,8" HeightRequest="60"
+                                            VerticalOptions="FillAndExpand">
+                                <Label Font="Roboto" FontSize="16.0"
+                                       Text="{Binding ReportTitle}"
+                                       TextColor="{StaticResource PrimaryTextColor}"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       AbsoluteLayout.LayoutBounds ="0,.2">
+                                </Label>
+                                <Label Font="Roboto" FontSize="14.0"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       AbsoluteLayout.LayoutBounds =".05,.9">
+                                </Label>
+                                <Label Font="Roboto" FontSize="14.0"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       AbsoluteLayout.LayoutBounds =".45,.9">
+                                </Label>
+                            </AbsoluteLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-            <fab:FloatingActionButton x:Name="addButtonF" Grid.Row="0"
-                                      VerticalOptions="End" HorizontalOptions="End"
-                                      TranslationX="-20" TranslationY="-20"
-                                      Source="button_add.png"
-                                      HasShadow="True" Size="Normal"
+            <!--Need Grid layout for FAB to display correctly-->
+            <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
+                  AbsoluteLayout.LayoutBounds=".9,.95,56,56">
+            </Grid>
+            <fab:FloatingActionButton AbsoluteLayout.LayoutFlags="PositionProportional"
+                                      AbsoluteLayout.LayoutBounds=".9,.95,56,56"
+                                      Source="button_add_center.png"
+                                      HasShadow="True"
                                       NormalColor="{StaticResource BlueButtonColor}"
                                       RippleColor="{StaticResource AccentColor}"
                                       Command="{Binding AddNewReportCommand}">
+                <fab:FloatingActionButton.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                      iOS="false"
+                      Android="true" />
+                </fab:FloatingActionButton.IsVisible>
             </fab:FloatingActionButton>
 
-            <Image Grid.Row="0"
-                   VerticalOptions="End" HorizontalOptions="End"
-                   TranslationX="-20" TranslationY="-20"
-                   Source="button_add_circle.png">
+            <Image AbsoluteLayout.LayoutFlags="PositionProportional"
+                   AbsoluteLayout.LayoutBounds=".9,.95"
+                   Source="button_add.png">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding AddNewReportCommand}"/>
                 </Image.GestureRecognizers>
@@ -94,6 +97,6 @@
                       Android="false" />
                 </Image.IsVisible>
             </Image>
-        </Grid>
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

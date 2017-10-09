@@ -144,25 +144,85 @@
     <ImageAsset Include="Resources\Media.xcassets\button_add.imageset\button_add.png">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\button_add.imageset\button_add_2x.png">
+    <ImageAsset Include="Resources\Media.xcassets\button_add.imageset\button_add@2x.png">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\button_add.imageset\button_add_3x.png">
+    <ImageAsset Include="Resources\Media.xcassets\button_add.imageset\button_add@3x.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\button_add.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\button_next.imageset\button_next.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\button_next.imageset\button_next@2x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\button_next.imageset\button_next@3x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\button_next.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\button_previous.imageset\button_previous.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\button_previous.imageset\button_previous@2x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\button_previous.imageset\button_previous@3x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\button_previous.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\button_setting.imageset\button_setting.png">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\button_setting.imageset\button_setting_2x.png">
+    <ImageAsset Include="Resources\Media.xcassets\button_setting.imageset\button_setting@2x.png">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\button_setting.imageset\button_setting_3x.png">
+    <ImageAsset Include="Resources\Media.xcassets\button_setting.imageset\button_setting@3x.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\button_setting.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_new.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_new.imageset\ic_gps_new.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_new.imageset\ic_gps_new@2x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_new.imageset\ic_gps_new@3x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_off.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_off.imageset\ic_gps_off.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_off.imageset\ic_gps_off@2x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_off.imageset\ic_gps_off@3x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_on.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_on.imageset\ic_gps_on.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_on.imageset\ic_gps_on@2x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_gps_on.imageset\ic_gps_on@3x.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">
@@ -192,14 +252,5 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ic_office365%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\button_add_circle.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\button_add_circle%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\button_add_circle%403x.png" />
   </ItemGroup>
 </Project>
