@@ -80,5 +80,9 @@
 	<string>This app needs access location when open and in the background.</string>
 	<key>MinimumOSVersion</key>
 	<string>9.0</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 </dict>
 </plist>

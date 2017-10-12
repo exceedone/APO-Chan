@@ -1,7 +1,5 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Apo_Chan.Items;
 
 namespace Apo_Chan.Views
 {

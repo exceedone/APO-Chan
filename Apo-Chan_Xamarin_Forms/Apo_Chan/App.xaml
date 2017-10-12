@@ -50,13 +50,7 @@
                 <Setter Property="TextColor" Value="{StaticResource TextIconsColor}" />
                 <Setter Property="BackgroundColor" Value="{StaticResource AccentColor}" />
                 <Setter Property="BorderColor" Value="{StaticResource PrimaryLightColor}" />
-                <Setter Property="BorderWidth">
-                    <Setter.Value>
-                        <OnPlatform x:TypeArguments="x:Double"
-                            iOS="1"
-                            Android="0" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="BorderWidth" Value="1"/>
             </Style>
             <Style x:Key="WhiteButtonStyle" TargetType="Button">
                 <Setter Property="MinimumWidthRequest" Value="88" />
@@ -64,13 +58,7 @@
                 <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}" />
                 <Setter Property="BackgroundColor" Value="{StaticResource TextIconsColor}" />
                 <Setter Property="BorderColor" Value="{StaticResource PrimaryLightColor}" />
-                <Setter Property="BorderWidth">
-                    <Setter.Value>
-                        <OnPlatform x:TypeArguments="x:Double"
-                            iOS="1"
-                            Android="0" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="BorderWidth" Value="1"/>
             </Style>
             <Style x:Key="BlueButtonStyle" TargetType="Button">
                 <Setter Property="MinimumWidthRequest" Value="88" />
@@ -78,13 +66,7 @@
                 <Setter Property="TextColor" Value="{StaticResource TextIconsColor}" />
                 <Setter Property="BackgroundColor" Value="{StaticResource BlueButtonColor}" />
                 <Setter Property="BorderColor" Value="{StaticResource PrimaryLightColor}" />
-                <Setter Property="BorderWidth">
-                    <Setter.Value>
-                        <OnPlatform x:TypeArguments="x:Double"
-                            iOS="1"
-                            Android="0" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="BorderWidth" Value="1"/>
             </Style>
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource PrimaryColor}"/>

@@ -38,13 +38,16 @@ namespace Apo_Chan.Droid
 
         protected override void OnCreate(Bundle bundle)
         {
-            FormsAppCompatActivity.ToolbarResource = Resource.Layout.Toolbar;
+            ToolbarResource = Resource.Layout.Toolbar;
+            TabLayoutResource = Resource.Layout.Tabbar;
 
             base.OnCreate(bundle);
 
             // Initialize Azure Mobile Apps
             CurrentPlatform.Init();
 
+            //Xamarin Forms 2.4.x
+            //Forms.SetFlags("FastRenderers_Experimental");
             // Initialize Xamarin Forms
             Forms.Init(this, bundle);
 
