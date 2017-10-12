@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:fab="clr-namespace:FAB.Forms;assembly=FAB.Forms"
+             NavigationPage.HasNavigationBar="True"
+             Title="Group List"
+             ControlTemplate="{StaticResource MainPageTemplate}"
+             x:Class="Apo_Chan.Views.GroupList">
+    <ContentPage.ToolbarItems>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <ListView x:Name="groupList"
+                      AbsoluteLayout.LayoutFlags="All"
+                      AbsoluteLayout.LayoutBounds="0,0,1,1"
+                      SeparatorColor="{StaticResource DividerColor}"
+                      HasUnevenRows="True"
+                      CachingStrategy="RecycleElement"
+                      RefreshCommand="{Binding RefreshCommand}"
+                      ItemsSource="{Binding GroupItems}">
+                <ListView.Behaviors>
+                    <b:EventToCommandBehavior EventName="ItemTapped"
+                                              Command="{Binding ItemTappedCommand}"
+                                              EventArgsParameterPath="Item" />
+                </ListView.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <AbsoluteLayout Padding="16,8,16,8" HeightRequest="60"
+                                            VerticalOptions="FillAndExpand">
+                                <Label Font="Roboto" FontSize="16.0"
+                                       Text="{Binding GroupName}"
+                                       TextColor="{StaticResource PrimaryTextColor}"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       AbsoluteLayout.LayoutBounds ="0,.2">
+                                </Label>
+                                <Label Font="Roboto" FontSize="14.0"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       Text="{Binding UserCount}"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       AbsoluteLayout.LayoutBounds =".05,.9">
+                                </Label>
+                                <Label Font="Roboto" FontSize="14.0"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       Text="{Binding UserAuth}"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       AbsoluteLayout.LayoutBounds =".45,.9">
+                                </Label>
+                            </AbsoluteLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!--Need Grid layout for FAB to display correctly-->
+            <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
+                  AbsoluteLayout.LayoutBounds=".9,.95,56,56">
+            </Grid>
+            <fab:FloatingActionButton AbsoluteLayout.LayoutFlags="PositionProportional"
+                                      AbsoluteLayout.LayoutBounds=".9,.95,56,56"
+                                      Source="button_add_center.png"
+                                      HasShadow="True"
+                                      NormalColor="{StaticResource BlueButtonColor}"
+                                      RippleColor="{StaticResource AccentColor}"
+                                      Command="{Binding AddNewGroupCommand}">
+                <fab:FloatingActionButton.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                      iOS="false"
+                      Android="true" />
+                </fab:FloatingActionButton.IsVisible>
+            </fab:FloatingActionButton>
+
+            <Image AbsoluteLayout.LayoutFlags="PositionProportional"
+                   AbsoluteLayout.LayoutBounds=".9,.95"
+                   Source="button_add.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding AddNewGroupCommand}"/>
+                </Image.GestureRecognizers>
+                <Image.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                      iOS="true"
+                      Android="false" />
+                </Image.IsVisible>
+            </Image>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

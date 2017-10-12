@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
+using Apo_Chan.Models;
 
 namespace Apo_Chan.ViewModels
 {
@@ -37,12 +38,21 @@ namespace Apo_Chan.ViewModels
             : base(navigationService, dialogService)
         {
             this.User = GlobalAttributes.User;
+            //if (!string.IsNullOrEmpty(this.User.UserImageBase64))
+            //{
+            //    this.User.UserImage = Utils.ImageFromBase64(this.User.UserImageBase64);
+            //}
+            //else
+            //{
+            //    this.User.UserImage = new Image() { Source = "icon_account.png" };
+            //}
 
             SettingItems = new ObservableCollection<SettingMenuVMItem>();
-            SettingItems.Add(new SettingMenuVMItem("SignOut", "SignOut From APO-Chan.", navigateSignOut));
+            SettingItems.Add(new SettingMenuVMItem("Manage Group", "Manage groups that share reports.", openManageGroup));
             SettingItems.Add(new SettingMenuVMItem("See the Source Code", "Access GitHub to see the source code of APO-Chan.", openGithub));
             SettingItems.Add(new SettingMenuVMItem("About us", "Access ExceedOne Homepage.", openExcedOne));
-            SettingItems.Add(new SettingMenuVMItem("Version", "1.0.1", versionStub));
+            SettingItems.Add(new SettingMenuVMItem("Version", Xamarin.Forms.DependencyService.Get<IAssemblyService>().GetVersionName(), versionStub));
+            SettingItems.Add(new SettingMenuVMItem("SignOut", "SignOut From APO-Chan.", navigateSignOut));
         }
         #endregion
 
@@ -62,6 +72,14 @@ namespace Apo_Chan.ViewModels
             }
 
             this.IsBusy = false;
+        }
+
+        /// <summary>
+        /// Open browser
+        /// </summary>
+        private async void openManageGroup()
+        {
+            await this.navigationService.NavigateAsync("GroupList");
         }
 
         /// <summary>

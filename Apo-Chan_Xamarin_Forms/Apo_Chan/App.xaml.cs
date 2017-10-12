@@ -54,6 +54,8 @@ namespace Apo_Chan
             Container.RegisterTypeForNavigation<UserReportList>();
             Container.RegisterTypeForNavigation<NewReport>();
             Container.RegisterTypeForNavigation<DetailReport>();
+            Container.RegisterTypeForNavigation<GroupList>();
+            Container.RegisterTypeForNavigation<NewGroup>();
         }
 
         public static void Init(IAuthenticate authenticator)

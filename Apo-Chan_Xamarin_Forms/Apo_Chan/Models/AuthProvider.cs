@@ -44,7 +44,9 @@ namespace Apo_Chan.Models
             {
                 try
                 {
+                    return true;
                     var user = GlobalAttributes.User;
+
                     // if past expires_on, refresh token
                     if (!user.ExpiresOn.HasValue || user.ExpiresOn.Value < DateTime.Now)
                     {
@@ -95,6 +97,8 @@ namespace Apo_Chan.Models
         /// <param name="json"></param>
         public abstract void SetUserProfile(UserItem user, string json);
 
+        public abstract Task GetUserPicture(UserItem user);
+
         public static BaseAuthProvider GetAuthProvider(Constants.EProviderType providerType)
         {
             switch (providerType)
@@ -111,6 +115,48 @@ namespace Apo_Chan.Models
 
     public class Google : BaseAuthProvider
     {
+        /// <summary>
+        /// Get User Profile Picture And POST to Azure Blob
+        /// </summary>
+        /// <param name="user"></param>
+        public override async Task GetUserPicture(UserItem user)
+        {
+            try
+            {
+                string pictureUrl = null;
+                using (HttpClient client = new HttpClient())
+                {
+                    var response = await client.GetAsync(string.Format(Constants.GoogleApisURI, "userinfo", user.AccessToken));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var json = JObject.Parse(await response.Content.ReadAsStringAsync());
+                        pictureUrl = Convert.ToString(json["picture"]);
+                    }
+                }
+                if (!string.IsNullOrWhiteSpace(pictureUrl))
+                {
+                    using (HttpClient client = new HttpClient())
+                    {
+                        var response = await client.GetAsync(pictureUrl);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            using (var stream = await response.Content.ReadAsStreamAsync())
+                            {
+                                // upload file to Azure(not wait.)
+                                AzureBlobAPI.UploadFile(user, stream);
+                                //user.UserImage = Utils.ImageFromStream(stream);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public override void SetUserProfile(UserItem user, string json)
         {
             ProviderProfileObj jobj = JsonConvert.DeserializeObject<List<ProviderProfileObj>>(json).FirstOrDefault();
@@ -139,6 +185,36 @@ namespace Apo_Chan.Models
 
     public class ActiveDirectory : BaseAuthProvider
     {
+        /// <summary>
+        /// Get User Profile Picture And POST to Azure Blob
+        /// </summary>
+        /// <param name="user"></param>
+        public override async Task GetUserPicture(UserItem user)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.AccessToken);
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    var response = await client.GetAsync($"{Constants.MicrosoftGraphApiURI}/me/photo/$value");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        using (var stream = await response.Content.ReadAsStreamAsync())
+                        {
+                            // upload file to Azure(not wait.)
+                            AzureBlobAPI.UploadFile(user, stream);
+                            //user.UserImage = Utils.ImageFromStream(stream);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public override void SetUserProfile(UserItem user, string json)
         {
             ProviderProfileObj jobj = JsonConvert.DeserializeObject<List<ProviderProfileObj>>(json).FirstOrDefault();
@@ -168,6 +244,7 @@ namespace Apo_Chan.Models
     {
         public string user_id { get; set; }
         public string access_token { get; set; }
+        public string id_token { get; set; }
         public string refresh_token { get; set; }
         public DateTime? expires_on { get; set; }
         public List<ProviderProfileClaimObj> user_claims { get; set; }

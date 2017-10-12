@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Json;
+using System.Collections.Generic;
 
 using Android.App;
 using Android.Content;
@@ -22,6 +23,8 @@ using Apo_Chan.Managers;
 using Apo_Chan.Items;
 using Apo_Chan.Models;
 using Plugin.Permissions;
+
+[assembly: Dependency(typeof(Apo_Chan.Droid.MainActivity))]
 
 namespace Apo_Chan.Droid
 {
@@ -61,7 +64,7 @@ namespace Apo_Chan.Droid
             try
             {
                 // Sign in using a server-managed flow.
-                loginuser = await App.CurrentClient.LoginAsync(this, providerType.MobileServiceAuthenticationProvider(), "apochan-scheme");
+                loginuser = await App.CurrentClient.LoginAsync(this, providerType.MobileServiceAuthenticationProvider(), "apochan-scheme", new Dictionary<string, string> { { "resource", "https://graph.microsoft.com" } });
                 if (loginuser != null)
                 {
                     UserItem user = new UserItem()
@@ -77,6 +80,7 @@ namespace Apo_Chan.Droid
                     BaseAuthProvider providerObj = BaseAuthProvider.GetAuthProvider(providerType);
                     string json = await providerObj.GetProfileJson(loginuser.MobileServiceAuthenticationToken);
                     providerObj.SetUserProfile(user, json);
+                    await providerObj.GetUserPicture(user);
 
                     success = true;
                     await user.SetUserToken();
@@ -106,7 +110,5 @@ namespace Apo_Chan.Droid
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-
     }
 }
-

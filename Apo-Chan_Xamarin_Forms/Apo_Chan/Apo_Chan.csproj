@@ -40,14 +40,21 @@
     <PackageReference Include="Prism.Core" Version="6.3.0" />
     <PackageReference Include="Prism.Forms" Version="6.3.0" />
     <PackageReference Include="Prism.Unity.Forms" Version="6.3.0" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
     <PackageReference Include="Xam.Plugin.Connectivity" Version="3.0.3" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="3.0.4" />
     <PackageReference Include="Xamarin.Auth" Version="1.5.0.3" />
     <PackageReference Include="Xamarin.Forms" Version="2.3.4.270" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\NewGroup.xaml.cs">
+      <DependentUpon>NewGroup.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Setting.xaml.cs">
       <DependentUpon>Setting.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\GroupList.xaml.cs">
+      <DependentUpon>GroupList.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@ namespace Apo_Chan
 	public static class Constants
 	{
 		// Replace strings with your Azure Mobile App endpoint.
-		public static string ApplicationURL = @"https://apo-chan.azurewebsites.net";
+		public static string ApplicationURL = @"https://apo-chandev.azurewebsites.net";
 
         /// <summary>
         /// Application name.
@@ -27,6 +27,16 @@ namespace Apo_Chan
         /// Google Maps Geocoding API - REST services
         /// </summary>
         public static string GoogleReverseGeocodingURI = "https://maps.googleapis.com/maps/api/geocode/json?latlng={1},{2}&key={0}";
+
+        /// <summary>
+        /// Google Apis
+        /// </summary>
+        public static string GoogleApisURI = "https://www.googleapis.com/oauth2/v1/{0}?alt=json&access_token={1}";
+
+        /// <summary>
+        /// MicrosoftGraphApi
+        /// </summary>
+        public static string MicrosoftGraphApiURI = "https://graph.microsoft.com/v1.0";
 
         /// <summary>
         /// Google Maps Geocoding API Key

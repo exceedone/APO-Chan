@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
+using System.IO;
 
 namespace Apo_Chan.Models
 {
@@ -53,6 +55,20 @@ namespace Apo_Chan.Models
                 = report.ReportEndDate.Date.Add(report.ReportEndTime).ToUniversalTime();
             report.ReportStartTime = report.ReportStartDate.TimeOfDay;
             report.ReportEndTime = report.ReportEndDate.TimeOfDay;
+        }
+
+        public static Image ImageFromStream(Stream stream)
+        {
+            return new Image { Source = ImageSource.FromStream(() => stream) };
+        }
+        public static Image ImageFromBase64(string base64picture)
+        {
+            if(base64picture == null) { return null; }
+            byte[] imageBytes = Convert.FromBase64String(base64picture);
+            return new Image
+            {
+                Source = ImageSource.FromStream(() => new MemoryStream(imageBytes))
+            };
         }
     }
 

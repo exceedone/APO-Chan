@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using Apo_Chan.Models;
 using Apo_Chan.Managers;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace Apo_Chan.Items
 {
@@ -31,29 +32,59 @@ namespace Apo_Chan.Items
         /// Provider Service Token(Not Coneect Mobile App)
         /// </summary>
         //[JsonProperty(PropertyName = "AccessToken")]
+        [JsonIgnore]
         public string AccessToken { get; set; }
 
         /// <summary>
         /// Provider Service Token(Not Coneect Mobile App)
         /// </summary>
         //[JsonProperty(PropertyName = "RefreshToken")]
+        [JsonIgnore]
         public string RefreshToken { get; set; }
 
         /// <summary>
         /// Azure Mobile Service Token(Not Coneect Mobile App)
         /// </summary>
         //[JsonProperty(PropertyName = "AMSToken")]
+        [JsonIgnore]
         public string AMSToken { get; set; }
 
         /// <summary>
         /// Mobile service User ID
         /// </summary>
+        [JsonIgnore]
         public string AMSUserId { get; set; }
+
+        /// <summary>
+        /// User Image(base64)
+        /// </summary>
+        //[JsonIgnore]
+        //public string UserImageBase64 { get; set; }
+
+        /// <summary>
+        /// User Image
+        /// </summary>
+        //[JsonIgnore]
+        //private Image userImage;
+        //[JsonIgnore]
+        //public Image UserImage
+        //{
+        //    get
+        //    {
+        //        return userImage;
+        //    }
+        //    set
+        //    {
+        //        SetProperty(ref this.userImage, value);
+        //    }
+        //}
         /// <summary>
         /// Token Expires DateTime
         /// </summary>
+        [JsonIgnore]
         public DateTime? ExpiresOn { get; set; }
 
+        [JsonIgnore]
         public Constants.EProviderType EProviderType
         {
             get
@@ -62,6 +93,7 @@ namespace Apo_Chan.Items
             }
         }
 
+        [JsonIgnore]
         public MobileServiceUser MobileServiceUser
         {
             get
@@ -86,6 +118,7 @@ namespace Apo_Chan.Items
                     user.RefreshToken = account.Properties.GetOrDefault("RefreshToken");
                     user.AMSToken = account.Properties.GetOrDefault("AMSToken");
                     user.AMSUserId = account.Properties.GetOrDefault("AMSUserId");
+                    //user.UserImageBase64 = account.Properties.GetOrDefault("UserImageBase64");
                     string d = account.Properties.GetOrDefault("ExpiresOn");
                     if (!string.IsNullOrWhiteSpace(d))
                     {
@@ -130,7 +163,12 @@ namespace Apo_Chan.Items
                         await UsersManager.DefaultManager.SaveTaskAsync(this);
                     }
                     catch (Microsoft.WindowsAzure.MobileServices.MobileServiceInvalidOperationException mex)
-                    { }
+                    {
+                        Stream receiveStream = await mex.Response.Content.ReadAsStreamAsync();
+                        StreamReader readStream = new StreamReader(receiveStream, System.Text.Encoding.UTF8);
+                        string error = readStream.ReadToEnd();
+
+                    }
                     catch (Exception ex)
                     { }
                 }
@@ -152,6 +190,7 @@ namespace Apo_Chan.Items
             account.Properties.AddOrSkip("RefreshToken", this.RefreshToken);
             account.Properties.AddOrSkip("AMSToken", this.AMSToken);
             account.Properties.AddOrSkip("AMSUserId", this.AMSUserId);
+            //account.Properties.AddOrSkip("UserImageBase64", this.UserImageBase64);
             if (this.ExpiresOn.HasValue)
             {
                 account.Properties.AddOrSkip("ExpiresOn", this.ExpiresOn.Value.ToString());
