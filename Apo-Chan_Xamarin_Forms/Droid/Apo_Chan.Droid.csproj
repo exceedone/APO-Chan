@@ -99,10 +99,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Mobile.Client">
-      <Version>4.0.0</Version>
+      <Version>4.0.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore">
-      <Version>4.0.0</Version>
+      <Version>4.0.2</Version>
     </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>1.0.1</Version>
@@ -120,7 +120,7 @@
       <Version>3.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugin.Geolocator">
-      <Version>4.1.0</Version>
+      <Version>4.1.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.CustomTabs">
       <Version>25.4.0.2</Version>

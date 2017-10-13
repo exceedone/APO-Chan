@@ -24,8 +24,8 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Mobile.Client" Version="4.0.0" />
-    <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Azure.Mobile.Client" Version="4.0.2" />
+    <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="4.0.2" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="3.17.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Plugin.Permissions" Version="2.1.0" />
@@ -33,7 +33,7 @@
     <PackageReference Include="Prism.Forms" Version="6.3.0" />
     <PackageReference Include="Prism.Unity.Forms" Version="6.3.0" />
     <PackageReference Include="Xam.Plugin.Connectivity" Version="3.0.3" />
-    <PackageReference Include="Xam.Plugin.Geolocator" Version="4.1.0" />
+    <PackageReference Include="Xam.Plugin.Geolocator" Version="4.1.1" />
     <PackageReference Include="Xamarin.Auth" Version="1.5.0.3" />
     <PackageReference Include="Xamarin.Forms" Version="2.3.4.270" />
   </ItemGroup>
