@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="195" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <scene sceneID="194">
+            <objects>
+                <viewController id="195" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="192"/>
+                        <viewControllerLayoutGuide type="bottom" id="193"/>
+                    </layoutGuides>
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="4809" key="view" image="splash_logo.png">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                    </imageView>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="197" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="289" y="-21"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Default.png" width="320" height="480"/>
+        <image name="Default-568h.png" width="320" height="568"/>
+        <image name="Default-Portrait.png" width="768" height="1004"/>
+        <image name="Icon-60.png" width="60" height="60"/>
+        <image name="Icon-76.png" width="76" height="76"/>
+        <image name="Icon-Small.png" width="29" height="29"/>
+        <image name="Icon-Small-40.png" width="40" height="40"/>
+        <image name="button_add" width="72" height="72"/>
+        <image name="button_next" width="32" height="32"/>
+        <image name="button_previous" width="32" height="32"/>
+        <image name="button_setting" width="32" height="32"/>
+        <image name="ic_gps_new" width="16" height="16"/>
+        <image name="ic_gps_off" width="16" height="16"/>
+        <image name="ic_gps_on" width="16" height="16"/>
+        <image name="Icon-57.png" width="57" height="57"/>
+        <image name="Icon.png" width="1024" height="1024"/>
+        <image name="ic_google.png" width="96" height="96"/>
+        <image name="ic_office365.png" width="96" height="96"/>
+        <image name="splash_logo.png" width="320" height="109"/>
+    </resources>
+</document>

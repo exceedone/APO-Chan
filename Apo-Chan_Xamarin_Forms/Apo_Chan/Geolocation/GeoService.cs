@@ -112,7 +112,7 @@ namespace Apo_Chan.Geolocation
                     }
                     else
                     {
-                        await Geolocator.GetPositionAsync(/*TimeSpan.FromSeconds(10)*/10000);
+                        results = await Geolocator.GetPositionAsync(TimeSpan.FromSeconds(10));
                     }
                     if (results != null)
                     {
@@ -128,7 +128,6 @@ namespace Apo_Chan.Geolocation
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + ex.Message);
-                //await alertOnViewModel(ex.Message);
                 await alertOnViewModel("Cannot acquire location information." +
                     "\nPlease enable location service and try again.");
             }
@@ -136,13 +135,7 @@ namespace Apo_Chan.Geolocation
 
         public async Task<string> GetAddressFromPositionAsync(Position position)
         {
-            //Plugin.Geolocator v4.0.1
-            //string address;
-            //IList<Address> addresses = (IList<Address>)await Geolocator.GetAddressesForPositionAsync(position);
-            //address = addresses.FirstOrDefault().FeatureName;
-
-            //return address;
-
+            //Google Geocoding REST
             Position pos = new Position
             {
                 Latitude = position.Latitude,
