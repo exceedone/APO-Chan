@@ -5,7 +5,7 @@ namespace Apo_ChanService.Migrations
     using System.Data.Entity.Infrastructure.Annotations;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Init : DbMigration
     {
         public override void Up()
         {
@@ -28,8 +28,9 @@ namespace Apo_ChanService.Migrations
                         ReportStartTime = c.Time(precision: 7),
                         ReportEndDate = c.DateTime(storeType: "date"),
                         ReportEndTime = c.Time(precision: 7),
-                        ReportLat = c.Decimal(nullable: false, precision: 10, scale: 7),
-                        ReportLon = c.Decimal(nullable: false, precision: 10, scale: 7),
+                        ReportLat = c.Decimal(precision: 10, scale: 7),
+                        ReportLon = c.Decimal(precision: 10, scale: 7),
+                        ReportAddress = c.String(maxLength: 512),
                         DeletedAt = c.DateTimeOffset(precision: 7),
                         Version = c.Binary(nullable: false, fixedLength: true, timestamp: true, storeType: "rowversion",
                             annotations: new Dictionary<string, AnnotationValues>
@@ -83,6 +84,7 @@ namespace Apo_ChanService.Migrations
                             }),
                         ProviderType = c.Int(nullable: false),
                         UserProviderId = c.String(nullable: false, maxLength: 128),
+                        UserName = c.String(maxLength: 128),
                         Email = c.String(nullable: false, maxLength: 128),
                         DeletedAt = c.DateTimeOffset(precision: 7),
                         Version = c.Binary(nullable: false, fixedLength: true, timestamp: true, storeType: "rowversion",

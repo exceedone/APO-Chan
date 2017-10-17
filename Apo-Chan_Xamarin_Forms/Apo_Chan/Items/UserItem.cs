@@ -55,29 +55,59 @@ namespace Apo_Chan.Items
         [JsonIgnore]
         public string AMSUserId { get; set; }
 
+        private string userImageBase64;
         /// <summary>
         /// User Image(base64)
         /// </summary>
-        //[JsonIgnore]
-        //public string UserImageBase64 { get; set; }
+        [JsonIgnore]
+        public string UserImageBase64
+        {
+            get
+            {
+                // for first time, getting from Azure Blob
+                if (string.IsNullOrWhiteSpace(userImageBase64))
+                {
+                    //try
+                    //{
+                    //    using (Stream stream = Task.Run(() => AzureBlobAPI.DownloadFile(this)).Result)
+                    //    {
+                    //        if (stream != null)
+                    //        {
+                    //            this.userImageBase64 = Utils.Base64FromStream(stream);
+                    //        }
+                    //    }
 
+                    //}
+                    //catch (Exception)
+                    //{
+                    //}
+                }
+                return this.userImageBase64;
+            }
+            set
+            {
+                this.userImageBase64 = value;
+            }
+        }
+
+        [JsonIgnore]
+        private ImageSource userImage;
         /// <summary>
         /// User Image
         /// </summary>
-        //[JsonIgnore]
-        //private Image userImage;
-        //[JsonIgnore]
-        //public Image UserImage
-        //{
-        //    get
-        //    {
-        //        return userImage;
-        //    }
-        //    set
-        //    {
-        //        SetProperty(ref this.userImage, value);
-        //    }
-        //}
+        [JsonIgnore]
+        public ImageSource UserImage
+        {
+            get
+            {
+                return userImage;
+            }
+            set
+            {
+                SetProperty(ref this.userImage, value);
+            }
+        }
+
         /// <summary>
         /// Token Expires DateTime
         /// </summary>
@@ -102,6 +132,15 @@ namespace Apo_Chan.Items
             }
         }
 
+        [JsonIgnore]
+        public string NameAndEmail
+        {
+            get
+            {
+                return $"{this.UserName}({this.Email})";
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -118,7 +157,6 @@ namespace Apo_Chan.Items
                     user.RefreshToken = account.Properties.GetOrDefault("RefreshToken");
                     user.AMSToken = account.Properties.GetOrDefault("AMSToken");
                     user.AMSUserId = account.Properties.GetOrDefault("AMSUserId");
-                    //user.UserImageBase64 = account.Properties.GetOrDefault("UserImageBase64");
                     string d = account.Properties.GetOrDefault("ExpiresOn");
                     if (!string.IsNullOrWhiteSpace(d))
                     {
@@ -162,15 +200,17 @@ namespace Apo_Chan.Items
                     {
                         await UsersManager.DefaultManager.SaveTaskAsync(this);
                     }
-                    catch (Microsoft.WindowsAzure.MobileServices.MobileServiceInvalidOperationException mex)
+                    catch (MobileServiceInvalidOperationException mex)
                     {
                         Stream receiveStream = await mex.Response.Content.ReadAsStreamAsync();
                         StreamReader readStream = new StreamReader(receiveStream, System.Text.Encoding.UTF8);
                         string error = readStream.ReadToEnd();
 
                     }
-                    catch (Exception ex)
-                    { }
+                    catch (Exception)
+                    {
+
+                    }
                 }
                 else
                 {
@@ -190,7 +230,6 @@ namespace Apo_Chan.Items
             account.Properties.AddOrSkip("RefreshToken", this.RefreshToken);
             account.Properties.AddOrSkip("AMSToken", this.AMSToken);
             account.Properties.AddOrSkip("AMSUserId", this.AMSUserId);
-            //account.Properties.AddOrSkip("UserImageBase64", this.UserImageBase64);
             if (this.ExpiresOn.HasValue)
             {
                 account.Properties.AddOrSkip("ExpiresOn", this.ExpiresOn.Value.ToString());
@@ -198,6 +237,9 @@ namespace Apo_Chan.Items
             AccountStore.Create().Save(account, Constants.ApplicationName);
         }
 
+        /// <summary>
+        /// Delete User Info from AccountStore
+        /// </summary>
         public static void ClearUserToken()
         {
             var accounts = AccountStore.Create().FindAccountsForService(Constants.ApplicationName);

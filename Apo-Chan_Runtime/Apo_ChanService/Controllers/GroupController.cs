@@ -10,37 +10,45 @@ using Apo_ChanService.Models;
 namespace Apo_ChanService.Controllers
 {
     [CustomAttributes.CustomAuthentize]
-    public class UserController : BaseController<UserItem>
+    public class GroupController : BaseController<GroupItem>
     {
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);
             base.context = new Apo_ChanContext();
-            DomainManager = new EntityDomainManager<UserItem>(base.context, Request);
+            DomainManager = new EntityDomainManager<GroupItem>(base.context, Request);
         }
 
         // GET tables/user
         [HttpGet]
-        public IQueryable<UserItem> GetAllUserItems()
+        public IQueryable<GroupItem> GetAllGroupItems()
         {
             return Query();
         }
 
         // GET tables/user/48D68C86-6EA6-4C25-AA33-223FC9A27959
         [HttpGet]
-        public SingleResult<UserItem> GetUserItem(string id)
+        public SingleResult<GroupItem> GetGroupItem(string id)
         {
             return Lookup(id);
         }
 
         // POST tables/user
         [HttpPost]
-        public async Task<IHttpActionResult> PostUserItem(UserItem item)
+        public async Task<IHttpActionResult> PostGroupItem(GroupItem item)
         {
-            try { 
-            UserItem current = await InsertAsync(item);
-            return CreatedAtRoute("Tables", new { id = current.Id }, current);
-            }catch(System.Exception ex)
+            try
+            {
+                GroupItem current = await InsertAsync(item);
+
+                return CreatedAtRoute("Tables", new { id = current.Id }, current);
+            }
+            catch (System.Web.Http.HttpResponseException ex)
+            {
+                string code = await ex.Response.Content.ReadAsStringAsync();
+                throw;
+            }
+            catch (System.Exception ex)
             {
                 throw;
             }
@@ -48,14 +56,14 @@ namespace Apo_ChanService.Controllers
 
         // PATCH tables/user/48D68C86-6EA6-4C25-AA33-223FC9A27959
         [HttpPatch]
-        public Task<UserItem> PatchUserItem(string id, Delta<UserItem> patch)
+        public Task<GroupItem> PatchGroupItem(string id, Delta<GroupItem> patch)
         {
             return UpdateAsync(id, patch);
         }
 
         // DELETE tables/user/48D68C86-6EA6-4C25-AA33-223FC9A27959
         [HttpDelete]
-        public Task DeleteUserItem(string id)
+        public Task DeleteGroupItem(string id)
         {
             return DeleteAsync(id);
         }

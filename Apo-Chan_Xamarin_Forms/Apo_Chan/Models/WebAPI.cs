@@ -79,7 +79,7 @@ namespace Apo_Chan.Models
         {
             try
             {
-                Stream stream = null;
+                MemoryStream stream = new MemoryStream();
                 var blob = await getBlob(fileName, containerName, false);
                 await blob.DownloadToStreamAsync(stream);
                 return stream;
@@ -89,7 +89,7 @@ namespace Apo_Chan.Models
                 return null;
             }
         }
-        public static async Task<Stream> DownloadFile(UserItem user, Stream stream)
+        public static async Task<Stream> DownloadFile(UserItem user)
         {
             try
             {

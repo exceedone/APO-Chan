@@ -9,6 +9,7 @@ namespace Apo_ChanService.DataObjects
     public class UserItem : EntityData
     {
         public UserItem()
+            : base()
         {
             this.ProviderType = null;
             this.UserProviderId = null;

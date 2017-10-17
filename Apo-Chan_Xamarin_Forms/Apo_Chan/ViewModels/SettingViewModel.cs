@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
 using Apo_Chan.Models;
-
+using System.IO;
 namespace Apo_Chan.ViewModels
 {
     public class SettingViewModel : BaseViewModel
@@ -38,14 +38,14 @@ namespace Apo_Chan.ViewModels
             : base(navigationService, dialogService)
         {
             this.User = GlobalAttributes.User;
-            //if (!string.IsNullOrEmpty(this.User.UserImageBase64))
-            //{
-            //    this.User.UserImage = Utils.ImageFromBase64(this.User.UserImageBase64);
-            //}
-            //else
-            //{
-            //    this.User.UserImage = new Image() { Source = "icon_account.png" };
-            //}
+            if (!string.IsNullOrEmpty(this.User.UserImageBase64))
+            {
+                this.User.UserImage = ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(this.User.UserImageBase64)));
+            }
+            else
+            {
+                this.User.UserImage = ImageSource.FromFile("icon_account.png");
+            }
 
             SettingItems = new ObservableCollection<SettingMenuVMItem>();
             SettingItems.Add(new SettingMenuVMItem("Manage Group", "Manage groups that share reports.", openManageGroup));
@@ -59,6 +59,7 @@ namespace Apo_Chan.ViewModels
         #region Function
         private async void navigateSignOut()
         {
+            BaseAuthProvider provider = BaseAuthProvider.GetAuthProvider(GlobalAttributes.User.EProviderType);
             this.IsBusy = true;
             bool isLogOut = false;
             if (App.Authenticator != null)

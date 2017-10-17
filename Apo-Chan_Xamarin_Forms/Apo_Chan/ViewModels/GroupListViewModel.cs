@@ -93,7 +93,7 @@ namespace Apo_Chan.ViewModels
                     // I want to get groupusers when we get groups at the same time. 
                     try
                     {
-                        var groupItems = await GroupUserManager.DefaultManager.GetItemsAsync(refUserId: GlobalAttributes.refUserId);
+                        var groupItems = await GroupUserManager.DefaultManager.GetItemsAsync(x => x.RefGroupId == item.Id);
                         item.UserCount = groupItems.Count;
                         var isAdmin = groupItems.Where(x => x.RefUserId == GlobalAttributes.refUserId).FirstOrDefault()?.AdminFlg ?? false;
                         item.UserAuth = isAdmin ? "Admin" : "User";
@@ -102,7 +102,12 @@ namespace Apo_Chan.ViewModels
                     {
                         throw;
                     }
-
+                }
+            }
+            if (allGroups != null)
+            {
+                foreach (var item in allGroups)
+                {
                     GroupItems.Add(item);
                 }
             }

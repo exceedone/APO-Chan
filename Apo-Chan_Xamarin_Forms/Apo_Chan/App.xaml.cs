@@ -1,4 +1,5 @@
-﻿using Prism.Unity;
+﻿using System;
+using Prism.Unity;
 using Apo_Chan.Views;
 using Xamarin.Forms;
 using Microsoft.WindowsAzure.MobileServices;
@@ -61,6 +62,22 @@ namespace Apo_Chan
         public static void Init(IAuthenticate authenticator)
         {
             Authenticator = authenticator;
+        }
+
+        //
+        // 概要:
+        //     App developers override this method to respond when the user initiates an app
+        //     link request.
+        //
+        // パラメーター:
+        //   uri:
+        //     The URI for the request.
+        //
+        // コメント:
+        //     To be added.
+        protected override void OnAppLinkRequestReceived(Uri uri)
+        {
+            base.OnAppLinkRequestReceived(uri);
         }
     }
 }

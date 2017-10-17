@@ -39,6 +39,11 @@ namespace Apo_Chan
         public static string MicrosoftGraphApiURI = "https://graph.microsoft.com/v1.0";
 
         /// <summary>
+        /// MicrosoftSignoutApi
+        /// </summary>
+        public static string MicrosoftSignoutApiURI = "https://login.microsoftonline.com/common/oauth2/logout";
+
+        /// <summary>
         /// Google Maps Geocoding API Key
         /// </summary>
         public static string GoogleGeocodingAPIKey = "AIzaSyCxHoYGMlu-y0BvLFHaoO14zD0E3eWxbVQ";

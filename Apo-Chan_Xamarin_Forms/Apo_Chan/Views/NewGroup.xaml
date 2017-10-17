@@ -6,30 +6,89 @@
              NavigationPage.HasNavigationBar="True"
              Title="New Group"
              ControlTemplate="{StaticResource MainPageTemplate}"
+             x:Name="Root"
              x:Class="Apo_Chan.Views.NewGroup">
     <ContentPage.Content>
         <StackLayout Orientation="Vertical"
                      Padding="16,0,16,0">
-            
+
             <StackLayout x:Name="nameLayout" Orientation="Vertical"
                          Padding="0,5,0,5">
                 <Label Text="Group Name"/>
                 <Entry Text="{Binding Group.GroupName}"/>
             </StackLayout>
 
-            <StackLayout x:Name="actionLayout"
+            <StackLayout x:Name="groupUserItemsLayout" Orientation="Vertical">
+                <Label Text="Group User List"/>
+                <Label Text="*Please enter email of user you want to add to the group."/>
+                <!-- Add User Field -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Entry Grid.Column="0"
+                       FontSize="16.0"
+                       Text="{Binding NewGroupUser.RefUser.Email}"
+                       TextColor="{StaticResource PrimaryTextColor}"></Entry>
+                <Button Grid.Column="1" 
+                        Text="+" 
+                        Style="{StaticResource BlueButtonStyle}"
+                        Command="{Binding AddUserCommand}"></Button>
+            </Grid>
+
+            <ListView x:Name="groupUserList"
+                      HasUnevenRows="True"
+                      CachingStrategy="RecycleElement"
+                      RefreshCommand="{Binding RefreshCommand}"
+                      Margin="5,0,0,0"
+                      ItemsSource="{Binding GroupUserItems}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0"
+                                       FontSize="16.0"
+                                       Text="{Binding RefUser.NameAndEmail}"
+                                       TextColor="{StaticResource PrimaryTextColor}"
+                                       VerticalTextAlignment="Center"
+                                           ></Label>
+                                    <Button Grid.Column="1" Text="×" 
+                                            Command="{Binding BindingContext.DeleteCommand, Source={x:Reference Root}}"
+                                            CommandParameter="{Binding .}"
+                                     />
+                                </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+
+        <StackLayout x:Name="actionLayout"
                          Padding="0,8,0,8">
-                <Button x:Name="submitButton"
+            <Button x:Name="submitButton"
                         VerticalOptions="Center" HorizontalOptions="Center"
                         Text="Submit"
                         Style="{StaticResource BlueButtonStyle}"
                         Command="{Binding SubmitCommand}">
-                    <Button.WidthRequest>100</Button.WidthRequest>
-                    <Button.HeightRequest>
-                        <OnPlatform x:TypeArguments="x:Double" iOS="40" Android="50" />
-                    </Button.HeightRequest>
-                </Button>
-            </StackLayout>
+                <Button.WidthRequest>100</Button.WidthRequest>
+                <Button.HeightRequest>
+                    <OnPlatform x:TypeArguments="x:Double" iOS="40" Android="50" />
+                </Button.HeightRequest>
+            </Button>
+        </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

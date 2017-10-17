@@ -5,6 +5,7 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Util;
 using Android.Content.PM;
+using HockeyApp.Android;
 
 namespace Apo_Chan.Droid
 {
@@ -23,6 +24,7 @@ namespace Apo_Chan.Droid
         protected override void OnResume()
         {
             base.OnResume();
+            CrashManager.Register(this, "85bc5a6b9307424c94118feb81256bf9");
             Task startupWork = new Task(() => { SimulateStartup(); });
             startupWork.Start();
         }

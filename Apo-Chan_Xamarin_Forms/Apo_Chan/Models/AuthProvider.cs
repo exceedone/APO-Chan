@@ -44,7 +44,6 @@ namespace Apo_Chan.Models
             {
                 try
                 {
-                    return true;
                     var user = GlobalAttributes.User;
 
                     // if past expires_on, refresh token
@@ -90,15 +89,6 @@ namespace Apo_Chan.Models
         }
 
 
-        /// <summary>
-        /// Set User Info(Email, name, userid)
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="json"></param>
-        public abstract void SetUserProfile(UserItem user, string json);
-
-        public abstract Task GetUserPicture(UserItem user);
-
         public static BaseAuthProvider GetAuthProvider(Constants.EProviderType providerType)
         {
             switch (providerType)
@@ -110,6 +100,17 @@ namespace Apo_Chan.Models
             }
             return new ActiveDirectory();
         }
+
+        /// <summary>
+        /// Set User Info(Email, name, userid)
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="json"></param>
+        public abstract void SetUserProfile(UserItem user, string json);
+
+        public abstract Task GetUserPicture(UserItem user);
+        public abstract string GetSignoutUrl();
+
     }
 
 
@@ -121,40 +122,40 @@ namespace Apo_Chan.Models
         /// <param name="user"></param>
         public override async Task GetUserPicture(UserItem user)
         {
-            try
-            {
-                string pictureUrl = null;
-                using (HttpClient client = new HttpClient())
-                {
-                    var response = await client.GetAsync(string.Format(Constants.GoogleApisURI, "userinfo", user.AccessToken));
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var json = JObject.Parse(await response.Content.ReadAsStringAsync());
-                        pictureUrl = Convert.ToString(json["picture"]);
-                    }
-                }
-                if (!string.IsNullOrWhiteSpace(pictureUrl))
-                {
-                    using (HttpClient client = new HttpClient())
-                    {
-                        var response = await client.GetAsync(pictureUrl);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            using (var stream = await response.Content.ReadAsStreamAsync())
-                            {
-                                // upload file to Azure(not wait.)
-                                AzureBlobAPI.UploadFile(user, stream);
-                                //user.UserImage = Utils.ImageFromStream(stream);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
+            //try
+            //{
+            //    string pictureUrl = null;
+            //    using (HttpClient client = new HttpClient())
+            //    {
+            //        var response = await client.GetAsync(string.Format(Constants.GoogleApisURI, "userinfo", user.AccessToken));
+            //        if (response.IsSuccessStatusCode)
+            //        {
+            //            var json = JObject.Parse(await response.Content.ReadAsStringAsync());
+            //            pictureUrl = Convert.ToString(json["picture"]);
+            //        }
+            //    }
+            //    if (!string.IsNullOrWhiteSpace(pictureUrl))
+            //    {
+            //        using (HttpClient client = new HttpClient())
+            //        {
+            //            var response = await client.GetAsync(pictureUrl);
+            //            if (response.IsSuccessStatusCode)
+            //            {
+            //                using (var stream = await response.Content.ReadAsStreamAsync())
+            //                {
+            //                    // upload file to Azure(not wait.)
+            //                    AzureBlobAPI.UploadFile(user, stream);
+            //                    user.UserImageBase64 = Utils.Base64FromStream(stream);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception)
+            //{
 
-                throw;
-            }
+            //    throw;
+            //}
         }
 
         public override void SetUserProfile(UserItem user, string json)
@@ -180,7 +181,12 @@ namespace Apo_Chan.Models
                 }
             }
         }
-
+        public override string GetSignoutUrl()
+        {
+            return null;
+            //return new Uri($"https://accounts.google.com/Logout?continue=https://appengine.google.com/_ah/logout?continue={Constants.ApplicationURL}/api/values/signout%3fZUMO-API-VERSION=2.0.0");
+            //return new Uri($"https://www.google.com/accounts/Logout?continue={Uri.EscapeDataString(Constants.ApplicationURL + "/api/values/signout?ZUMO-API-VERSION=2.0.0")}");
+        }
     }
 
     public class ActiveDirectory : BaseAuthProvider
@@ -191,28 +197,28 @@ namespace Apo_Chan.Models
         /// <param name="user"></param>
         public override async Task GetUserPicture(UserItem user)
         {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.AccessToken);
-                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                    var response = await client.GetAsync($"{Constants.MicrosoftGraphApiURI}/me/photo/$value");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        using (var stream = await response.Content.ReadAsStreamAsync())
-                        {
-                            // upload file to Azure(not wait.)
-                            AzureBlobAPI.UploadFile(user, stream);
-                            //user.UserImage = Utils.ImageFromStream(stream);
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            //try
+            //{
+            //    using (HttpClient client = new HttpClient())
+            //    {
+            //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.AccessToken);
+            //        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            //        var response = await client.GetAsync($"{Constants.MicrosoftGraphApiURI}/me/photo/%24value");// %24 → $
+            //        if (response.IsSuccessStatusCode)
+            //        {
+            //            using (var stream = await response.Content.ReadAsStreamAsync())
+            //            {
+            //                // upload file to Azure(not wait.)
+            //                AzureBlobAPI.UploadFile(user, stream);
+            //                user.UserImageBase64 = Utils.Base64FromStream(stream);
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    throw;
+            //}
         }
 
         public override void SetUserProfile(UserItem user, string json)
@@ -237,6 +243,11 @@ namespace Apo_Chan.Models
                     user.ExpiresOn = UnixTime.FromUnixTime(Convert.ToInt64(claim.val));// claim.val;
                 }
             }
+        }
+
+        public override string GetSignoutUrl()
+        {
+            return Constants.MicrosoftSignoutApiURI;
         }
     }
 

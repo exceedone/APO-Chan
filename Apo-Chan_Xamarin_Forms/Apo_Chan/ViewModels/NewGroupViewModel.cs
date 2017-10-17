@@ -10,8 +10,10 @@ using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
@@ -31,7 +33,37 @@ namespace Apo_Chan.ViewModels
                 SetProperty(ref this.group, value);
             }
         }
+
+        private GroupUserItem newGroupUser;
+        public GroupUserItem NewGroupUser
+        {
+            get
+            {
+                return newGroupUser;
+            }
+            set
+            {
+                SetProperty(ref this.newGroupUser, value);
+            }
+        }
+
+        private ObservableCollection<GroupUserItem> groupUserItems;
+        public ObservableCollection<GroupUserItem> GroupUserItems
+        {
+            get
+            {
+                return groupUserItems;
+            }
+            set
+            {
+                SetProperty(ref this.groupUserItems, value);
+            }
+        }
+
         public DelegateCommand SubmitCommand { get; private set; }
+        public DelegateCommand AddUserCommand { get; private set; }
+        public DelegateCommand<GroupUserItem> DeleteCommand { get; private set; }
+
         #endregion
 
         #region Constructor
@@ -44,12 +76,28 @@ namespace Apo_Chan.ViewModels
                 CreatedUserId = GlobalAttributes.refUserId,
                 GroupName = null,
             };
+            // Init and add yourself.
+            GroupUserItems = new ObservableCollection<GroupUserItem>{
+                new GroupUserItem()
+                        {
+                            RefGroupId = Group.Id
+                            ,
+                            RefUser = GlobalAttributes.User
+                            ,
+                            RefUserId = GlobalAttributes.refUserId
+                            ,
+                            AdminFlg = true
+                        }
+                };
+            NewGroupUser = new GroupUserItem();
 
             SubmitCommand = new DelegateCommand(submitGroup);
+            AddUserCommand = new DelegateCommand(addUser);
+            DeleteCommand = new DelegateCommand<GroupUserItem>(deleteUser);
         }
-#endregion
+        #endregion
 
-#region Function
+        #region Function
         private async void submitGroup()
         {
             if (isValidGroup())
@@ -75,12 +123,11 @@ namespace Apo_Chan.ViewModels
                         await GroupManager.DefaultManager.SaveTaskAsync(Group);
 
                         // Create groupuser and save.
-                        await GroupUserManager.DefaultManager.SaveTaskAsync(new GroupUserItem()
+                        foreach (var item in this.GroupUserItems)
                         {
-                            RefGroupId = Group.Id
-                            , RefUserId = GlobalAttributes.refUserId
-                            , AdminFlg = true
-                        });
+                            item.RefGroupId = Group.Id;
+                            await GroupUserManager.DefaultManager.SaveTaskAsync(item);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -90,6 +137,66 @@ namespace Apo_Chan.ViewModels
                     await navigationService.GoBackAsync();
                 }
             }
+            else
+            {
+            }
+        }
+
+        private async void addUser()
+        {
+            UserItem user = null;
+            string message = this.getErrorMessageGroupUser();
+            if (message == null)
+            {
+                user = await getUserByEmail();
+                message = "The Email address you entered does not exist in accounts";
+            }
+            if (user != null)
+            {
+                this.GroupUserItems.Add(new GroupUserItem()
+                {
+                    RefUser = user
+                    ,
+                    RefUserId = user.Id
+                });
+                this.NewGroupUser = new GroupUserItem();
+            }
+            else
+            {
+                await dialogService.DisplayAlertAsync
+                     (
+                         "Error",
+                         message,
+                         "OK"
+                     );
+                this.NewGroupUser.RefUser.Email = null;
+            }
+        }
+
+        private async void deleteUser(GroupUserItem item)
+        {
+            string message = this.getErrorMessageDeleteGroupUser(item);
+            if (message != null)
+            {
+                await dialogService.DisplayAlertAsync
+                (
+                    "Error",
+                    message,
+                    "Confirm"
+                );
+                return;
+            }
+            var accepted = await dialogService.DisplayAlertAsync
+                (
+                    "Confirmation",
+                    "Do you want to remove this group user?",
+                    "Confirm",
+                    "Cancel"
+                );
+            if (accepted)
+            {
+                this.GroupUserItems.Remove(item);
+            }
         }
 
         private bool isValidGroup()
@@ -98,6 +205,70 @@ namespace Apo_Chan.ViewModels
             isValid = !string.IsNullOrWhiteSpace(Group.GroupName);
 
             return isValid;
+        }
+
+        /// <summary>
+        /// valid and get error message before search user from email.
+        /// </summary>
+        /// <returns></returns>
+        private string getErrorMessageGroupUser()
+        {
+            string email = this.NewGroupUser.RefUser.Email;
+            // empty textbox
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return "Please input email address.";
+            }
+
+            // same user email address
+            if (GlobalAttributes.User.Email == email)
+            {
+                return "Please enter an email address other than your email address.";
+            }
+
+            foreach (var item in this.GroupUserItems)
+            {
+                if (item.RefUser.Email == email)
+                {
+                    return "The email address you entered is already included.";
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// valid and get error message before delete user.
+        /// </summary>
+        /// <returns></returns>
+        private string getErrorMessageDeleteGroupUser(GroupUserItem item)
+        {
+            // cannot delete userself.
+            if (item.Id == GlobalAttributes.User.Id)
+            {
+                return "Cannot delete yourself.";
+            }
+            //cannot delete last 1.
+            if (this.GroupUserItems.Count == 1)
+            {
+                return "Cannot delete last group user.";
+            }
+            //cannot delete last admin user.
+            if (item.AdminFlg && this.GroupUserItems.Where(x => x.AdminFlg).Count() == 1)
+            {
+                return "Cannot delete last admin user.";
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Check User From Email
+        /// </summary>
+        /// <returns></returns>
+        private async Task<UserItem> getUserByEmail()
+        {
+            return await UsersManager.DefaultManager.GetItemAsync(x => x.Email == this.NewGroupUser.RefUser.Email);
         }
 
         #endregion

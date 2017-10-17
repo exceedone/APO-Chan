@@ -21,7 +21,7 @@ namespace Apo_Chan.Items
         private string createdUserId;
         private int userCount;
         private string userAuth;
-
+        
         [JsonProperty(PropertyName = "groupKey")]
         public string GroupKey { get
             {
@@ -59,6 +59,9 @@ namespace Apo_Chan.Items
             }
         }
 
+        /// <summary>
+        /// Count users Joined to group
+        /// </summary>
         public int UserCount
         {
             get
@@ -82,8 +85,5 @@ namespace Apo_Chan.Items
                 SetProperty(ref this.userAuth, value);
             }
         }
-
-
     }
-
 }

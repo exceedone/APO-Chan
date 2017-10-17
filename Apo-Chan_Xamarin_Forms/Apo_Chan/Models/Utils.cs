@@ -57,19 +57,24 @@ namespace Apo_Chan.Models
             report.ReportEndTime = report.ReportEndDate.TimeOfDay;
         }
 
-        public static Image ImageFromStream(Stream stream)
+        public static string Base64FromStream(Stream stream)
         {
-            return new Image { Source = ImageSource.FromStream(() => stream) };
-        }
-        public static Image ImageFromBase64(string base64picture)
-        {
-            if(base64picture == null) { return null; }
-            byte[] imageBytes = Convert.FromBase64String(base64picture);
-            return new Image
+            byte[] bytedata = null;
+            using (StreamReader reader = new StreamReader(stream))
             {
-                Source = ImageSource.FromStream(() => new MemoryStream(imageBytes))
-            };
+                    bytedata = Encoding.UTF8.GetBytes(reader.ReadToEnd());
+            }
+            return Convert.ToBase64String(bytedata);
         }
+        //public static Image ImageFromBase64(string base64picture)
+        //{
+        //    if(base64picture == null) { return null; }
+        //    byte[] imageBytes = Convert.FromBase64String(base64picture);
+        //    return new Image
+        //    {
+        //        Source = ImageSource.FromStream(() => new MemoryStream(imageBytes))
+        //    };
+        //}
     }
 
     public static class UnixTime

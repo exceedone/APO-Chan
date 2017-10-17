@@ -10,7 +10,7 @@ namespace Apo_ChanService.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "Apo_ChanService.Models.Apo_ChanContext";
+            SetSqlGenerator("System.Data.SqlClient", new Microsoft.Azure.Mobile.Server.Tables.EntityTableSqlGenerator());
         }
 
         protected override void Seed(Apo_ChanService.Models.Apo_ChanContext context)

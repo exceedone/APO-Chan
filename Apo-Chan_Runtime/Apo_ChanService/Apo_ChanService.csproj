@@ -191,38 +191,29 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.MobileApp.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\GroupUserController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
-    <Compile Include="Controllers\TokenController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DataObjects\GroupItem.cs" />
+    <Compile Include="DataObjects\GroupUserItem.cs" />
     <Compile Include="DataObjects\ReportItem.cs" />
     <Compile Include="DataObjects\UserItem.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201708100442136_InitialCreate.cs" />
-    <Compile Include="Migrations\201708100442136_InitialCreate.Designer.cs">
-      <DependentUpon>201708100442136_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201710130315550_Init.cs" />
+    <Compile Include="Migrations\201710130315550_Init.Designer.cs">
+      <DependentUpon>201710130315550_Init.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201708100608498_Initial.cs" />
-    <Compile Include="Migrations\201708100608498_Initial.Designer.cs">
-      <DependentUpon>201708100608498_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201710130325010_Init1.cs" />
+    <Compile Include="Migrations\201710130325010_Init1.Designer.cs">
+      <DependentUpon>201710130325010_Init1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201708100706026_Initial1.cs" />
-    <Compile Include="Migrations\201708100706026_Initial1.Designer.cs">
-      <DependentUpon>201708100706026_Initial1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708100707150_Test1234.cs" />
-    <Compile Include="Migrations\201708100707150_Test1234.Designer.cs">
-      <DependentUpon>201708100707150_Test1234.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708100723196_Mig201708101623.cs" />
-    <Compile Include="Migrations\201708100723196_Mig201708101623.Designer.cs">
-      <DependentUpon>201708100723196_Mig201708101623.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709250617220_Initial2.cs" />
-    <Compile Include="Migrations\201709250617220_Initial2.Designer.cs">
-      <DependentUpon>201709250617220_Initial2.cs</DependentUpon>
+    <Compile Include="Migrations\201710161015393_Update20171016.cs" />
+    <Compile Include="Migrations\201710161015393_Update20171016.Designer.cs">
+      <DependentUpon>201710161015393_Update20171016.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Apo_ChanContext.cs" />
@@ -234,6 +225,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\aspnet-Apo_ChanService.mdf" />
+    <Content Include="App_Data\aspnet-Apo_ChanService_log.ldf">
+      <DependentUpon>aspnet-Apo_ChanService.mdf</DependentUpon>
+    </Content>
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -264,30 +259,18 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <EmbeddedResource Include="Migrations\201710130315550_Init.resx">
+      <DependentUpon>201710130315550_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710130325010_Init1.resx">
+      <DependentUpon>201710130325010_Init1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710161015393_Update20171016.resx">
+      <DependentUpon>201710161015393_Update20171016.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201708100442136_InitialCreate.resx">
-      <DependentUpon>201708100442136_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708100608498_Initial.resx">
-      <DependentUpon>201708100608498_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708100706026_Initial1.resx">
-      <DependentUpon>201708100706026_Initial1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708100707150_Test1234.resx">
-      <DependentUpon>201708100707150_Test1234.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708100723196_Mig201708101623.resx">
-      <DependentUpon>201708100723196_Mig201708101623.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709250617220_Initial2.resx">
-      <DependentUpon>201709250617220_Initial2.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

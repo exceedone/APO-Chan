@@ -7,13 +7,13 @@ namespace Apo_ChanService.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Initial1 : IMigrationMetadata
+    public sealed partial class Init1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial1));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Init1));
         
         string IMigrationMetadata.Id
         {
-            get { return "201708100706026_Initial1"; }
+            get { return "201710130325010_Init1"; }
         }
         
         string IMigrationMetadata.Source

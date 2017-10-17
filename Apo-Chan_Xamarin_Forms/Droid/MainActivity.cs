@@ -101,7 +101,12 @@ namespace Apo_Chan.Droid
 
         async Task<bool> IAuthenticate.SignOutAsync()
         {
+            var auth = BaseAuthProvider.GetAuthProvider(GlobalAttributes.User.EProviderType);
             await App.CurrentClient.LogoutAsync();
+            if (!string.IsNullOrWhiteSpace(auth.GetSignoutUrl()))
+            {
+                BrowserService.OpenUrl(this, auth.GetSignoutUrl());
+            }
             return true;
         }
 

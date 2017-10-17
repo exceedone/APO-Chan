@@ -71,7 +71,7 @@
             <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
                   AbsoluteLayout.LayoutBounds=".9,.95,56,56">
             </Grid>
-            <fab:FloatingActionButton AbsoluteLayout.LayoutFlags="PositionProportional"
+            <!--<fab:FloatingActionButton AbsoluteLayout.LayoutFlags="PositionProportional"
                                       AbsoluteLayout.LayoutBounds=".9,.95,56,56"
                                       Source="button_add_center.png"
                                       HasShadow="True"
@@ -83,7 +83,7 @@
                       iOS="false"
                       Android="true" />
                 </fab:FloatingActionButton.IsVisible>
-            </fab:FloatingActionButton>
+            </fab:FloatingActionButton>-->
 
             <Image AbsoluteLayout.LayoutFlags="PositionProportional"
                    AbsoluteLayout.LayoutBounds=".9,.95"

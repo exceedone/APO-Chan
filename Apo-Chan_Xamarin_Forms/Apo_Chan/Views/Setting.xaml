@@ -18,7 +18,7 @@
                          HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                          BackgroundColor="{StaticResource PrimaryLightColor}"
                          Padding="10,20,10,20">
-                <Image HorizontalOptions="Center" VerticalOptions="StartAndExpand" Source="icon_account.png"></Image>
+                <Image HorizontalOptions="Center" VerticalOptions="StartAndExpand" Source="{Binding User.UserImage}"></Image>
                 <Label HorizontalOptions="Center" VerticalOptions="StartAndExpand"
                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
                        FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"

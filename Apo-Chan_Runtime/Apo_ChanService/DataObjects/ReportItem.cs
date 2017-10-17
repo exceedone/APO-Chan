@@ -10,6 +10,7 @@ namespace Apo_ChanService.DataObjects
     public class ReportItem : EntityData
     {
         public ReportItem()
+            : base()
         {
             this.ReportTitle = null;
             this.ReportComment = null;

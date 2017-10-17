@@ -14,6 +14,8 @@ namespace Apo_ChanService.Controllers
 {
     public abstract class BaseController<T> : TableController<T> where T : class, ITableData
     {
+        protected Apo_ChanContext context;
+
         /// <summary>
         /// get object by query string
         /// </summary>

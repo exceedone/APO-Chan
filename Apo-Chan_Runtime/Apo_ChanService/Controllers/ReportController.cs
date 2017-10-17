@@ -16,8 +16,8 @@ namespace Apo_ChanService.Controllers
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);
-            Apo_ChanContext context = new Apo_ChanContext();
-            DomainManager = new EntityDomainManager<ReportItem>(context, Request);
+            base.context = new Apo_ChanContext();
+            DomainManager = new EntityDomainManager<ReportItem>(base.context, Request);
         }
 
         // GET tables/report

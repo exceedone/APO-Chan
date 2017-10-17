@@ -15,6 +15,12 @@ namespace Apo_Chan.Items
     [DataContract(Name = "groupuser")]
     public class GroupUserItem : BaseItem
     {
+        public GroupUserItem()
+        {
+            this.RefUser = new UserItem();
+            this.RefGroup = new GroupItem();
+        }
+
         private string refGroupId;
         private string refUserId;
         private bool adminFlg;

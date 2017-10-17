@@ -76,6 +76,10 @@ namespace Apo_Chan.Managers
 
         public new async Task SaveTaskAsync(GroupItem group)
         {
+            if (string.IsNullOrWhiteSpace(group.GroupKey))
+            {
+                group.GroupKey = System.Guid.NewGuid().ToString().Replace("-", "");
+            }
             await BaseAuthProvider.RefreshProfile();
             await base.SaveTaskAsync(group);
         }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
@@ -58,6 +59,42 @@ namespace Apo_Chan.Managers
                     query.Where(x => x.RefUserId == refUserId);
                 }
                 IEnumerable<GroupUserItem> items = await query.ToEnumerableAsync();
+
+                ObservableCollection<GroupUserItem> groups = new ObservableCollection<GroupUserItem>();
+                foreach (var item in items)
+                {
+                    groups.Add(item);
+                }
+
+                return groups;
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                Debug.WriteLine(@"-------------------[Debug] ReportManager Invalid sync operation: " + msioe.Message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"-------------------[Debug] ReportManager Sync error: " + e.Message);
+            }
+            return null;
+        }
+
+        public async Task<ObservableCollection<GroupUserItem>> GetItemsAsync(Expression<Func<GroupUserItem, bool>> extension, bool syncItems = false)
+        {
+            // get from Azure Mobile Apps
+            try
+            {
+#if OFFLINE_SYNC_ENABLED
+                if (syncItems)
+                {
+                    await this.SyncAsync();
+                }
+#endif
+                await BaseAuthProvider.RefreshProfile();
+                IEnumerable<GroupUserItem> items = await this.dataTable
+                    .Where(x => !x.Deleted)
+                    .Where(extension)
+                    .ToEnumerableAsync();
 
                 ObservableCollection<GroupUserItem> groups = new ObservableCollection<GroupUserItem>();
                 foreach (var item in items)

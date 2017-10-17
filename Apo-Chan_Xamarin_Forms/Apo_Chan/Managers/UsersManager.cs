@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
@@ -41,13 +42,39 @@ namespace Apo_Chan.Managers
 
         public async Task<UserItem> GetItemAsync(string providerId, int providerType)
         {
+            return await this.GetItemAsync(x => x.UserProviderId == providerId);
+            //// get from Azure Mobile Apps
+            //try
+            //{
+            //    // not token update info
+            //    //await BaseAuthProvider.RefreshProfile();
+            //    IEnumerable<UserItem> items = await this.dataTable
+            //        .Where(x => x.UserProviderId == providerId)
+            //        .ToEnumerableAsync();
+
+            //    if (!items.Any()) { return null; }
+            //    return items.ToList().FirstOrDefault();
+            //}
+            //catch (MobileServiceInvalidOperationException msioe)
+            //{
+            //    Debug.WriteLine(@"-------------------[Debug] UsersManager Invalid sync operation: " + msioe.Message);
+            //}
+            //catch (Exception e)
+            //{
+            //    Debug.WriteLine(@"-------------------[Debug] UsersManager Sync error: " + e.Message);
+            //}
+            //return null;
+        }
+
+        public async Task<UserItem> GetItemAsync(Expression<Func<UserItem, bool>> expression)
+        {
             // get from Azure Mobile Apps
             try
             {
                 // not token update info
                 //await BaseAuthProvider.RefreshProfile();
                 IEnumerable<UserItem> items = await this.dataTable
-                    .Where(x => x.UserProviderId == providerId)
+                    .Where(expression)
                     .ToEnumerableAsync();
 
                 if (!items.Any()) { return null; }
