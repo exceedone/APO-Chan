@@ -127,6 +127,8 @@ namespace Apo_Chan.ViewModels
                     try
                     {
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
+
+                        GlobalAttributes.ShouldUpdateReports = true;
                     }
                     catch (Exception e)
                     {

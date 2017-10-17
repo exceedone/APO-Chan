@@ -111,6 +111,8 @@ namespace Apo_Chan.ViewModels
                     try
                     {
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
+
+                        GlobalAttributes.ShouldUpdateReports = true;
                     }
                     catch (Exception e)
                     {
@@ -142,13 +144,15 @@ namespace Apo_Chan.ViewModels
                 try
                 {
                     await ReportManager.DefaultManager.DeleteAsync(Report);
+
+                    GlobalAttributes.ShouldUpdateReports = true;
                 }
                 catch (Exception e)
                 {
                     System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                 }
-                await navigationService.GoBackAsync();
                 IsBusy = false;
+                await navigationService.GoBackAsync();
             }
         }
 
@@ -164,7 +168,8 @@ namespace Apo_Chan.ViewModels
 
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
-            ;
+            System.Diagnostics.Debug.WriteLine("-------------------[Debug] "
+                + "DetailReportViewModel.OnNavigatedFrom()");
         }
 
         public async void OnNavigatedTo(NavigationParameters parameters)

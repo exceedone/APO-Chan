@@ -11,7 +11,7 @@ using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
 {
-    public class UserReportListViewModel : BaseViewModel
+    public class UserReportListViewModel : BaseViewModel, INavigatedAware
     {
         #region Variable and Property
         private ObservableCollection<ReportItem> reportItems;
@@ -59,11 +59,13 @@ namespace Apo_Chan.ViewModels
         {
             ReportItems = new ObservableCollection<ReportItem>();
             CurrentDate = DateTime.Now;
-            RefreshCommand = new DelegateCommand(SetItemsAsync).ObservesProperty(() => IsBusy);
+            RefreshCommand = new DelegateCommand(SetItemsAsync);
             AddNewReportCommand = new DelegateCommand(NavigateNewReport);
             ItemTappedCommand = new DelegateCommand<ReportItem>(NavigateDetailReport);
             NextMonthReportCommand = new DelegateCommand(nextMonthReport);
             PrevMonthReportCommand = new DelegateCommand(prevMonthReport);
+
+            GlobalAttributes.ShouldUpdateReports = true;
         }
         #endregion
 
@@ -127,6 +129,19 @@ namespace Apo_Chan.ViewModels
         {
             this.CurrentDate = this.CurrentDate.AddMonths(-1);
             await this.setItemsAsync();
+        }
+
+        public void OnNavigatedFrom(NavigationParameters parameters)
+        {
+            GlobalAttributes.ShouldUpdateReports = false;
+        }
+
+        public void OnNavigatedTo(NavigationParameters parameters)
+        {
+            if (GlobalAttributes.ShouldUpdateReports)
+            {
+                RefreshCommand.Execute();
+            }
         }
         #endregion
 
