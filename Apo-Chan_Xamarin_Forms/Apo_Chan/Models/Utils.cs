@@ -117,4 +117,10 @@ namespace Apo_Chan.Models
             return (long)nowTicks;
         }
     }
+
+    public class AuthModel
+    {
+        public bool AdminFlg { get; set; }
+        public string Label { get; set; }
+    }
 }

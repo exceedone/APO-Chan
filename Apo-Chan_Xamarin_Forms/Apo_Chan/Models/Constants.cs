@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Apo_Chan.Models;
 
 namespace Apo_Chan
 {
-	public static class Constants
-	{
-		// Replace strings with your Azure Mobile App endpoint.
-		public static string ApplicationURL = @"https://apo-chandev.azurewebsites.net";
+    public static class Constants
+    {
+        // Replace strings with your Azure Mobile App endpoint.
+        public static string ApplicationURL = @"https://apo-chandev.azurewebsites.net";
 
         /// <summary>
         /// Application name.
@@ -59,7 +62,16 @@ namespace Apo_Chan
         /// </summary>
         public static string ExcedOneURL = "http://www.exceedone.co.jp/";
 
-
+        public static IEnumerable<AuthModel> AuthPicker
+        {
+            get
+            {
+                return new[]{
+                    new AuthModel(){ AdminFlg = false, Label = "User"}
+                    , new AuthModel(){ AdminFlg = true, Label = "Admin"}
+            };
+            }
+        }
     }
 }
 

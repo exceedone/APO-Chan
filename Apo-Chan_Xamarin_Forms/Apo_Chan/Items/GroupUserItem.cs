@@ -24,6 +24,7 @@ namespace Apo_Chan.Items
         private string refGroupId;
         private string refUserId;
         private bool adminFlg;
+        private AuthModel auth;
 
         [JsonProperty(PropertyName = "refGroupId")]
         public string RefGroupId
@@ -67,6 +68,18 @@ namespace Apo_Chan.Items
                 SetProperty(ref this.adminFlg, value);
             }
         }
+
+        //public AuthModel Auth
+        //{
+        //    get
+        //    {
+        //        return this.auth;
+        //    }
+        //    set
+        //    {
+        //        SetProperty(ref this.auth, value);
+        //    }
+        //}
 
     }
 

@@ -55,20 +55,20 @@
                                         <RowDefinition Height="Auto"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="4*"></ColumnDefinition>
-                                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
 
                                     <Label Grid.Column="0"
                                        FontSize="16.0"
                                        Text="{Binding RefUser.NameAndEmail}"
                                        TextColor="{StaticResource PrimaryTextColor}"
                                        VerticalTextAlignment="Center"
-                                           ></Label>
-                                    <Button Grid.Column="1" Text="×" 
+                                       LineBreakMode="TailTruncation"></Label>
+                                    <Button Grid.Column="2" Text="×" 
                                             Command="{Binding BindingContext.DeleteCommand, Source={x:Reference Root}}"
-                                            CommandParameter="{Binding .}"
-                                     />
+                                            CommandParameter="{Binding .}"/>
                                 </Grid>
                         </ViewCell>
                     </DataTemplate>

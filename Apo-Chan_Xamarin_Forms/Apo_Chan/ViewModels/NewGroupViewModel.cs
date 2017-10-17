@@ -63,6 +63,7 @@ namespace Apo_Chan.ViewModels
         public DelegateCommand SubmitCommand { get; private set; }
         public DelegateCommand AddUserCommand { get; private set; }
         public DelegateCommand<GroupUserItem> DeleteCommand { get; private set; }
+        public IEnumerable<AuthModel> AuthPicker { get; }
 
         #endregion
 
@@ -94,6 +95,7 @@ namespace Apo_Chan.ViewModels
             SubmitCommand = new DelegateCommand(submitGroup);
             AddUserCommand = new DelegateCommand(addUser);
             DeleteCommand = new DelegateCommand<GroupUserItem>(deleteUser);
+            AuthPicker = Constants.AuthPicker;
         }
         #endregion
 
@@ -189,7 +191,7 @@ namespace Apo_Chan.ViewModels
             var accepted = await dialogService.DisplayAlertAsync
                 (
                     "Confirmation",
-                    "Do you want to remove this group user?",
+                    $"Do you want to remove group user '{item.RefUser.NameAndEmail}'?",
                     "Confirm",
                     "Cancel"
                 );
