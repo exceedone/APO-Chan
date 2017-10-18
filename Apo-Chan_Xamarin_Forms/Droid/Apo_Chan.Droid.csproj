@@ -114,6 +114,9 @@
     <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore">
       <Version>4.0.2</Version>
     </PackageReference>
+    <PackageReference Include="PCLStorage">
+      <Version>1.0.2</Version>
+    </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>1.0.1</Version>
     </PackageReference>

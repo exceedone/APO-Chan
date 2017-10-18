@@ -12,6 +12,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Android.Provider;
 
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;

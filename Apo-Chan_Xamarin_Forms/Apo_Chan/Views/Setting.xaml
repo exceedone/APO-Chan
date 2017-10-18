@@ -14,21 +14,22 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackLayout Grid.Row="0" Orientation="Vertical"
-                         HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                         BackgroundColor="{StaticResource PrimaryLightColor}"
-                         Padding="10,20,10,20">
-                <Image HorizontalOptions="Center" VerticalOptions="StartAndExpand" Source="{Binding User.UserImage}"></Image>
-                <Label HorizontalOptions="Center" VerticalOptions="StartAndExpand"
+            <StackLayout Orientation="Horizontal"
+                Grid.Row="0"
+                BackgroundColor="{StaticResource PrimaryLightColor}"
+                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                Padding="5,10,5,10">
+                <Image HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" 
+                       Source="{Binding User.UserImage.ImageSource}" 
+                       WidthRequest="60" HeightRequest="60"
+                       Margin="0,0,0,0"/>
+                <Label HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
+                       Margin="5,0,0,0"
+                       LineBreakMode="TailTruncation"
                        FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"
-                       Text="{Binding User.UserName }"/>
-                <Label HorizontalOptions="Center" VerticalOptions="StartAndExpand"
-                       HorizontalTextAlignment="Start" VerticalTextAlignment="Start"
-                       FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"
-                       Text="{Binding User.Email}"/>
+                       Text="{Binding User.NameAndEmail }"/>
             </StackLayout>
-
             <ListView Grid.Row="1" x:Name="settingItems"
                       SeparatorColor="{StaticResource DividerColor}"
                       HasUnevenRows="True"

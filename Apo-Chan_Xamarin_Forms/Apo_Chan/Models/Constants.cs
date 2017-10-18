@@ -15,6 +15,7 @@ namespace Apo_Chan
         /// </summary>
         public static string ApplicationName = "APO-Chan";
 
+        public static string IconAccountName = "icon_account.png";
 
         /// <summary>
         /// Provider Type

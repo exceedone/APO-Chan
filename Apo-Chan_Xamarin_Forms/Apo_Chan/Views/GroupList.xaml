@@ -4,7 +4,7 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
-             xmlns:fab="clr-namespace:FAB.Forms;assembly=FAB.Forms"
+             xmlns:fab="clr-namespace:Apo_Chan.Custom;assembly=Apo_Chan"
              NavigationPage.HasNavigationBar="True"
              Title="Group List"
              ControlTemplate="{StaticResource MainPageTemplate}"
@@ -31,23 +31,31 @@
                         <ViewCell>
                             <AbsoluteLayout Padding="16,8,16,8" HeightRequest="60"
                                             VerticalOptions="FillAndExpand">
+                                <Image Source="{Binding GroupImage.ImageSource}" 
+                                       WidthRequest="50" HeightRequest="50"
+                                       Margin="0,5,0,5"
+                                       VerticalOptions="FillAndExpand"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       AbsoluteLayout.LayoutBounds ="0,.2">
+                                </Image>
+
                                 <Label Font="Roboto" FontSize="16.0"
                                        Text="{Binding GroupName}"
                                        TextColor="{StaticResource PrimaryTextColor}"
                                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                                       AbsoluteLayout.LayoutBounds ="0,.2">
+                                       AbsoluteLayout.LayoutBounds ="0.25,.2">
                                 </Label>
                                 <Label Font="Roboto" FontSize="14.0"
                                        TextColor="{StaticResource SecondaryTextColor}"
                                        Text="{Binding UserCount}"
                                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                                       AbsoluteLayout.LayoutBounds =".05,.9">
+                                       AbsoluteLayout.LayoutBounds =".3,.9">
                                 </Label>
                                 <Label Font="Roboto" FontSize="14.0"
                                        TextColor="{StaticResource SecondaryTextColor}"
                                        Text="{Binding UserAuth}"
                                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                                       AbsoluteLayout.LayoutBounds =".45,.9">
+                                       AbsoluteLayout.LayoutBounds =".7,.9">
                                 </Label>
                             </AbsoluteLayout>
                         </ViewCell>
@@ -55,23 +63,25 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <!--Need Grid layout for FAB to display correctly-->
-            <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
-                  AbsoluteLayout.LayoutBounds=".9,.95,56,56">
-            </Grid>
-            <fab:FloatingActionButton AbsoluteLayout.LayoutFlags="PositionProportional"
-                                      AbsoluteLayout.LayoutBounds=".9,.95,56,56"
-                                      Source="button_add_center.png"
-                                      HasShadow="True"
-                                      NormalColor="{StaticResource BlueButtonColor}"
-                                      RippleColor="{StaticResource AccentColor}"
-                                      Command="{Binding AddNewGroupCommand}">
-                <fab:FloatingActionButton.IsVisible>
-                    <OnPlatform x:TypeArguments="x:Boolean"
-                      iOS="false"
-                      Android="true" />
-                </fab:FloatingActionButton.IsVisible>
-            </fab:FloatingActionButton>
+            <ContentView AbsoluteLayout.LayoutFlags="PositionProportional"
+                         AbsoluteLayout.LayoutBounds=".9,.95">
+                <OnPlatform x:TypeArguments="View">
+                    <OnPlatform.iOS>
+                        <Image Source="button_add.png">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding AddNewGroupCommand}"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </OnPlatform.iOS>
+                    <OnPlatform.Android>
+                        <fab:FloatingActionButtonView ImageName="button_add_center.png"
+                                                      Command="{Binding AddNewGroupCommand}"
+                                                      ColorNormal="{StaticResource BlueButtonColor}"
+                                                      ColorRipple="{StaticResource AccentColor}">
+                        </fab:FloatingActionButtonView>
+                    </OnPlatform.Android>
+                </OnPlatform>
+            </ContentView>
 
             <Image AbsoluteLayout.LayoutFlags="PositionProportional"
                    AbsoluteLayout.LayoutBounds=".9,.95"

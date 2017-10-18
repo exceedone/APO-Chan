@@ -38,13 +38,10 @@ namespace Apo_Chan.ViewModels
             : base(navigationService, dialogService)
         {
             this.User = GlobalAttributes.User;
-            if (!string.IsNullOrEmpty(this.User.UserImageBase64))
+            Task.Run(() => Service.ImageService.SetImageSource(this.User));
+            if (this.User.UserImage == null)
             {
-                this.User.UserImage = ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(this.User.UserImageBase64)));
-            }
-            else
-            {
-                this.User.UserImage = ImageSource.FromFile("icon_account.png");
+                this.User.UserImage = CustomImageSource.FromFile(Constants.IconAccountName);
             }
 
             SettingItems = new ObservableCollection<SettingMenuVMItem>();

@@ -122,40 +122,39 @@ namespace Apo_Chan.Models
         /// <param name="user"></param>
         public override async Task GetUserPicture(UserItem user)
         {
-            //try
-            //{
-            //    string pictureUrl = null;
-            //    using (HttpClient client = new HttpClient())
-            //    {
-            //        var response = await client.GetAsync(string.Format(Constants.GoogleApisURI, "userinfo", user.AccessToken));
-            //        if (response.IsSuccessStatusCode)
-            //        {
-            //            var json = JObject.Parse(await response.Content.ReadAsStringAsync());
-            //            pictureUrl = Convert.ToString(json["picture"]);
-            //        }
-            //    }
-            //    if (!string.IsNullOrWhiteSpace(pictureUrl))
-            //    {
-            //        using (HttpClient client = new HttpClient())
-            //        {
-            //            var response = await client.GetAsync(pictureUrl);
-            //            if (response.IsSuccessStatusCode)
-            //            {
-            //                using (var stream = await response.Content.ReadAsStreamAsync())
-            //                {
-            //                    // upload file to Azure(not wait.)
-            //                    AzureBlobAPI.UploadFile(user, stream);
-            //                    user.UserImageBase64 = Utils.Base64FromStream(stream);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //catch (Exception)
-            //{
+            try
+            {
+                string pictureUrl = null;
+                using (HttpClient client = new HttpClient())
+                {
+                    var response = await client.GetAsync(string.Format(Constants.GoogleApisURI, "userinfo", user.AccessToken));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var json = JObject.Parse(await response.Content.ReadAsStringAsync());
+                        pictureUrl = Convert.ToString(json["picture"]);
+                    }
+                }
+                if (!string.IsNullOrWhiteSpace(pictureUrl))
+                {
+                    using (HttpClient client = new HttpClient())
+                    {
+                        var response = await client.GetAsync(pictureUrl);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            using (var stream = await response.Content.ReadAsStreamAsync())
+                            {
+                                // upload file
+                                await Service.ImageService.SaveImage(user, Utils.ReadStram(stream));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
 
-            //    throw;
-            //}
+                throw;
+            }
         }
 
         public override void SetUserProfile(UserItem user, string json)
@@ -197,28 +196,27 @@ namespace Apo_Chan.Models
         /// <param name="user"></param>
         public override async Task GetUserPicture(UserItem user)
         {
-            //try
-            //{
-            //    using (HttpClient client = new HttpClient())
-            //    {
-            //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.AccessToken);
-            //        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            //        var response = await client.GetAsync($"{Constants.MicrosoftGraphApiURI}/me/photo/%24value");// %24 → $
-            //        if (response.IsSuccessStatusCode)
-            //        {
-            //            using (var stream = await response.Content.ReadAsStreamAsync())
-            //            {
-            //                // upload file to Azure(not wait.)
-            //                AzureBlobAPI.UploadFile(user, stream);
-            //                user.UserImageBase64 = Utils.Base64FromStream(stream);
-            //            }
-            //        }
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    throw;
-            //}
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.AccessToken);
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    var response = await client.GetAsync($"{Constants.MicrosoftGraphApiURI}/me/photo/%24value");// %24 → $
+                    if (response.IsSuccessStatusCode)
+                    {
+                        using (var stream = await response.Content.ReadAsStreamAsync())
+                        {
+                            // upload file
+                            await Service.ImageService.SaveImage(user, Utils.ReadStram(stream));
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public override void SetUserProfile(UserItem user, string json)

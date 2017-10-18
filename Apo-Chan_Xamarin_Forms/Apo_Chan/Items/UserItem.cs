@@ -55,48 +55,41 @@ namespace Apo_Chan.Items
         [JsonIgnore]
         public string AMSUserId { get; set; }
 
-        private string userImageBase64;
-        /// <summary>
-        /// User Image(base64)
-        /// </summary>
-        [JsonIgnore]
-        public string UserImageBase64
-        {
-            get
-            {
-                // for first time, getting from Azure Blob
-                if (string.IsNullOrWhiteSpace(userImageBase64))
-                {
-                    //try
-                    //{
-                    //    using (Stream stream = Task.Run(() => AzureBlobAPI.DownloadFile(this)).Result)
-                    //    {
-                    //        if (stream != null)
-                    //        {
-                    //            this.userImageBase64 = Utils.Base64FromStream(stream);
-                    //        }
-                    //    }
-
-                    //}
-                    //catch (Exception)
-                    //{
-                    //}
-                }
-                return this.userImageBase64;
-            }
-            set
-            {
-                this.userImageBase64 = value;
-            }
-        }
+        //private byte[] userImageByte;
+        ///// <summary>
+        ///// User Image(base64)
+        ///// </summary>
+        //[JsonIgnore]
+        //public byte[] UserImageByte
+        //{
+        //    get
+        //    {
+        //        // for first time, getting from Azure Blob
+        //        if (userImageByte == null)
+        //        {
+        //            try
+        //            {
+        //                this.userImageByte = Task.Run(() => Service.ImageService.DownloadFile(this)).Result;
+        //            }
+        //            catch (Exception)
+        //            {
+        //            }
+        //        }
+        //        return this.userImageByte;
+        //    }
+        //    set
+        //    {
+        //        this.userImageByte = value;
+        //    }
+        //}
 
         [JsonIgnore]
-        private ImageSource userImage;
+        private CustomImageSource userImage;
         /// <summary>
         /// User Image
         /// </summary>
         [JsonIgnore]
-        public ImageSource UserImage
+        public CustomImageSource UserImage
         {
             get
             {

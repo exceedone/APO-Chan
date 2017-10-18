@@ -45,6 +45,7 @@ namespace Apo_Chan.ViewModels
             RefreshCommand = new DelegateCommand(SetItemsAsync).ObservesProperty(() => IsBusy);
             AddNewGroupCommand = new DelegateCommand(NavigateNewGroup);
             ItemTappedCommand = new DelegateCommand<GroupItem>(NavigateDetailGroup);
+
         }
         #endregion
 
@@ -108,10 +109,10 @@ namespace Apo_Chan.ViewModels
             {
                 foreach (var item in allGroups)
                 {
+                    await Service.ImageService.SetImageSource(item);
                     GroupItems.Add(item);
                 }
             }
-
             IsBusy = false;
         }
 

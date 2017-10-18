@@ -21,7 +21,8 @@ namespace Apo_Chan.Items
         private string createdUserId;
         private int userCount;
         private string userAuth;
-        
+        private CustomImageSource groupImage;
+
         [JsonProperty(PropertyName = "groupKey")]
         public string GroupKey { get
             {
@@ -56,6 +57,30 @@ namespace Apo_Chan.Items
             set
             {
                 SetProperty(ref this.createdUserId, value);
+            }
+        }
+
+        public CustomImageSource GroupImage
+        {
+            get
+            {
+                if (this.groupImage == null)
+                {
+                    return CustomImageSource.FromFile(Constants.IconAccountName);
+                }
+                return this.groupImage;
+            }
+            set
+            {
+                SetProperty(ref this.groupImage, value);
+            }
+        }
+
+        public bool HasImage
+        {
+            get
+            {
+                return this.groupImage != null;
             }
         }
 

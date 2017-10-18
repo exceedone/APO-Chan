@@ -3,6 +3,7 @@ using Apo_Chan.Items;
 using Apo_Chan.Managers;
 using Apo_Chan.Models;
 using Plugin.Geolocator.Abstractions;
+using Plugin.Media;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -60,6 +61,7 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+        public DelegateCommand ImageSelectCommand { get; private set; }
         public DelegateCommand SubmitCommand { get; private set; }
         public DelegateCommand AddUserCommand { get; private set; }
         public DelegateCommand<GroupUserItem> DeleteCommand { get; private set; }
@@ -76,7 +78,7 @@ namespace Apo_Chan.ViewModels
                 Id = null,
                 CreatedUserId = GlobalAttributes.refUserId,
                 GroupName = null,
-            };
+        };
             // Init and add yourself.
             GroupUserItems = new ObservableCollection<GroupUserItem>{
                 new GroupUserItem()
@@ -92,6 +94,7 @@ namespace Apo_Chan.ViewModels
                 };
             NewGroupUser = new GroupUserItem();
 
+            ImageSelectCommand = new DelegateCommand(imageSelect);
             SubmitCommand = new DelegateCommand(submitGroup);
             AddUserCommand = new DelegateCommand(addUser);
             DeleteCommand = new DelegateCommand<GroupUserItem>(deleteUser);
@@ -100,7 +103,37 @@ namespace Apo_Chan.ViewModels
         #endregion
 
         #region Function
-        private async void submitGroup()
+        private async void imageSelect()
+        {
+            this.IsBusy = true;
+            await CrossMedia.Current.Initialize();
+            if (!CrossMedia.Current.IsTakePhotoSupported)
+            {
+                await dialogService.DisplayAlertAsync("No Camera", "No camera available.", "OK");
+                this.IsBusy = false;
+                return;
+            }
+
+            var file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
+            {
+                PhotoSize = Plugin.Media.Abstractions.PhotoSize.MaxWidthHeight,
+                MaxWidthHeight = 500
+            });
+            if (file == null)
+            {
+                this.IsBusy = false;
+                return;
+            }
+            this.Group.GroupImage = CustomImageSource.FromByteArray(() =>
+            {
+                var stream = file.GetStream();
+                var byteArray = Utils.ReadStram(stream);
+                file.Dispose();
+                return byteArray;
+            });
+            this.IsBusy = false;
+        }
+            private async void submitGroup()
         {
             if (isValidGroup())
             {
@@ -129,6 +162,12 @@ namespace Apo_Chan.ViewModels
                         {
                             item.RefGroupId = Group.Id;
                             await GroupUserManager.DefaultManager.SaveTaskAsync(item);
+                        }
+
+                        // upload icon
+                        if (this.Group.HasImage)
+                        {
+                            await Service.ImageService.SaveImage(this.Group, this.Group.GroupImage.StreamByte);
                         }
                     }
                     catch (Exception e)

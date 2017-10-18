@@ -1,56 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
-    <PackageTargetFallback>portable-net45+win8+wpa81+wp8</PackageTargetFallback>
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;NETSTANDARD1_4;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <ErrorReport>prompt</ErrorReport>
-    <OutputPath>bin\Release</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <ItemGroup>
-    <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
-    <None Remove="**\*.xaml" />
-    
-    <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
-    <EmbeddedResource Include="**\*.xaml" SubType="Designer" Generator="MSBuild:UpdateDesignTimeXaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="FAB.Forms" Version="2.2.0-pre1" />
-    <PackageReference Include="Microsoft.Azure.Mobile.Client" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="4.0.1" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="3.16.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Plugin.Permissions" Version="2.1.0" />
-    <PackageReference Include="Prism.Core" Version="6.3.0" />
-    <PackageReference Include="Prism.Forms" Version="6.3.0" />
-    <PackageReference Include="Prism.Unity.Forms" Version="6.3.0" />
-    <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
-    <PackageReference Include="Xam.Plugin.Connectivity" Version="3.0.3" />
-    <PackageReference Include="Xam.Plugin.Geolocator" Version="4.1.1" />
-    <PackageReference Include="Xamarin.Auth" Version="1.5.0.3" />
-    <PackageReference Include="Xamarin.Forms" Version="2.3.4.270" />
-  </ItemGroup>
-  <ItemGroup>
-    <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
-    <None Remove="**\*.xaml" />
+    <PropertyGroup>
+        <TargetFramework>netstandard1.4</TargetFramework>
+        <PackageTargetFallback>portable-net45+win8+wpa81+wp8</PackageTargetFallback>
+        <DebugType>full</DebugType>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug</OutputPath>
+        <DefineConstants>DEBUG;NETSTANDARD1_4;</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <ConsolePause>false</ConsolePause>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DebugType>full</DebugType>
+        <Optimize>true</Optimize>
+        <ErrorReport>prompt</ErrorReport>
+        <OutputPath>bin\Release</OutputPath>
+        <WarningLevel>4</WarningLevel>
+        <ConsolePause>false</ConsolePause>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
+        <None Remove="**\*.xaml" />
 
-    <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
-    <EmbeddedResource Include="**\*.xaml" SubType="Designer" Generator="MSBuild:UpdateDesignTimeXaml" />
-  </ItemGroup>
+        <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
+        <EmbeddedResource Include="**\*.xaml" SubType="Designer" Generator="MSBuild:UpdateDesignTimeXaml" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FAB.Forms" Version="2.2.0-pre1" />
+        <PackageReference Include="HockeySDK.Xamarin" Version="4.1.5" />
+        <PackageReference Include="LiveXAML" Version="1.3.1" />
+        <PackageReference Include="Microsoft.Azure.Mobile.Client" Version="4.0.1" />
+        <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="4.0.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="3.16.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+        <PackageReference Include="PCLStorage" Version="1.0.2" />
+        <PackageReference Include="Plugin.Permissions" Version="2.1.0" />
+        <PackageReference Include="Prism.Core" Version="6.3.0" />
+        <PackageReference Include="Prism.Forms" Version="6.3.0" />
+        <PackageReference Include="Prism.Unity.Forms" Version="6.3.0" />
+        <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
+        <PackageReference Include="Xam.Plugin.Connectivity" Version="3.0.3" />
+        <PackageReference Include="Xam.Plugin.Geolocator" Version="4.1.1" />
+        <PackageReference Include="Xam.Plugin.Media" Version="3.0.1" />
+        <PackageReference Include="Xamarin.Auth" Version="1.5.0.3" />
+        <PackageReference Include="Xamarin.Forms" Version="2.3.4.270" />
+    </ItemGroup>
 </Project>
