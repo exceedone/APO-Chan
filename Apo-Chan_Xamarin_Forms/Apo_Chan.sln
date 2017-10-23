@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apo_Chan", "Apo_Chan\Apo_Chan.csproj", "{3AFA591D-C115-4AC9-9519-F788373ECDE9}"
 EndProject
@@ -45,6 +45,7 @@ Global
 		{3AFA591D-C115-4AC9-9519-F788373ECDE9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3AFA591D-C115-4AC9-9519-F788373ECDE9}.Release|ARM.ActiveCfg = Release|Any CPU
 		{3AFA591D-C115-4AC9-9519-F788373ECDE9}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{3AFA591D-C115-4AC9-9519-F788373ECDE9}.Release|iPhone.Build.0 = Release|Any CPU
 		{3AFA591D-C115-4AC9-9519-F788373ECDE9}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{3AFA591D-C115-4AC9-9519-F788373ECDE9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3AFA591D-C115-4AC9-9519-F788373ECDE9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
@@ -85,7 +86,6 @@ Global
 		{34B9099E-4B00-4707-BFDE-0B95997F8893}.Release|Any CPU.Build.0 = Release|Any CPU
 		{34B9099E-4B00-4707-BFDE-0B95997F8893}.Release|ARM.ActiveCfg = Release|Any CPU
 		{34B9099E-4B00-4707-BFDE-0B95997F8893}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{34B9099E-4B00-4707-BFDE-0B95997F8893}.Release|iPhone.Build.0 = Release|Any CPU
 		{34B9099E-4B00-4707-BFDE-0B95997F8893}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{34B9099E-4B00-4707-BFDE-0B95997F8893}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{34B9099E-4B00-4707-BFDE-0B95997F8893}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU

@@ -35,13 +35,13 @@
     <PackageReference Include="Xam.Plugin.Connectivity" Version="3.0.3" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.1.1" />
     <PackageReference Include="Xamarin.Auth" Version="1.5.0.3" />
-    <PackageReference Include="Xamarin.Forms" Version="2.3.4.270" />
+    <PackageReference Include="Xamarin.Forms" Version="2.4.0.18342" />
   </ItemGroup>
-  <ItemGroup>
-    <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
+  <!--<ItemGroup>
+     https://bugzilla.xamarin.com/show_bug.cgi?id=55591 
     <None Remove="**\*.xaml" />
 
     <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
     <EmbeddedResource Include="**\*.xaml" SubType="Designer" Generator="MSBuild:UpdateDesignTimeXaml" />
-  </ItemGroup>
+  </ItemGroup>-->
 </Project>
