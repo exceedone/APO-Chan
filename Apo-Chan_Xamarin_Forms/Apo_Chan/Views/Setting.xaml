@@ -4,6 +4,7 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
              NavigationPage.HasNavigationBar="True"
              Title="Settings"
              ControlTemplate="{StaticResource MainPageTemplate}"
@@ -19,9 +20,10 @@
                 BackgroundColor="{StaticResource PrimaryLightColor}"
                 HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                 Padding="5,10,5,10">
-                <Image HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" 
+                <controls:CircleImage HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" 
                        Source="{Binding User.UserImage.ImageSource}" 
                        WidthRequest="60" HeightRequest="60"
+                       Aspect="AspectFill"
                        Margin="0,0,0,0"/>
                 <Label HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start"

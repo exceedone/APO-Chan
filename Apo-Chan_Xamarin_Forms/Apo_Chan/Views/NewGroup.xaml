@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
              prism:ViewModelLocator.AutowireViewModel="True"
              NavigationPage.HasNavigationBar="True"
              Title="New Group"
@@ -12,6 +13,7 @@
         <StackLayout Orientation="Vertical"
                      Padding="16,0,16,0">
 
+            <!-- Group Icon And Name -->
             <Grid Margin="0,16,0,16">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -22,14 +24,20 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="{Binding Group.GroupImage.ImageSource}" WidthRequest="50" HeightRequest="50">
-                    <Image.GestureRecognizers>
+                <controls:CircleImage  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" 
+                                       Aspect="AspectFill"
+                                       Margin="0,5,0,5"
+                                       VerticalOptions="FillAndExpand"
+                                       HorizontalOptions="FillAndExpand"
+                                        Source="{Binding Group.GroupImage.ImageSource}" 
+                                        WidthRequest="50" HeightRequest="50">
+                    <controls:CircleImage.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ImageSelectCommand}"></TapGestureRecognizer>
-                    </Image.GestureRecognizers>
-                </Image>
+                    </controls:CircleImage.GestureRecognizers>
+                </controls:CircleImage>
 
-                <Label Grid.Row="0" Grid.Column="1" Text="Group Name"/>
-                <Entry Grid.Row="1" Grid.Column="1" Text="{Binding Group.GroupName}"/>
+                <Label Grid.Row="0" Grid.Column="1" Margin="5,0,0,0" Text="Group Name"/>
+                <Entry Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Text="{Binding Group.GroupName}"/>
             </Grid>
 
             <!-- Add User Field -->
@@ -59,7 +67,6 @@
                 <ListView x:Name="groupUserList"
                       HasUnevenRows="True"
                       CachingStrategy="RecycleElement"
-                      RefreshCommand="{Binding RefreshCommand}"
                       Margin="5,0,0,0"
                       ItemsSource="{Binding GroupUserItems}">
                     <ListView.ItemTemplate>
@@ -68,23 +75,36 @@
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="4*"></ColumnDefinition>
                                         <ColumnDefinition Width="1*"></ColumnDefinition>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
                                         <ColumnDefinition Width="1*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
 
-                                    <Label Grid.Column="0"
-                                       FontSize="16.0"
+                                    <controls:CircleImage Grid.Row="0" Grid.Column="0"
+                                                          Grid.RowSpan="2"
+                                                          Source="{Binding RefUser.UserImage.ImageSource}" 
+                                                          WidthRequest="50" HeightRequest="50"
+                                                          Aspect="AspectFill"
+                                                          />
+                                    <Label Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
+                                       FontSize="14.0"
                                        Text="{Binding RefUser.NameAndEmail}"
                                        TextColor="{StaticResource PrimaryTextColor}"
                                        VerticalTextAlignment="Center"
                                        LineBreakMode="TailTruncation"
-                                       Margin="0"></Label>
-                                    <Button Grid.Column="2" Text="×" 
+                                       Margin="5,0,0,0"></Label>
+                                    <Picker Grid.Column="1" Grid.Row="1"
+                                            ItemsSource="{Binding BindingContext.AuthPicker, Source={x:Reference Root}}" 
+                                            SelectedIndex="{Binding AuthSelectedIndex}"
+                                            Margin="0"
+                                            />
+                                    <Button Grid.Column="2" Grid.Row="1" Text="×" 
                                             Command="{Binding BindingContext.DeleteCommand, Source={x:Reference Root}}"
-                                            CommandParameter="{Binding .}"/>
+                                            CommandParameter="{Binding .}"
+                                            Margin="0"/>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

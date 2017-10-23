@@ -24,6 +24,7 @@ using Apo_Chan.Managers;
 using Apo_Chan.Items;
 using Apo_Chan.Models;
 using Plugin.Permissions;
+using HockeyApp.Android;
 
 [assembly: Dependency(typeof(Apo_Chan.Droid.MainActivity))]
 
@@ -58,8 +59,16 @@ namespace Apo_Chan.Droid
             // Initialize the authenticator before loading the app.
             App.Init((IAuthenticate)this);
 
+            // Init CircleImage
+            ImageCircle.Forms.Plugin.Droid.ImageCircleRenderer.Init();
+
             // Load the main application
             LoadApplication(new App());
+        }
+        protected override void OnResume()
+        {
+            base.OnResume();
+            CrashManager.Register(this, "85bc5a6b9307424c94118feb81256bf9");
         }
 
         public async Task<bool> AuthenticateAsync(Constants.EProviderType providerType)
@@ -84,10 +93,10 @@ namespace Apo_Chan.Droid
                     BaseAuthProvider providerObj = BaseAuthProvider.GetAuthProvider(providerType);
                     string json = await providerObj.GetProfileJson(loginuser.MobileServiceAuthenticationToken);
                     providerObj.SetUserProfile(user, json);
-                    await providerObj.GetUserPicture(user);
-
+                    
                     success = true;
                     await user.SetUserToken();
+                    await providerObj.GetUserPicture(user);
                 }
             }
             catch (Exception ex)

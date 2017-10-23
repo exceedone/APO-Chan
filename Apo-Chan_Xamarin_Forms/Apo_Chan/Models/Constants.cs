@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Apo_Chan.Models;
-
 namespace Apo_Chan
 {
     public static class Constants
@@ -15,7 +14,9 @@ namespace Apo_Chan
         /// </summary>
         public static string ApplicationName = "APO-Chan";
 
-        public static string IconAccountName = "icon_account.png";
+        public static string IconAccountName = "ic_account.png";
+
+        public static string IconGropName = "ic_group.png";
 
         /// <summary>
         /// Provider Type
@@ -63,7 +64,7 @@ namespace Apo_Chan
         /// </summary>
         public static string ExcedOneURL = "http://www.exceedone.co.jp/";
 
-        public static IEnumerable<AuthModel> AuthPicker
+        public static IList<AuthModel> AuthPicker
         {
             get
             {

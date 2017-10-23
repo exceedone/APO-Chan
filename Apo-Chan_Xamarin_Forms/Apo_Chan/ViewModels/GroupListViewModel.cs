@@ -7,6 +7,7 @@ using Prism.Services;
 using System;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Forms;
 
@@ -74,44 +75,29 @@ namespace Apo_Chan.ViewModels
         {
             IsBusy = true;
 
-            ObservableCollection<GroupItem> allGroups = null;
+            ObservableCollection<GroupItem> allGroups = new ObservableCollection<GroupItem>();
             try
             {
-                allGroups = await GroupManager.DefaultManager.GetItemsAsync();
+                GroupItems.Clear();
+                // Get Group List contains usercount and auth
+                var groupCountList = await CustomFunction.Get<List<GroupAndUserCountItem>>($"api/values/userjoingroups/{GlobalAttributes.refUserId}");
+                if(groupCountList != null)
+                {
+                    foreach (var g in groupCountList)
+                    {
+                        var group = g.Group;
+                        group.UserCount = g.UserCount;
+                        group.UserAuth = Constants.AuthPicker.FirstOrDefault(x => x.AdminFlg == g.AdminFlg).Label;
+                        // Add group image
+                        await Service.ImageService.SetImageSource(group);
+                        allGroups.Add(group);
+                    }
+                }
+                this.GroupItems = allGroups;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
-            }
-
-            GroupItems.Clear();
-            if (allGroups != null)
-            {
-                foreach (var item in allGroups)
-                {
-                    // get all group's user count and auth.
-                    // TODO: I think it's very slowly manner. 
-                    // I want to get groupusers when we get groups at the same time. 
-                    try
-                    {
-                        var groupItems = await GroupUserManager.DefaultManager.GetItemsAsync(x => x.RefGroupId == item.Id);
-                        item.UserCount = groupItems.Count;
-                        var isAdmin = groupItems.Where(x => x.RefUserId == GlobalAttributes.refUserId).FirstOrDefault()?.AdminFlg ?? false;
-                        item.UserAuth = isAdmin ? "Admin" : "User";
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-                }
-            }
-            if (allGroups != null)
-            {
-                foreach (var item in allGroups)
-                {
-                    await Service.ImageService.SetImageSource(item);
-                    GroupItems.Add(item);
-                }
             }
             IsBusy = false;
         }

@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using Apo_Chan.Models;
 using Apo_Chan.Managers;
 using Newtonsoft.Json.Linq;
+using Apo_Chan.Models;
 
 namespace Apo_Chan.Items
 {
@@ -24,7 +25,7 @@ namespace Apo_Chan.Items
         private string refGroupId;
         private string refUserId;
         private bool adminFlg;
-        private AuthModel auth;
+        private int? authSelectedIndex;
 
         [JsonProperty(PropertyName = "refGroupId")]
         public string RefGroupId
@@ -39,6 +40,7 @@ namespace Apo_Chan.Items
             }
         }
 
+        [JsonProperty]
         public GroupItem RefGroup { get; set; }
 
         [JsonProperty(PropertyName = "refUserId")]
@@ -54,6 +56,7 @@ namespace Apo_Chan.Items
             }
         }
 
+        [JsonProperty]
         public UserItem RefUser { get; set; }
 
         [JsonProperty(PropertyName = "adminFlg")]
@@ -69,17 +72,47 @@ namespace Apo_Chan.Items
             }
         }
 
-        //public AuthModel Auth
-        //{
-        //    get
-        //    {
-        //        return this.auth;
-        //    }
-        //    set
-        //    {
-        //        SetProperty(ref this.auth, value);
-        //    }
-        //}
+        /// <summary>
+        /// Selectrd Auth
+        /// </summary>
+        public string Auth
+        {
+            get
+            {
+                return Constants.AuthPicker.FirstOrDefault(x => x.AdminFlg == this.AdminFlg)?.Label ?? string.Empty;
+            }
+            set
+            {
+                this.AdminFlg = Constants.AuthPicker.FirstOrDefault(x => x.Label == value)?.AdminFlg ?? false;
+            }
+        }
+
+        public int AuthSelectedIndex
+        {
+            get
+            {
+                if (!this.authSelectedIndex.HasValue)
+                {
+                    this.authSelectedIndex = Constants.AuthPicker.Select((auth, index) => new { auth, index }).FirstOrDefault(x => x.auth.AdminFlg == this.AdminFlg).index;
+                }
+                return authSelectedIndex.Value;
+            }
+            set
+            {
+                // sometimes set as -1, but it's error, so return.
+                if(value == -1)
+                {
+                    return;
+                }
+
+                if (authSelectedIndex != value)
+                {
+                    // trigger some action to take such as updating other labels or fields
+                    SetProperty(ref this.authSelectedIndex, value);
+                    this.Auth = Constants.AuthPicker[authSelectedIndex ?? 0].Label;
+                }
+            }
+        }
 
     }
 

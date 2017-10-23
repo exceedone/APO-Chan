@@ -25,14 +25,14 @@ namespace Apo_ChanService.DataObjects
         public string RefGroupId { get; set; }
 
         [ForeignKey("RefGroupId")]
-        [JsonIgnore]
+        //[JsonIgnore]
         public GroupItem RefGroup { get; set; }
 
         [Required]
         public string RefUserId { get; set; }
 
         [ForeignKey("RefUserId")]
-        [JsonIgnore]
+        //[JsonIgnore]
         public UserItem RefUser { get; set; }
 
         [Required]

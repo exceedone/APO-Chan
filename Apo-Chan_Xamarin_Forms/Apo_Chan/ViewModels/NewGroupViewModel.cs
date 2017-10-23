@@ -65,7 +65,7 @@ namespace Apo_Chan.ViewModels
         public DelegateCommand SubmitCommand { get; private set; }
         public DelegateCommand AddUserCommand { get; private set; }
         public DelegateCommand<GroupUserItem> DeleteCommand { get; private set; }
-        public IEnumerable<AuthModel> AuthPicker { get; }
+        public IEnumerable<string> AuthPicker { get; }
 
         #endregion
 
@@ -78,27 +78,27 @@ namespace Apo_Chan.ViewModels
                 Id = null,
                 CreatedUserId = GlobalAttributes.refUserId,
                 GroupName = null,
-        };
+            };
             // Init and add yourself.
-            GroupUserItems = new ObservableCollection<GroupUserItem>{
-                new GroupUserItem()
-                        {
-                            RefGroupId = Group.Id
+            var myself = new GroupUserItem()
+            {
+                RefGroupId = Group.Id
                             ,
-                            RefUser = GlobalAttributes.User
+                RefUser = GlobalAttributes.User
                             ,
-                            RefUserId = GlobalAttributes.refUserId
+                RefUserId = GlobalAttributes.refUserId
                             ,
-                            AdminFlg = true
-                        }
-                };
+                AdminFlg = true
+            };
+            Task.Run(() => Service.ImageService.SetImageSource(myself.RefUser));
+            GroupUserItems = new ObservableCollection<GroupUserItem>{ myself };
             NewGroupUser = new GroupUserItem();
 
             ImageSelectCommand = new DelegateCommand(imageSelect);
             SubmitCommand = new DelegateCommand(submitGroup);
             AddUserCommand = new DelegateCommand(addUser);
             DeleteCommand = new DelegateCommand<GroupUserItem>(deleteUser);
-            AuthPicker = Constants.AuthPicker;
+            AuthPicker = Constants.AuthPicker.Select(x => x.Label).ToList();
         }
         #endregion
 
@@ -133,53 +133,60 @@ namespace Apo_Chan.ViewModels
             });
             this.IsBusy = false;
         }
-            private async void submitGroup()
+        private async void submitGroup()
         {
-            if (isValidGroup())
+
+            string message = this.getErrorMessageGroup();
+            if (message != null)
             {
-                var accepted = await dialogService.DisplayAlertAsync
-                    (
-                        "Confirmation",
-                        "Do you want to submit this group?",
-                        "Confirm",
-                        "Cancel"
-                    );
-                if (accepted)
-                {
-                    if (!GlobalAttributes.isConnectedInternet)
-                    {
-                        await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-                        return;
-                    }
-                    IsBusy = true;
-                    try
-                    {
-                        // Save group
-                        await GroupManager.DefaultManager.SaveTaskAsync(Group);
-
-                        // Create groupuser and save.
-                        foreach (var item in this.GroupUserItems)
-                        {
-                            item.RefGroupId = Group.Id;
-                            await GroupUserManager.DefaultManager.SaveTaskAsync(item);
-                        }
-
-                        // upload icon
-                        if (this.Group.HasImage)
-                        {
-                            await Service.ImageService.SaveImage(this.Group, this.Group.GroupImage.StreamByte);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
-                    }
-                    IsBusy = false;
-                    await navigationService.GoBackAsync();
-                }
+                await dialogService.DisplayAlertAsync
+                (
+                    "Error",
+                    message,
+                    "Confirm"
+                );
+                return;
             }
-            else
+
+            var accepted = await dialogService.DisplayAlertAsync
+                (
+                    "Confirmation",
+                    "Do you want to submit this group?",
+                    "Confirm",
+                    "Cancel"
+                );
+            if (accepted)
             {
+                if (!GlobalAttributes.isConnectedInternet)
+                {
+                    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+                    return;
+                }
+                IsBusy = true;
+                try
+                {
+                    // Save group
+                    await GroupManager.DefaultManager.SaveTaskAsync(Group);
+
+                    // Create groupuser and save.
+                    foreach (var item in this.GroupUserItems)
+                    {
+                        item.RefGroupId = Group.Id;
+                        await GroupUserManager.DefaultManager.SaveTaskAsync(item);
+                    }
+
+                    // upload icon
+                    if (this.Group.HasImage)
+                    {
+                        await Service.ImageService.SaveImage(this.Group, this.Group.GroupImage.StreamByte);
+                    }
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                }
+                IsBusy = false;
+                await navigationService.GoBackAsync();
             }
         }
 
@@ -194,12 +201,15 @@ namespace Apo_Chan.ViewModels
             }
             if (user != null)
             {
-                this.GroupUserItems.Add(new GroupUserItem()
+                var groupUser = new GroupUserItem()
                 {
                     RefUser = user
                     ,
                     RefUserId = user.Id
-                });
+                };
+                this.GroupUserItems.Add(groupUser);
+                // read user image
+                await Service.ImageService.SetImageSource(groupUser.RefUser);
                 this.NewGroupUser = new GroupUserItem();
             }
             else
@@ -240,12 +250,24 @@ namespace Apo_Chan.ViewModels
             }
         }
 
-        private bool isValidGroup()
+        private string getErrorMessageGroup()
         {
-            bool isValid = false;
-            isValid = !string.IsNullOrWhiteSpace(Group.GroupName);
+            if (string.IsNullOrWhiteSpace(Group.GroupName))
+            {
+                return "Please input group name";
+            }
 
-            return isValid;
+            // Check Group User auth.
+            foreach (var item in this.GroupUserItems)
+            {
+                // user auth is "user"
+                if (item.RefUserId == GlobalAttributes.refUserId && !item.AdminFlg)
+                {
+                    return "Cannot set your admin 'User'";
+                }
+            }
+
+            return null;
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using Apo_ChanService.DataObjects;
 using Apo_ChanService.Models;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Apo_ChanService.Controllers
 {
@@ -42,24 +43,88 @@ namespace Apo_ChanService.Controllers
         //    return "Hello World!";
         //}
 
+        /// <summary>
+        /// Select user id, and get groups the user joins.
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/values/userjoingroups/{userid}")]
+        public IHttpActionResult GetUserJoinGroups(string userid)
+        {
+            List<dynamic> list = new List<dynamic>();
+            // get groups the user joins
+            var items = this.context.GroupUserItems
+                .Where(x => x.RefUserId == userid && !x.Deleted)
+                .Join(context.GroupItems, user => user.RefGroupId, group => group.Id
+                , (user, group) => new { user, group }
+                ).ToList();
+
+            // get user count
+            foreach (var item in items)
+            {
+                var usersCount = this.context.GroupUserItems
+                    .Where(x => x.RefGroupId == item.group.Id && !x.Deleted)
+                    .Count();
+
+                list.Add(new
+                {
+                    group = item.group
+                    ,
+                    adminflg = item.user.AdminFlg
+                    ,
+                    usercount = usersCount
+                });
+            }
+
+            return Json(list);
+        }
+
+        /// <summary>
+        /// Select group id, and get users list.
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
         //[HttpGet]
-        //[Route("api/values/groupandusers/{id}")]
-        //public async Task<IHttpActionResult> GetGroupAndUsers(string id)
+        //[Route("api/values/groupusers/{groupid}")]
+        //public IHttpActionResult GetGroupUsers(string groupid)
         //{
-        //    var joins = this.context.GroupUserItems
-        //        .Where(x => x.RefUserId == id && !x.Deleted)
-        //        .Join(context.GroupItems, user => user.RefGroupId, group => group.Id
-        //        , (user, group) => new { user, group }
+        //    List<dynamic> list = new List<dynamic>();
+        //    // get groups the groupuser and user joins
+        //    var items = this.context.GroupUserItems
+        //        .Where(x => x.RefGroupId == groupid && !x.Deleted)
+        //        .Join(context.UserItems, groupuser => groupuser.RefUserId, user => user.Id
+        //        , (groupuser, user) => new { groupuser, user }
+        //        ).Join(context.GroupItems, usergroupuser => usergroupuser.groupuser.RefGroupId, group => group.Id
+        //        , (usergroupuser, group) => new { usergroupuser, group }
         //        ).ToList();
-        //    return null;
+
+        //    // select usergrouplist
+        //    var g = items.FirstOrDefault().group;
+        //    var groupUserList = items.Select(x => x.usergroupuser).ToList();
+
+        //    return Json(new { group = g, users = groupUserList });
         //}
 
-        //[HttpGet]
-        //[Route("api/values/signout")]
-        //public IHttpActionResult SignOut()
-        //{
-        //    return Redirect("apochan-scheme://signout");
-        //}
+        [HttpGet]
+        [Route("api/values/groupusers/{groupid}")]
+        public IHttpActionResult GetGroupUsers(string groupid)
+        {
+            List<dynamic> list = new List<dynamic>();
+            // get groups the groupuser and user joins
+            var items = this.context.GroupUserItems
+                .Where(x => x.RefGroupId == groupid && !x.Deleted)
+                .Join(context.UserItems, groupuser => groupuser.RefUserId, user => user.Id
+                , (groupuser, user) => new { groupuser, user }
+                ).Join(context.GroupItems, usergroupuser => usergroupuser.groupuser.RefGroupId, group => group.Id
+                , (usergroupuser, group) => new { usergroupuser, group }
+                ).ToList();
 
+            // select usergrouplist
+            var g = items.FirstOrDefault().group;
+            var groupusers = items.Select(x => x.usergroupuser.groupuser).ToList();
+
+            return Json(new { group = g, groupusers = groupusers });
+        }
     }
 }

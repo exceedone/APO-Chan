@@ -93,6 +93,10 @@ namespace Apo_Chan.Items
         {
             get
             {
+                if (this.userImage == null)
+                {
+                    return CustomImageSource.FromFile(Constants.IconAccountName);
+                }
                 return userImage;
             }
             set

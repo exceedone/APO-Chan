@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.WindowsAzure.MobileServices;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Apo_Chan.Models
 {
@@ -42,6 +44,42 @@ namespace Apo_Chan.Models
         {
             if (!dict.ContainsKey(key)) { return default(T2); }
             return dict[key];
+        }
+
+    }
+}
+
+namespace System
+{
+    public static class Ex
+    {
+        /// <summary>
+        /// compare two array.
+        /// first & second = null → true
+        /// first or second = null → false
+        /// first and second != null → compare
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static bool EqualArray<TSource>(this IList<TSource> first, IList<TSource> second)
+        {
+            if(first == null && second == null) { return true; }
+            if (first == null || second == null) { return false; }
+
+            if(first.Count != second.Count)
+            {
+                return false;
+            }
+            for (int i = 0; i < first.Count; i++)
+            {
+                if(!first[i].Equals(second[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

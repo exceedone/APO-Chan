@@ -45,6 +45,10 @@ namespace Apo_ChanService
                     TokenHandler = config.GetAppServiceTokenHandler()
                 });
             }
+
+            // Add for valuescontroller
+            config.MapHttpAttributeRoutes();
+
             app.UseWebApi(config);
         }
     }

@@ -15,7 +15,7 @@
     <AndroidApplication>True</AndroidApplication>
     <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
     <AssemblyName>Apo_Chan.Droid</AssemblyName>
-    <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

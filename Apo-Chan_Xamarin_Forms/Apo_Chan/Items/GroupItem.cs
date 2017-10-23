@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Microsoft.WindowsAzure.MobileServices;
 using System.Runtime.Serialization;
@@ -66,7 +67,7 @@ namespace Apo_Chan.Items
             {
                 if (this.groupImage == null)
                 {
-                    return CustomImageSource.FromFile(Constants.IconAccountName);
+                    return CustomImageSource.FromFile(Constants.IconGropName);
                 }
                 return this.groupImage;
             }
@@ -110,5 +111,31 @@ namespace Apo_Chan.Items
                 SetProperty(ref this.userAuth, value);
             }
         }
+    }
+
+    /// <summary>
+    /// for grouplist view. has group, count, auth(target user).
+    /// </summary>
+    public class GroupAndUserCountItem
+    {
+        [JsonProperty(PropertyName = "group")]
+        public GroupItem Group { get; set; }
+
+        [JsonProperty(PropertyName = "usercount")]
+        public int UserCount { get; set; }
+
+        [JsonProperty(PropertyName = "adminflg")]
+        public bool AdminFlg { get; set; }
+    }
+    /// <summary>
+    /// for detailgroup view. has group, List(Tuple(User, Groupuser)).
+    /// </summary>
+    public class GroupAndGroupUsersItem
+    {
+        [JsonProperty(PropertyName = "group")]
+        public GroupItem Group { get; set; }
+
+        [JsonProperty(PropertyName = "groupusers")]
+        public List<GroupUserItem> GroupUsers { get; set; }
     }
 }
