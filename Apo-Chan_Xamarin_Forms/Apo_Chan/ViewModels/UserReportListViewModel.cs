@@ -72,11 +72,6 @@ namespace Apo_Chan.ViewModels
         #region Function
         public async void SetItemsAsync()
         {
-            if (!GlobalAttributes.isConnectedInternet)
-            {
-                await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-                return;
-            }
             await setItemsAsync();
         }
 
@@ -92,6 +87,12 @@ namespace Apo_Chan.ViewModels
 
         private async Task setItemsAsync()
         {
+            //if (!GlobalAttributes.isConnectedInternet)
+            //{
+            //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+            //    return;
+            //}
+
             IsBusy = true;
 
             ObservableCollection<ReportItem> allReports = null;

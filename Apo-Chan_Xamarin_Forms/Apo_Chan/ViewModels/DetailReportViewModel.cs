@@ -176,6 +176,12 @@ namespace Apo_Chan.ViewModels
         {
             if (parameters.ContainsKey("Id"))
             {
+                if (!GlobalAttributes.isConnectedInternet)
+                {
+                    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+                    return;
+                }
+
                 IsBusy = true;
                 try
                 {

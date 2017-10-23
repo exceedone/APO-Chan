@@ -10,5 +10,12 @@ namespace Apo_Chan.Views
         {
             InitializeComponent();
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            reportList.SelectedItem = null;
+        }
     }
 }
