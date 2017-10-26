@@ -86,6 +86,25 @@
                     </OnPlatform.Android>
                 </OnPlatform>
             </ContentView>
+            <ContentView AbsoluteLayout.LayoutFlags="PositionProportional"
+                         AbsoluteLayout.LayoutBounds=".1,.95">
+                <OnPlatform x:TypeArguments="View">
+                    <OnPlatform.iOS>
+                        <Image Source="button_add.png">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectGroupCommand}"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </OnPlatform.iOS>
+                    <OnPlatform.Android>
+                        <fab:FloatingActionButtonView ImageName="button_group_center.png"
+                                                      Command="{Binding SelectGroupCommand}"
+                                                      ColorNormal="{StaticResource AccentColor}"
+                                                      ColorRipple="{StaticResource AccentColor}">
+                        </fab:FloatingActionButtonView>
+                    </OnPlatform.Android>
+                </OnPlatform>
+            </ContentView>
 
         </AbsoluteLayout>
     </ContentPage.Content>

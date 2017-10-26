@@ -13,7 +13,7 @@ using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
 {
-    public class GroupListViewModel : BaseViewModel
+    public class GroupListViewModel : BaseViewModel, INavigatedAware
     {
         #region Variable and Property
         private ObservableCollection<GroupItem> groupItems;
@@ -28,6 +28,35 @@ namespace Apo_Chan.ViewModels
                 SetProperty(ref this.groupItems, value);
             }
         }
+        
+        private bool isCalledFromSetting;
+        public bool IsCalledFromSetting 
+        {
+            get
+            {
+                return isCalledFromSetting;
+            }
+            set
+            {
+                SetProperty(ref this.isCalledFromSetting, value);
+            }
+        }
+
+        /// <summary>
+        /// Is called from report list
+        /// </summary>
+        public bool IsCalledFromReport
+        {
+            get
+            {
+                return !this.IsCalledFromSetting;
+            }
+            set
+            {
+                this.IsCalledFromSetting = !value;
+            }
+        }
+
 
         public DelegateCommand RefreshCommand { get; private set; }
 
@@ -51,6 +80,16 @@ namespace Apo_Chan.ViewModels
         #endregion
 
         #region Function
+        public void OnNavigatedFrom(NavigationParameters parameters)
+        {
+            ;
+        }
+
+        public void OnNavigatedTo(NavigationParameters parameters)
+        {
+            this.IsCalledFromReport = parameters.ContainsKey("IsCalledFromReport");
+        }
+
         public async void SetItemsAsync()
         {
             if (!GlobalAttributes.isConnectedInternet)
@@ -68,7 +107,15 @@ namespace Apo_Chan.ViewModels
 
         public async void NavigateDetailGroup(GroupItem item)
         {
-            await navigationService.NavigateAsync("DetailGroup?Id=" + item.Id);
+            // If Called From Report, go back and add query groupid.
+            if (this.IsCalledFromReport)
+            {
+                await navigationService.GoBackAsync(new NavigationParameters($"GroupId={item.Id}"));
+            }
+            else
+            {
+                await navigationService.NavigateAsync("DetailGroup?Id=" + item.Id);
+            }
         }
 
         private async Task setItemsAsync()
@@ -81,13 +128,13 @@ namespace Apo_Chan.ViewModels
                 GroupItems.Clear();
                 // Get Group List contains usercount and auth
                 var groupCountList = await CustomFunction.Get<List<GroupAndUserCountItem>>($"api/values/userjoingroups/{GlobalAttributes.refUserId}");
-                if(groupCountList != null)
+                if (groupCountList != null)
                 {
                     foreach (var g in groupCountList)
                     {
                         var group = g.Group;
                         group.UserCount = g.UserCount;
-                        group.UserAuth = Constants.AuthPicker.FirstOrDefault(x => x.AdminFlg == g.AdminFlg).Label;
+                        group.IsUserAdmin = g.AdminFlg;
                         // Add group image
                         await Service.ImageService.SetImageSource(group);
                         allGroups.Add(group);

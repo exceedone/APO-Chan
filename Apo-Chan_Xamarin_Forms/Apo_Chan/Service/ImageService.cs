@@ -15,11 +15,13 @@ namespace Apo_Chan.Service
 {
     public class ImageService
     {
+        private const string container_name_profile = "profile";
+        private const string container_name_group = "group";
 
         public static async Task SetImageSource(UserItem item)
         {
             ///// set from local
-            var buffer = await getImageByteFromLocal(item.Id, "profile");
+            var buffer = await getImageByteFromLocal(item.Id, container_name_profile);
             if (buffer != null)
             {
                 item.UserImage = CustomImageSource.FromByteArray(() => { return buffer; });
@@ -32,7 +34,7 @@ namespace Apo_Chan.Service
         public static async Task SetImageSource(GroupItem item)
         {
             ///// set from local
-            var buffer = await getImageByteFromLocal(item.Id, "group");
+            var buffer = await getImageByteFromLocal(item.Id, container_name_group);
             if (buffer != null)
             {
                 item.GroupImage = CustomImageSource.FromByteArray(() => { return buffer; });
@@ -45,43 +47,43 @@ namespace Apo_Chan.Service
         public static async Task SaveImage(UserItem item, byte[] buffer)
         {
             ///// save to local
-            await saveImageByteToLocal(item.Id, "profile", buffer);
+            await saveImageByteToLocal(item.Id, container_name_profile, buffer);
 
             ///// save to Azure blob (not wait)
-            uploadFile(item, buffer);
+            uploadFile(item.Id, container_name_profile, buffer);
         }
 
         public static async Task SaveImage(GroupItem item, byte[] buffer)
         {
             ///// save to local
-            await saveImageByteToLocal(item.Id, "profile", buffer);
+            await saveImageByteToLocal(item.Id, container_name_group, buffer);
 
             ///// save to Azure blob (not wait)
-            uploadFile(item, buffer);
+            uploadFile(item.Id, container_name_group, buffer);
         }
 
 
         private static async Task setImageSourceFromBlob(UserItem item)
         {
-            var buffer = await downloadFile(item);
+            var buffer = await downloadFile(item.Id, container_name_profile);
             // replace if not defference image
             if (buffer != null && !buffer.EqualArray(item.UserImage.StreamByte))
             {
                 item.UserImage = CustomImageSource.FromByteArray(() => { return buffer; });
                 // save as loadfile
-                await saveImageByteToLocal(item, buffer);
+                await saveImageByteToLocal(item.Id, container_name_profile, buffer);
             }
         }
 
         private static async Task setImageSourceFromBlob(GroupItem item)
         {
-            var buffer = await downloadFile(item);
+            var buffer = await downloadFile(item.Id, container_name_group);
             // replace if not defference image
             if (buffer != null && !buffer.EqualArray(item.GroupImage.StreamByte))
             {
                 item.GroupImage = CustomImageSource.FromByteArray(() => { return buffer; });
                 // save as loadfile
-                await saveImageByteToLocal(item, buffer);
+                await saveImageByteToLocal(item.Id, container_name_group, buffer);
             }
         }
 
@@ -107,7 +109,7 @@ namespace Apo_Chan.Service
         /// <param name="fileName">upload file name</param>
         /// <param name="containerName">target container name</param>
         /// <returns></returns>
-        private static async Task UploadFile(string fileName, string containerName, byte[] streamByte)
+        private static async Task uploadFile(string fileName, string containerName, byte[] streamByte)
         {
             try
             {
@@ -121,37 +123,13 @@ namespace Apo_Chan.Service
         }
 
         /// <summary>
-        /// Upload File to AzureBlob
-        /// https://dotnetcoretutorials.com/2017/06/17/using-azure-blob-storage-net-core/
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        private static async Task uploadFile(UserItem user, byte[] buffer)
-        {
-            await UploadFile(user.Id, "profile", buffer);
-        }
-
-        /// <summary>
-        /// Upload Group Image to AzureBlob
-        /// https://dotnetcoretutorials.com/2017/06/17/using-azure-blob-storage-net-core/
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        private static async Task uploadFile(GroupItem group, byte[] buffer)
-        {
-            await UploadFile(group.Id, "group", buffer);
-        }
-
-        /// <summary>
         /// Download File from AzureBlob
         /// https://dotnetcoretutorials.com/2017/06/17/using-azure-blob-storage-net-core/
         /// </summary>
         /// <param name="fileName">download file name</param>
         /// <param name="containerName">target container name</param>
         /// <returns></returns>
-        private static async Task<byte[]> DownloadFile(string fileName, string containerName)
+        private static async Task<byte[]> downloadFile(string fileName, string containerName)
         {
             try
             {
@@ -164,30 +142,6 @@ namespace Apo_Chan.Service
                     buffer = Utils.ReadStram(stream);
                 }
                 return buffer;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        private static async Task<byte[]> downloadFile(UserItem user)
-        {
-            try
-            {
-                return await DownloadFile(user.Id, "profile");
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        private static async Task<byte[]> downloadFile(GroupItem group)
-        {
-            try
-            {
-                return await DownloadFile(group.Id, "group");
             }
             catch (Exception)
             {
@@ -252,17 +206,6 @@ namespace Apo_Chan.Service
                 }
             }
         }
-
-        private static async Task saveImageByteToLocal(UserItem user, byte[] buffer)
-        {
-            await saveImageByteToLocal(user.Id, "profile", buffer);
-        }
-
-        private static async Task saveImageByteToLocal(GroupItem group, byte[] buffer)
-        {
-            await saveImageByteToLocal(group.Id, "group", buffer);
-        }
-
         #endregion
     }
 }

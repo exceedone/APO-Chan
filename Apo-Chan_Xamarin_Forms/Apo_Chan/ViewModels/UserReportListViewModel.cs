@@ -11,7 +11,7 @@ using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
 {
-    public class UserReportListViewModel : BaseViewModel
+    public class UserReportListViewModel : BaseViewModel, INavigatedAware
     {
         #region Variable and Property
         private ObservableCollection<ReportItem> reportItems;
@@ -40,9 +40,16 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+        /// <summary>
+        /// Select if user select grouo, set Group Id.
+        /// </summary>
+        public string TargetGroupId { get; set; }
+
         public DelegateCommand RefreshCommand { get; private set; }
 
         public DelegateCommand AddNewReportCommand { get; private set; }
+
+        public DelegateCommand SelectGroupCommand { get; private set; }
 
         public DelegateCommand<ReportItem> ItemTappedCommand { get; private set; }
 
@@ -61,6 +68,7 @@ namespace Apo_Chan.ViewModels
             CurrentDate = DateTime.Now;
             RefreshCommand = new DelegateCommand(SetItemsAsync).ObservesProperty(() => IsBusy);
             AddNewReportCommand = new DelegateCommand(NavigateNewReport);
+            SelectGroupCommand = new DelegateCommand(NavigateSelectGroup);
             ItemTappedCommand = new DelegateCommand<ReportItem>(NavigateDetailReport);
             NextMonthReportCommand = new DelegateCommand(nextMonthReport);
             PrevMonthReportCommand = new DelegateCommand(prevMonthReport);
@@ -68,6 +76,23 @@ namespace Apo_Chan.ViewModels
         #endregion
 
         #region Function
+        public void OnNavigatedFrom(NavigationParameters parameters)
+        {
+            ;
+        }
+
+        public void OnNavigatedTo(NavigationParameters parameters)
+        {
+            if (parameters.ContainsKey("GroupId"))
+            {
+                this.TargetGroupId = (string)parameters["GroupId"];
+            }
+            else
+            {
+                this.TargetGroupId = null;
+            }
+        }
+
         public async void SetItemsAsync()
         {
             if (!GlobalAttributes.isConnectedInternet)
@@ -86,6 +111,11 @@ namespace Apo_Chan.ViewModels
         public async void NavigateDetailReport(ReportItem item)
         {
             await navigationService.NavigateAsync("DetailReport?Id=" + item.Id);
+        }
+
+        public async void NavigateSelectGroup()
+        {
+            await navigationService.NavigateAsync("GroupList?IsCalledFromReport=true");
         }
 
         private async Task setItemsAsync()

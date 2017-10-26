@@ -21,7 +21,8 @@ namespace Apo_Chan.Items
         private string groupName;
         private string createdUserId;
         private int userCount;
-        private string userAuth;
+        private bool isUserAdmin;
+
         private CustomImageSource groupImage;
 
         [JsonProperty(PropertyName = "groupKey")]
@@ -100,15 +101,37 @@ namespace Apo_Chan.Items
             }
         }
 
+        /// <summary>
+        /// Signin User Is Group-Admin
+        /// </summary>
+        public bool IsUserAdmin
+        {
+            get
+            {
+                return this.isUserAdmin;
+            }
+            set
+            {
+                SetProperty(ref this.isUserAdmin, value);
+            }
+        }
+
+        /// <summary>
+        /// Signin User Is Not-Group-Admin
+        /// </summary>
+        public bool IsUserNotAdmin
+        {
+            get
+            {
+                return !this.isUserAdmin;
+            }
+        }
+
         public string UserAuth
         {
             get
             {
-                return this.userAuth;
-            }
-            set
-            {
-                SetProperty(ref this.userAuth, value);
+                return Constants.AuthPicker.FirstOrDefault(x => x.AdminFlg == this.isUserAdmin).Label;
             }
         }
     }
