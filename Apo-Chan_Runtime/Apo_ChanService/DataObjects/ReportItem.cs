@@ -68,7 +68,7 @@ namespace Apo_ChanService.DataObjects
         [JsonIgnore]
         public int? Month { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public UserItem RefUser { get; set; }
 
     }

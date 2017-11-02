@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
@@ -36,7 +37,7 @@ namespace Apo_Chan.Managers
                 defaultInstance = value;
             }
         }
-        public async Task<ObservableCollection<GroupItem>> GetItemsAsync(bool syncItems = false)
+        public async Task<ObservableCollection<GroupItem>> GetItemsAsync(Expression<Func<GroupItem, bool>> expression, bool syncItems = false)
         {
             // get from Azure Mobile Apps
             try
@@ -53,7 +54,9 @@ namespace Apo_Chan.Managers
                 IEnumerable<GroupItem> items = await this.dataTable
                     .Where(x =>
                          !x.Deleted
-                    ).ToEnumerableAsync();
+                    )
+                    .Where(expression)
+                    .ToEnumerableAsync();
 
                 ObservableCollection<GroupItem> groups = new ObservableCollection<GroupItem>();
                 foreach (var item in items)

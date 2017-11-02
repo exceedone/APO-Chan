@@ -193,11 +193,13 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\GroupUserController.cs" />
+    <Compile Include="Controllers\ReportGroupController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DataObjects\GroupItem.cs" />
     <Compile Include="DataObjects\GroupUserItem.cs" />
+    <Compile Include="DataObjects\ReportGroupItem.cs" />
     <Compile Include="DataObjects\ReportItem.cs" />
     <Compile Include="DataObjects\UserItem.cs" />
     <Compile Include="Global.asax.cs">
@@ -214,6 +216,14 @@
     <Compile Include="Migrations\201710161015393_Update20171016.cs" />
     <Compile Include="Migrations\201710161015393_Update20171016.Designer.cs">
       <DependentUpon>201710161015393_Update20171016.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710311104131_Update201710311800.cs" />
+    <Compile Include="Migrations\201710311104131_Update201710311800.Designer.cs">
+      <DependentUpon>201710311104131_Update201710311800.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711020343128_Update20171102.cs" />
+    <Compile Include="Migrations\201711020343128_Update20171102.Designer.cs">
+      <DependentUpon>201711020343128_Update20171102.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Apo_ChanContext.cs" />
@@ -247,7 +257,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -267,6 +279,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710161015393_Update20171016.resx">
       <DependentUpon>201710161015393_Update20171016.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710311104131_Update201710311800.resx">
+      <DependentUpon>201710311104131_Update201710311800.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711020343128_Update20171102.resx">
+      <DependentUpon>201711020343128_Update20171102.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

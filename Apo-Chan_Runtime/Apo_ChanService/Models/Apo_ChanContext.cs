@@ -26,6 +26,7 @@ namespace Apo_ChanService.Models
         public DbSet<ReportItem> ReportItems { get; set; }
         public DbSet<GroupItem> GroupItems { get; set; }
         public DbSet<GroupUserItem> GroupUserItems { get; set; }
+        public DbSet<ReportGroupItem> ReportGroupItems { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

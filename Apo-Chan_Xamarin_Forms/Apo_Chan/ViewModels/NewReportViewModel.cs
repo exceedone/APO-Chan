@@ -10,13 +10,14 @@ using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
 {
-    public class NewReportViewModel : BaseViewModel
+    public class NewReportViewModel : BaseViewModel, INavigatedAware
     {
         #region Variable and Property
         private ReportItem report;
@@ -71,8 +72,28 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+        private string groupIds;
+        private string groupLabel;
+        public string GroupLabel
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(groupLabel))
+                {
+                    return "No groups. Please tap selecting target groups.";
+                }
+                return groupLabel;
+            }
+            set
+            {
+                SetProperty(ref this.groupLabel, value);
+            }
+        }
+
         public DelegateCommand SubmitCommand { get; private set; }
         public DelegateCommand UpdateLocationCommand { get; private set; }
+        public DelegateCommand GroupSelectCommand { get; private set; }
+
         #endregion
 
         #region Constructor
@@ -100,10 +121,27 @@ namespace Apo_Chan.ViewModels
 
             UpdateLocationCommand = new DelegateCommand(updateLocation);
             UpdateLocationCommand.Execute();
-        }
-#endregion
 
-#region Function
+            GroupSelectCommand = new DelegateCommand(selectGroup);
+        }
+        #endregion
+
+        #region Function
+
+        public void OnNavigatedFrom(NavigationParameters parameters)
+        {
+            ;
+        }
+
+        public void OnNavigatedTo(NavigationParameters parameters)
+        {
+            if (parameters.ContainsKey("GroupIds") && parameters.ContainsKey("GroupNames"))
+            {
+                this.groupIds = parameters["GroupIds"].ToString();
+                this.GroupLabel = parameters["GroupNames"].ToString();
+            }
+        }
+
         private async void submitReport()
         {
             if (isValidReport())
@@ -127,6 +165,19 @@ namespace Apo_Chan.ViewModels
                     try
                     {
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
+
+                        // has groupids, post 
+                        if (!string.IsNullOrWhiteSpace(this.groupIds))
+                        {
+                            foreach (var groupId in this.groupIds.Split(','))
+                            {
+                                await ReportGroupManager.DefaultManager.SaveTaskAsync(new ReportGroupItem()
+                                {
+                                    RefGroupId = groupId
+                                    , RefReportId = Report.Id
+                                });
+                            }
+                        }
                     }
                     catch (Exception e)
                     {
@@ -223,6 +274,14 @@ namespace Apo_Chan.ViewModels
                 LocationTextColor = (Color)App.Current.Resources["SecondaryTextColor"];
             }
             gpsStatus++;
+        }
+
+        /// <summary>
+        /// select target group
+        /// </summary>
+        private async void selectGroup()
+        {
+            await navigationService.NavigateAsync($"GroupList?CalledType=2&GroupIds={groupIds}");
         }
         #endregion
     }

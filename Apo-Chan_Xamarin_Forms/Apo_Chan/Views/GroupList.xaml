@@ -9,6 +9,7 @@
              NavigationPage.HasNavigationBar="True"
              Title="Group List"
              ControlTemplate="{StaticResource MainPageTemplate}"
+             x:Name="Root"
              x:Class="Apo_Chan.Views.GroupList">
     <ContentPage.ToolbarItems>
     </ContentPage.ToolbarItems>
@@ -30,7 +31,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <AbsoluteLayout Padding="16,8,16,8" HeightRequest="60"
+                            <AbsoluteLayout Padding="8,8,8,8" HeightRequest="60"
                                             VerticalOptions="FillAndExpand">
                                 <controls:CircleImage Source="{Binding GroupImage.ImageSource}" 
                                        WidthRequest="50" HeightRequest="50"
@@ -63,6 +64,12 @@
                                        AbsoluteLayout.LayoutFlags="PositionProportional"
                                        AbsoluteLayout.LayoutBounds =".7,.9">
                                 </Label>
+
+                                <Switch
+                                        IsToggled="{Binding IsSelect}"
+                                        IsVisible="{Binding BindingContext.IsCalledFromReport, Source={x:Reference Root}}"
+                                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                                        AbsoluteLayout.LayoutBounds ="1,.4"></Switch>
                             </AbsoluteLayout>
                         </ViewCell>
                     </DataTemplate>

@@ -48,12 +48,26 @@
 
             <StackLayout x:Name="commentLayout" Orientation="Vertical"
                          VerticalOptions="FillAndExpand"
-                         Padding="0,5,0,10">
+                         Padding="0,5,0,5">
                 <Label Text="Comment"/>
                 <Editor Text="{Binding Report.ReportComment}"
                         VerticalOptions="FillAndExpand"/>
             </StackLayout>
 
+            <StackLayout x:Name="groupLayout" Orientation="Vertical"
+                         VerticalOptions="FillAndExpand"
+                         Padding="0,5,0,5">
+                <Label Text="Target Group"/>
+                <Label Text="{Binding GroupLabel}"
+                    LineBreakMode="TailTruncation"
+                    FontFamily="Roboto" FontSize="13"
+                    Margin="10,0,10,0"
+                       >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GroupSelectCommand}"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
             <StackLayout x:Name="locationLayout" Orientation="Horizontal"
                          Padding="0,5,0,5">
                 <Image Source="{Binding GpsImage}"/>

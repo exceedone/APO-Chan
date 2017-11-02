@@ -21,6 +21,7 @@ namespace Apo_Chan.Items
         private string groupName;
         private string createdUserId;
         private int userCount;
+        private bool isSelect;
         private bool isUserAdmin;
 
         private CustomImageSource groupImage;
@@ -59,6 +60,18 @@ namespace Apo_Chan.Items
             set
             {
                 SetProperty(ref this.createdUserId, value);
+            }
+        }
+
+        public bool IsSelect
+        {
+            get
+            {
+                return this.isSelect;
+            }
+            set
+            {
+                SetProperty(ref this.isSelect, value);
             }
         }
 
@@ -134,6 +147,7 @@ namespace Apo_Chan.Items
                 return Constants.AuthPicker.FirstOrDefault(x => x.AdminFlg == this.isUserAdmin).Label;
             }
         }
+
     }
 
     /// <summary>

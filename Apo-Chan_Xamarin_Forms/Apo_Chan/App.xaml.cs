@@ -1,6 +1,7 @@
 ﻿using System;
 using Prism.Unity;
 using Apo_Chan.Views;
+using Apo_Chan.Service;
 using Xamarin.Forms;
 using Microsoft.WindowsAzure.MobileServices;
 using Apo_Chan.Models;
@@ -11,7 +12,14 @@ namespace Apo_Chan
     public partial class App : PrismApplication
     {
         private static MobileServiceClient client;
+        public static ISessionRepository SessionRepository;
         public static IAuthenticate Authenticator { get; private set; }
+
+        static App()
+        {
+            SessionRepository = new ApplicationProperties();
+            SessionRepository.Initilize();
+        }
 
         public App() : base(null)
         {

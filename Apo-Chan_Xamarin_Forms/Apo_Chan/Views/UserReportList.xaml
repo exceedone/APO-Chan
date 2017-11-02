@@ -25,48 +25,57 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <ListView x:Name="reportList"
+            <StackLayout
                       AbsoluteLayout.LayoutFlags="All"
-                      AbsoluteLayout.LayoutBounds="0,0,1,1"
-                      SeparatorColor="{StaticResource DividerColor}"
-                      HasUnevenRows="True"
-                      CachingStrategy="RecycleElement"
-                      RefreshCommand="{Binding RefreshCommand}"
-                      ItemsSource="{Binding ReportItems}">
-                <ListView.Behaviors>
-                    <b:EventToCommandBehavior EventName="ItemTapped"
-                                              Command="{Binding ItemTappedCommand}"
-                                              EventArgsParameterPath="Item" />
-                </ListView.Behaviors>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <AbsoluteLayout Padding="16,8,16,8" HeightRequest="60"
-                                            VerticalOptions="FillAndExpand">
-                                <Label Font="Roboto" FontSize="16.0"
-                                       Text="{Binding ReportTitle}"
-                                       TextColor="{StaticResource PrimaryTextColor}"
-                                       AbsoluteLayout.LayoutFlags="PositionProportional"
-                                       AbsoluteLayout.LayoutBounds ="0,.2">
-                                </Label>
-                                <Label Font="Roboto" FontSize="14.0"
-                                       TextColor="{StaticResource SecondaryTextColor}"
-                                       Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"
-                                       AbsoluteLayout.LayoutFlags="PositionProportional"
-                                       AbsoluteLayout.LayoutBounds =".05,.9">
-                                </Label>
-                                <Label Font="Roboto" FontSize="14.0"
-                                       TextColor="{StaticResource SecondaryTextColor}"
-                                       Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"
-                                       AbsoluteLayout.LayoutFlags="PositionProportional"
-                                       AbsoluteLayout.LayoutBounds =".45,.9">
-                                </Label>
-                            </AbsoluteLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                      AbsoluteLayout.LayoutBounds="0,0,1,1">
 
+                <Label Font="Roboto" FontSize="18.0"
+                    Text="{Binding ReportHeaderLabel}"
+                    TextColor="{StaticResource PrimaryTextColor}"
+                    Margin="5,5,5,0" />
+                    <ListView x:Name="reportList"
+                          SeparatorColor="{StaticResource DividerColor}"
+                          Margin="0"
+                          HasUnevenRows="True"
+                          CachingStrategy="RecycleElement"
+                          RefreshCommand="{Binding RefreshCommand}"
+                          ItemsSource="{Binding ReportItems}">
+                        <ListView.Behaviors>
+                            <b:EventToCommandBehavior EventName="ItemTapped"
+                                                  Command="{Binding ItemTappedCommand}"
+                                                  EventArgsParameterPath="Item" />
+                        </ListView.Behaviors>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <AbsoluteLayout Padding="16,8,16,8" HeightRequest="60"
+                                                VerticalOptions="FillAndExpand">
+                                        <Label Font="Roboto" FontSize="16.0"
+                                           Text="{Binding ReportTitle}"
+                                           TextColor="{StaticResource PrimaryTextColor}"
+                                           AbsoluteLayout.LayoutFlags="PositionProportional"
+                                           AbsoluteLayout.LayoutBounds ="0,.2">
+                                        </Label>
+                                        <Label Font="Roboto" FontSize="14.0"
+                                           TextColor="{StaticResource SecondaryTextColor}"
+                                           Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"
+                                           AbsoluteLayout.LayoutFlags="PositionProportional"
+                                           AbsoluteLayout.LayoutBounds =".05,.9">
+                                        </Label>
+                                        <Label Font="Roboto" FontSize="14.0"
+                                           TextColor="{StaticResource SecondaryTextColor}"
+                                           Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"
+                                           AbsoluteLayout.LayoutFlags="PositionProportional"
+                                           AbsoluteLayout.LayoutBounds =".45,.9">
+                                        </Label>
+                                    </AbsoluteLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+            </StackLayout>
+            
             <ContentView AbsoluteLayout.LayoutFlags="PositionProportional"
                          AbsoluteLayout.LayoutBounds=".9,.95">
                 <OnPlatform x:TypeArguments="View">

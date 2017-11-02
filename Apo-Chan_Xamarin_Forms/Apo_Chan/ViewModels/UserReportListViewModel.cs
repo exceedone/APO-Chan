@@ -40,12 +40,30 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+        private string reportHeaderLabel;
+        /// <summary>
+        /// Group Name, or "Your Report List"
+        /// </summary>
+        public string ReportHeaderLabel
+        {
+            get
+            {
+                if (this.reportHeaderLabel == null)
+                {
+                    return "Your Report List";
+                }
+                return $"Group Report List:{reportHeaderLabel}";
+            }
+            set
+            {
+                SetProperty(ref this.reportHeaderLabel, value);
+            }
+        }
+
         /// <summary>
         /// Select if user select grouo, set Group Id.
         /// </summary>
         public string TargetGroupId { get; set; }
-
-        public DelegateCommand RefreshCommand { get; private set; }
 
         public DelegateCommand AddNewReportCommand { get; private set; }
 
@@ -66,7 +84,6 @@ namespace Apo_Chan.ViewModels
         {
             ReportItems = new ObservableCollection<ReportItem>();
             CurrentDate = DateTime.Now;
-            RefreshCommand = new DelegateCommand(SetItemsAsync).ObservesProperty(() => IsBusy);
             AddNewReportCommand = new DelegateCommand(NavigateNewReport);
             SelectGroupCommand = new DelegateCommand(NavigateSelectGroup);
             ItemTappedCommand = new DelegateCommand<ReportItem>(NavigateDetailReport);
@@ -83,14 +100,21 @@ namespace Apo_Chan.ViewModels
 
         public void OnNavigatedTo(NavigationParameters parameters)
         {
-            if (parameters.ContainsKey("GroupId"))
+            if (parameters.ContainsKey("GroupId") && parameters.ContainsKey("GroupName"))
             {
                 this.TargetGroupId = (string)parameters["GroupId"];
+                this.ReportHeaderLabel = Flurl.Url.DecodeQueryParamValue((string)parameters["GroupName"]);
             }
             else
             {
-                this.TargetGroupId = null;
+                this.TargetGroupId = App.SessionRepository.GetValue<string>(nameof(TargetGroupId));
+                this.ReportHeaderLabel = App.SessionRepository.GetValue<string>(nameof(ReportHeaderLabel));
             }
+
+            // Set Session
+            App.SessionRepository.SetValue(nameof(TargetGroupId), TargetGroupId);
+            App.SessionRepository.SetValue(nameof(ReportHeaderLabel), reportHeaderLabel);
+            SetItemsAsync();
         }
 
         public async void SetItemsAsync()
@@ -105,38 +129,45 @@ namespace Apo_Chan.ViewModels
 
         public async void NavigateNewReport()
         {
-            await navigationService.NavigateAsync("NewReport");
+            await navigationService.NavigateAsync($"NewReport?GroupId={TargetGroupId}&GroupName={Flurl.Url.EncodeQueryParamValue(this.reportHeaderLabel, false)}");
         }
 
         public async void NavigateDetailReport(ReportItem item)
         {
-            await navigationService.NavigateAsync("DetailReport?Id=" + item.Id);
+            await navigationService.NavigateAsync($"DetailReport?Id={item.Id}&GroupId={TargetGroupId}&GroupName={Flurl.Url.EncodeQueryParamValue(this.reportHeaderLabel, false)}");
         }
 
         public async void NavigateSelectGroup()
         {
-            await navigationService.NavigateAsync("GroupList?IsCalledFromReport=true");
+            await navigationService.NavigateAsync("GroupList?CalledType=1");
         }
 
         private async Task setItemsAsync()
         {
             IsBusy = true;
-
+            ReportItems.Clear();
             ObservableCollection<ReportItem> allReports = null;
             try
             {
-                allReports = await ReportManager.DefaultManager.GetItemsAsync
-                    (
-                        this.CurrentDate.Year,
-                        this.CurrentDate.Month
-                    );
+                // if select groupid, get reports referensed group
+                if (!string.IsNullOrWhiteSpace(TargetGroupId))
+                {
+                    allReports = await CustomFunction.Get<ObservableCollection<ReportItem>>($"api/values/groupreports/{TargetGroupId}");
+                }
+                // default
+                else
+                {
+                    allReports = await ReportManager.DefaultManager.GetItemsAsync
+                        (
+                            this.CurrentDate.Year,
+                            this.CurrentDate.Month
+                        );
+                }
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
             }
-
-            ReportItems.Clear();
             if (allReports != null)
             {
                 foreach (var item in allReports)

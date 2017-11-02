@@ -126,5 +126,30 @@ namespace Apo_ChanService.Controllers
 
             return Json(new { group = g, groupusers = groupusers });
         }
+
+        /// <summary>
+        /// Get Reports, key groupid.
+        /// </summary>
+        /// <param name="groupid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/values/groupreports/{groupid}")]
+        public IHttpActionResult GetGroupJoinReports(string groupid)
+        {
+            List<dynamic> list = new List<dynamic>();
+            // get reports the reportgroup and group joins
+            var items = this.context.GroupItems
+                .Where(x => x.Id == groupid && !x.Deleted)
+                .Join(context.ReportGroupItems, group => group.Id, reportgroup => reportgroup.RefGroupId
+                , (group, reportgroup) => new { group, reportgroup }
+                ).Join(context.ReportItems, reportgroup => reportgroup.reportgroup.RefReportId, report => report.Id
+                , (reportgroup, report) => report
+                ).Join(context.UserItems, report => report.RefUserId, user => user.Id
+                , (report, user) => new { report, user }
+                ).ToList();
+
+            //return Json(new { group = g, groupusers = groupusers });
+            return Json(items.Select(x => x.report));
+        }
     }
 }
