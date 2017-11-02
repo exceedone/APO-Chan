@@ -54,7 +54,7 @@
                                            Text="{Binding ReportTitle}"
                                            TextColor="{StaticResource PrimaryTextColor}"
                                            AbsoluteLayout.LayoutFlags="PositionProportional"
-                                           AbsoluteLayout.LayoutBounds ="0,.2">
+                                           AbsoluteLayout.LayoutBounds ="0,.1">
                                         </Label>
                                         <Label Font="Roboto" FontSize="14.0"
                                            TextColor="{StaticResource SecondaryTextColor}"

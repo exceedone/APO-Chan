@@ -17,64 +17,11 @@ using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
 {
-    public class DetailReportViewModel : BaseViewModel, INavigatedAware
+    public class DetailReportViewModel : BaseReportViewModel
     {
         #region Variable and Property
-        private ReportItem report;
-        public ReportItem Report
-        {
-            get
-            {
-                return report;
-            }
-            set
-            {
-                SetProperty(ref this.report, value);
-            }
-        }
-
-        private string locationText = string.Empty;
-        public string LocationText
-        {
-            get
-            {
-                return locationText;
-            }
-            set
-            {
-                SetProperty(ref this.locationText, value);
-            }
-        }
-
-        private Color locationTextColor;
-        public Color LocationTextColor
-        {
-            get
-            {
-                return locationTextColor;
-            }
-            set
-            {
-                SetProperty(ref this.locationTextColor, value);
-            }
-        }
-
-        private ImageSource gpsImage;
-        public ImageSource GpsImage
-        {
-            get
-            {
-                return gpsImage;
-            }
-            set
-            {
-                SetProperty(ref this.gpsImage, value);
-            }
-        }
-
         public DelegateCommand UpdateCommand { get; private set; }
         public DelegateCommand DeleteCommand { get; private set; }
-        public DelegateCommand UpdateLocationCommand { get; private set; }
         #endregion
 
         #region Constructor
@@ -83,7 +30,6 @@ namespace Apo_Chan.ViewModels
         {
             UpdateCommand = new DelegateCommand(updateReport);
             DeleteCommand = new DelegateCommand(deleteReport);
-            UpdateLocationCommand = new DelegateCommand(updateLocation);
         }
         #endregion
 
@@ -111,13 +57,24 @@ namespace Apo_Chan.ViewModels
                     try
                     {
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
+
+                        // has groupids, post 
+                        if (!string.IsNullOrWhiteSpace(this.groupIds))
+                        {
+                            await CustomFunction.Post($"table/reportgroup/list/{this.Report.Id}", this.groupIds.Split(',').Select(x => new ReportGroupItem()
+                            {
+                                RefGroupId = x
+                                    ,
+                                RefReportId = Report.Id
+                            }));
+                        }
                     }
                     catch (Exception e)
                     {
                         System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                     }
                     IsBusy = false;
-                    await navigationService.GoBackAsync();
+                    await this.navigateTop();
                 }
             }
         }
@@ -152,71 +109,47 @@ namespace Apo_Chan.ViewModels
             }
         }
 
-        private bool isValidReport()
+        public async override void OnNavigatedTo(NavigationParameters parameters)
         {
-            bool isValid = false;
-            isValid = Report.ReportStartDate != null && Report.ReportStartTime != null;
-            isValid &= Report.ReportEndDate != null && Report.ReportEndTime != null;
-            isValid &= Report.ReportTitle != null;
-
-            return isValid;
-        }
-
-        public void OnNavigatedFrom(NavigationParameters parameters)
-        {
-            ;
-        }
-
-        public async void OnNavigatedTo(NavigationParameters parameters)
-        {
-            if (parameters.ContainsKey("Id"))
+            base.OnNavigatedTo(parameters);
+            if (parameters.GetNavigationMode() == NavigationMode.New)
             {
-                IsBusy = true;
-                try
+                if (parameters.ContainsKey("Id"))
                 {
-                    Report = await ReportManager.DefaultManager.LookupAsync((string)parameters["Id"]);
-                }
-                catch (Exception e)
-                {
+                    IsBusy = true;
+                    try
+                    {
+                        Report = await ReportManager.DefaultManager.LookupAsync((string)parameters["Id"]);
 
-                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                        // get reportGroup
+                        var reportGroupItems = await CustomFunction.Get<List<GroupItem>>($"api/values/groupsbyreport/{Report.Id}");
+                        if (reportGroupItems.Any())
+                        {
+                            this.groupIds = string.Join(",", reportGroupItems.Select(x => x.Id));
+                            this.GroupLabel = string.Join(",", reportGroupItems.Select(x => x.GroupName));
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                    }
+                    IsBusy = false;
+                    if (Report != null)
+                    {
+                        UpdateLocationCommand.Execute();
+                        Report.PropertyChanged += OnDateTimeChanged;
+                    }
                 }
-                IsBusy = false;
-                if (Report != null)
+                else
                 {
-                    UpdateLocationCommand.Execute();
-                    Report.PropertyChanged += OnDateTimeChanged;
+                    await dialogService.DisplayAlertAsync("Error", "Failed to load the detail page!", "OK");
+                    await navigationService.GoBackAsync();
                 }
-            }
-            else
-            {
-                await dialogService.DisplayAlertAsync("Error", "Failed to load the detail page!", "OK");
-                await navigationService.GoBackAsync();
             }
         }
 
-        private async void OnDateTimeChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "ReportStartDate" || e.PropertyName == "ReportStartTime" ||
-                e.PropertyName == "ReportEndDate" || e.PropertyName == "ReportEndTime")
-            {
-                if (!Utils.CheckDateTimeContinuity(Report))
-                {
-                    await dialogService.DisplayAlertAsync
-                        (
-                            "Error",
-                            "The end time is earlier than the start time!",
-                            "OK"
-                        );
-                }
-            }
-            else
-            {
-                return;
-            }
-        }
-
-        private void updateLocation()
+        protected override void updateLocation()
         {
             if (Report != null)
             {

@@ -122,8 +122,8 @@ namespace Apo_Chan.ViewModels
             if (IsCalledFromReport)
             {
                 var toggleList = this.GroupItems.Where(x => x.IsSelect);
-                parameters.Add("GroupIds", string.Join(",", toggleList.Select(x => x.Id)));
-                parameters.Add("GroupNames", string.Join(",", toggleList.Select(x => Flurl.Url.EncodeQueryParamValue(x.GroupName, false))));
+                parameters.Add("GroupId", string.Join(",", toggleList.Select(x => x.Id)));
+                parameters.Add("GroupName", string.Join(",", toggleList.Select(x => Flurl.Url.EncodeQueryParamValue(x.GroupName, false))));
             }
         }
 
@@ -132,10 +132,10 @@ namespace Apo_Chan.ViewModels
             if (parameters.ContainsKey("CalledType"))
             {
                 this.CalledType = Convert.ToInt32(parameters["CalledType"]);
-                // when CalledType = 2(From Report) and has GroupIds, set selectGroupList
-                if(this.IsCalledFromReport && parameters.ContainsKey("GroupIds"))
+                // when CalledType = 2(From Report) and has GroupId, set selectGroupList
+                if(this.IsCalledFromReport && parameters.ContainsKey("GroupId"))
                 {
-                    this.selectGroupList = parameters["GroupIds"].ToString().Split(',').ToList();
+                    this.selectGroupList = parameters["GroupId"].ToString().Split(',').ToList();
                 }
             }
             else
@@ -165,7 +165,7 @@ namespace Apo_Chan.ViewModels
             // If Called From ReportList, go back and add query groupid.
             if (this.IsCalledFromReportList)
             {
-                await navigationService.GoBackAsync(new NavigationParameters($"GroupId={item.Id}&GroupName={Flurl.Url.EncodeQueryParamValue(item.GroupName,false)}"));
+                await this.navigateTop($"GroupId={item.Id}&GroupName={Flurl.Url.EncodeQueryParamValue(item.GroupName, false)}");
             }
             // If Called From Setting, go detailgroup.
             else if (this.IsCalledFromSetting)

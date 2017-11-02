@@ -45,6 +45,15 @@ namespace Apo_Chan.ViewModels
 
 
         #region Function
+        protected async Task navigateTop(string query = null)
+        {
+            string uri = "/NavigationPage/UserReportList";
+            if(query != null)
+            {
+                uri += "?" + query;
+            }
+            await this.navigationService.NavigateAsync(uri);
+        }
         private async void navigateSetting()
         {
             await this.navigationService.NavigateAsync("Setting");

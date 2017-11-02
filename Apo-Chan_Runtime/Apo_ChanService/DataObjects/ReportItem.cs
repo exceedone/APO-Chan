@@ -55,19 +55,6 @@ namespace Apo_ChanService.DataObjects
 
         public DateTimeOffset? DeletedAt { get; set; }
 
-        /// <summary>
-        /// For query:year
-        /// </summary>
-        [NotMapped]
-        [JsonIgnore]
-        public int? Year { get; set; }
-        /// <summary>
-        /// For query:month
-        /// </summary>
-        [NotMapped]
-        [JsonIgnore]
-        public int? Month { get; set; }
-
         //[JsonIgnore]
         public UserItem RefUser { get; set; }
 

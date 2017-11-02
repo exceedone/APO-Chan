@@ -133,8 +133,8 @@ namespace Apo_ChanService.Controllers
         /// <param name="groupid"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/values/groupreports/{groupid}")]
-        public IHttpActionResult GetGroupJoinReports(string groupid)
+        [Route("api/values/reportsbygroup/{groupid}/{year}/{month}")]
+        public IHttpActionResult GetReportsByGroup(string groupid, int year, int month)
         {
             List<dynamic> list = new List<dynamic>();
             // get reports the reportgroup and group joins
@@ -146,10 +146,34 @@ namespace Apo_ChanService.Controllers
                 , (reportgroup, report) => report
                 ).Join(context.UserItems, report => report.RefUserId, user => user.Id
                 , (report, user) => new { report, user }
-                ).ToList();
+                ).Where(x => (x.report.ReportStartDate.Value.Year == year && x.report.ReportStartDate.Value.Month == month) || (x.report.ReportEndDate.Value.Year == year && x.report.ReportEndDate.Value.Month == month) && !x.report.Deleted).ToList();
 
             //return Json(new { group = g, groupusers = groupusers });
             return Json(items.Select(x => x.report));
         }
+
+        /// <summary>
+        /// Get Reports, key groupid.
+        /// </summary>
+        /// <param name="groupid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/values/groupsbyreport/{reportid}")]
+        public IHttpActionResult GetGroupsByReport(string reportid)
+        {
+            List<dynamic> list = new List<dynamic>();
+            // get reports the reportgroup and group joins
+            var items = this.context.ReportItems
+                .Where(x => x.Id == reportid && !x.Deleted)
+                .Join(context.ReportGroupItems, report => report.Id, reportgroup => reportgroup.RefReportId
+                , (report, reportgroup) => new { report, reportgroup }
+                ).Join(context.GroupItems, reportgroup => reportgroup.reportgroup.RefGroupId, group => group.Id
+                , (reportgroup, group) => group
+                );
+
+            //return Json(new { group = g, groupusers = groupusers });
+            return Json(items);
+        }
+
     }
 }

@@ -13,133 +13,30 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
 {
-    public class NewReportViewModel : BaseViewModel, INavigatedAware
+    public class NewReportViewModel : BaseReportViewModel
     {
         #region Variable and Property
-        private ReportItem report;
-        public ReportItem Report
-        {
-            get
-            {
-                return report;
-            }
-            set
-            {
-                SetProperty(ref this.report, value);
-            }
-        }
-
-        private string locationText = string.Empty;
-        public string LocationText
-        {
-            get
-            {
-                return locationText;
-            }
-            set
-            {
-                SetProperty(ref this.locationText, value);
-            }
-        }
-
-        private Color locationTextColor;
-        public Color LocationTextColor
-        {
-            get
-            {
-                return locationTextColor;
-            }
-            set
-            {
-                SetProperty(ref this.locationTextColor, value);
-            }
-        }
-
-        private ImageSource gpsImage;
-        public ImageSource GpsImage
-        {
-            get
-            {
-                return gpsImage;
-            }
-            set
-            {
-                SetProperty(ref this.gpsImage, value);
-            }
-        }
-
-        private string groupIds;
-        private string groupLabel;
-        public string GroupLabel
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(groupLabel))
-                {
-                    return "No groups. Please tap selecting target groups.";
-                }
-                return groupLabel;
-            }
-            set
-            {
-                SetProperty(ref this.groupLabel, value);
-            }
-        }
-
         public DelegateCommand SubmitCommand { get; private set; }
-        public DelegateCommand UpdateLocationCommand { get; private set; }
-        public DelegateCommand GroupSelectCommand { get; private set; }
-
         #endregion
 
         #region Constructor
         public NewReportViewModel(INavigationService navigationService, IPageDialogService dialogService)
             : base(navigationService, dialogService)
         {
-            // convert next 00, 10, 20, 30, 40, 50 minute
-            var foonow = DateTime.Now;
-            var now = new DateTime(foonow.Year, foonow.Month, foonow.Day, foonow.Hour, foonow.Minute, 0, 0, foonow.Kind);
-            now = now.AddMinutes(10 - (now.Minute % 10));
-            // get enddate
-            var endDate = now.AddHours(1);
-            Report = new ReportItem
-            {
-                Id = null,
-                RefUserId = GlobalAttributes.refUserId,
-                ReportStartDate = now.Date,
-                ReportStartTime = now.TimeOfDay,
-                ReportEndDate = endDate.Date,
-                ReportEndTime = endDate.TimeOfDay,
-            };
-
             SubmitCommand = new DelegateCommand(submitReport);
-            Report.PropertyChanged += OnDateTimeChanged;
-
-            UpdateLocationCommand = new DelegateCommand(updateLocation);
-            UpdateLocationCommand.Execute();
-
-            GroupSelectCommand = new DelegateCommand(selectGroup);
         }
         #endregion
 
         #region Function
-
-        public void OnNavigatedFrom(NavigationParameters parameters)
+        
+        public override void OnNavigatedTo(NavigationParameters parameters)
         {
-            ;
-        }
-
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
-            if (parameters.ContainsKey("GroupIds") && parameters.ContainsKey("GroupNames"))
-            {
-                this.groupIds = parameters["GroupIds"].ToString();
-                this.GroupLabel = parameters["GroupNames"].ToString();
-            }
+            base.OnNavigatedTo(parameters);
         }
 
         private async void submitReport()
@@ -169,14 +66,12 @@ namespace Apo_Chan.ViewModels
                         // has groupids, post 
                         if (!string.IsNullOrWhiteSpace(this.groupIds))
                         {
-                            foreach (var groupId in this.groupIds.Split(','))
+                            await CustomFunction.Post($"table/reportgroup/list/{this.Report.Id}", this.groupIds.Split(',').Select(x => new ReportGroupItem()
                             {
-                                await ReportGroupManager.DefaultManager.SaveTaskAsync(new ReportGroupItem()
-                                {
-                                    RefGroupId = groupId
-                                    , RefReportId = Report.Id
-                                });
-                            }
+                                RefGroupId = x
+                                    ,
+                                RefReportId = Report.Id
+                            }));
                         }
                     }
                     catch (Exception e)
@@ -184,70 +79,13 @@ namespace Apo_Chan.ViewModels
                         System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                     }
                     IsBusy = false;
-                    await navigationService.GoBackAsync();
+                    await this.navigateTop();
                 }
             }
-        }
-
-        private bool isValidReport()
-        {
-            bool isValid = false;
-            isValid = Report.ReportStartDate != null && Report.ReportStartTime != null;
-            isValid &= Report.ReportEndDate != null && Report.ReportEndTime != null;
-            isValid &= Report.ReportTitle != null;
-
-            return isValid;
-        }
-
-        private async void OnDateTimeChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "ReportStartDate" || e.PropertyName == "ReportStartTime" ||
-                e.PropertyName == "ReportEndDate" || e.PropertyName == "ReportEndTime")
-            {
-                if (!Utils.CheckDateTimeContinuity(Report))
-                {
-                    await dialogService.DisplayAlertAsync
-                        (
-                            "Error",
-                            "The end time is earlier than the start time!",
-                            "OK"
-                        );
-                }
-            }
-            else
-            {
-                return;
-            }
-        }
-
-        private async void OnLocationAcquired(Position position)
-        {
-            if (Report != null)
-            {
-                Report.ReportLat = position.Latitude;
-                Report.ReportLon = position.Longitude;
-            }
-
-            var result = await GeoService.DefaultInstance.GetAddressFromPositionAsync(position);
-            if (result != null)
-            {
-                Report.ReportAddress = result;
-                LocationText = Report.ReportAddress;
-                LocationTextColor = (Color)App.Current.Resources["PrimaryTextColor"];
-            }
-            else
-            {
-                Report.ReportAddress = string.Empty;
-                LocationText = "Location acquired but address not found.";
-                LocationTextColor = (Color)App.Current.Resources["SecondaryTextColor"];
-            }
-            GpsImage = "ic_gps_new.png";
-
-            GeoEvent.DefaultInstance.Unsubscribe(OnLocationAcquired);
         }
 
         private int gpsStatus = 0;
-        private void updateLocation()
+        protected override void updateLocation()
         {
             if (gpsStatus == 0)
             {
@@ -274,14 +112,6 @@ namespace Apo_Chan.ViewModels
                 LocationTextColor = (Color)App.Current.Resources["SecondaryTextColor"];
             }
             gpsStatus++;
-        }
-
-        /// <summary>
-        /// select target group
-        /// </summary>
-        private async void selectGroup()
-        {
-            await navigationService.NavigateAsync($"GroupList?CalledType=2&GroupIds={groupIds}");
         }
         #endregion
     }

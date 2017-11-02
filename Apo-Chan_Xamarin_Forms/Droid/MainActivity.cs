@@ -68,7 +68,6 @@ namespace Apo_Chan.Droid
         protected override void OnResume()
         {
             base.OnResume();
-            CrashManager.Register(this, "85bc5a6b9307424c94118feb81256bf9");
         }
 
         public async Task<bool> AuthenticateAsync(Constants.EProviderType providerType)

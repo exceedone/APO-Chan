@@ -114,7 +114,12 @@ namespace Apo_Chan.ViewModels
             // Set Session
             App.SessionRepository.SetValue(nameof(TargetGroupId), TargetGroupId);
             App.SessionRepository.SetValue(nameof(ReportHeaderLabel), reportHeaderLabel);
-            SetItemsAsync();
+
+            // navigate mode == new, set items
+            if (parameters.GetNavigationMode() == NavigationMode.New)
+            {
+                SetItemsAsync();
+            }
         }
 
         public async void SetItemsAsync()
@@ -152,7 +157,7 @@ namespace Apo_Chan.ViewModels
                 // if select groupid, get reports referensed group
                 if (!string.IsNullOrWhiteSpace(TargetGroupId))
                 {
-                    allReports = await CustomFunction.Get<ObservableCollection<ReportItem>>($"api/values/groupreports/{TargetGroupId}");
+                    allReports = await CustomFunction.Get<ObservableCollection<ReportItem>>($"api/values/reportsbygroup/{TargetGroupId}/{this.CurrentDate.Year}/{this.CurrentDate.Month}");
                 }
                 // default
                 else

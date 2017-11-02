@@ -45,5 +45,26 @@ namespace Apo_Chan.Managers
                 }
             }
         }
+
+        /// <summary>
+        /// Execute Custom Web API from Mobile Service
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        public static async Task<HttpResponseMessage> Post<T>(string uri, T data) where T : class
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Constants.ApplicationURL);
+                // ADD required querystring "ZUMO-API-VERSION=2.0.0"
+                var requri = uri.SetQueryParam("ZUMO-API-VERSION", "2.0.0");
+
+                // Serialize our concrete class into a JSON String
+                string stringPayload = JsonConvert.SerializeObject(data);
+                var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(requri, httpContent);
+                return response;
+            }
+        }
     }
 }
