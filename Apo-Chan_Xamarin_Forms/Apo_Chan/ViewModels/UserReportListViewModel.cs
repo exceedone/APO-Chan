@@ -106,6 +106,8 @@ namespace Apo_Chan.ViewModels
             ItemTappedCommand = new DelegateCommand<ReportItem>(NavigateDetailReport);
             NextMonthReportCommand = new DelegateCommand(nextMonthReport);
             PrevMonthReportCommand = new DelegateCommand(prevMonthReport);
+
+            GlobalAttributes.ShouldUpdateReports = true;
         }
         #endregion
 
@@ -143,11 +145,6 @@ namespace Apo_Chan.ViewModels
 
         public async void SetItemsAsync()
         {
-            if (!GlobalAttributes.isConnectedInternet)
-            {
-                await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-                return;
-            }
             await setItemsAsync();
         }
 
@@ -168,6 +165,12 @@ namespace Apo_Chan.ViewModels
 
         private async Task setItemsAsync()
         {
+            //if (!GlobalAttributes.isConnectedInternet)
+            //{
+            //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+            //    return;
+            //}
+
             IsBusy = true;
             ReportItems.Clear();
             ObservableCollection<ReportItem> allReports = null;
@@ -212,6 +215,19 @@ namespace Apo_Chan.ViewModels
         {
             this.CurrentDate = this.CurrentDate.AddMonths(-1);
             await this.setItemsAsync();
+        }
+
+        public void OnNavigatedFrom(NavigationParameters parameters)
+        {
+            GlobalAttributes.ShouldUpdateReports = false;
+        }
+
+        public void OnNavigatedTo(NavigationParameters parameters)
+        {
+            if (GlobalAttributes.ShouldUpdateReports)
+            {
+                RefreshCommand.Execute();
+            }
         }
         #endregion
 

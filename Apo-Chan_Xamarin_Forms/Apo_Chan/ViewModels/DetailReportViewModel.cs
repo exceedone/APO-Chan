@@ -68,6 +68,7 @@ namespace Apo_Chan.ViewModels
                                 RefReportId = Report.Id
                             }));
                         }
+                        GlobalAttributes.ShouldUpdateReports = true;
                     }
                     catch (Exception e)
                     {
@@ -99,13 +100,15 @@ namespace Apo_Chan.ViewModels
                 try
                 {
                     await ReportManager.DefaultManager.DeleteAsync(Report);
+
+                    GlobalAttributes.ShouldUpdateReports = true;
                 }
                 catch (Exception e)
                 {
                     System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
                 }
-                await navigationService.GoBackAsync();
                 IsBusy = false;
+                await navigationService.GoBackAsync();
             }
         }
 

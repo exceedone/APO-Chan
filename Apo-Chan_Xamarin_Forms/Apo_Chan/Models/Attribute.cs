@@ -30,5 +30,18 @@ namespace Apo_Chan
                 return CrossConnectivity.Current.IsConnected;
             }
         }
+
+        private static bool shouldUpdateReports;
+        public static bool ShouldUpdateReports
+        {
+            get
+            {
+                return shouldUpdateReports;
+            }
+            set
+            {
+                shouldUpdateReports = value;
+            }
+        }
     }
 }
