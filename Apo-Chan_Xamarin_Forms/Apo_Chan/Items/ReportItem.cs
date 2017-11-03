@@ -147,5 +147,8 @@ namespace Apo_Chan.Items
                 SetProperty(ref this.reportAddress, value);
             }
         }
+
+        [JsonProperty]
+        public UserItem RefUser { get; set; }
     }
 }

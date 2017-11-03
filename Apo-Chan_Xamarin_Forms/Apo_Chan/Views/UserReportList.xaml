@@ -7,6 +7,7 @@
              xmlns:fab="clr-namespace:Apo_Chan.Custom;assembly=Apo_Chan"
              NavigationPage.HasNavigationBar="True"
              ControlTemplate="{StaticResource MainPageTemplate}"
+             x:Name="Root"
              x:Class="Apo_Chan.Views.UserReportList">
     <ContentPage.ToolbarItems>
         <ToolbarItem Name="previousButton" Order="Primary" Priority="0"
@@ -48,27 +49,43 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <AbsoluteLayout Padding="16,8,16,8" HeightRequest="60"
+                                    <Grid Padding="16,8,16,8" HeightRequest="60"
                                                 VerticalOptions="FillAndExpand">
-                                        <Label Font="Roboto" FontSize="16.0"
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Font="Roboto" FontSize="16.0"
                                            Text="{Binding ReportTitle}"
                                            TextColor="{StaticResource PrimaryTextColor}"
-                                           AbsoluteLayout.LayoutFlags="PositionProportional"
-                                           AbsoluteLayout.LayoutBounds ="0,.1">
+                                           Margin="10,0,0,0"
+                                           Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
                                         </Label>
                                         <Label Font="Roboto" FontSize="14.0"
                                            TextColor="{StaticResource SecondaryTextColor}"
                                            Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"
-                                           AbsoluteLayout.LayoutFlags="PositionProportional"
-                                           AbsoluteLayout.LayoutBounds =".05,.9">
-                                        </Label>
-                                        <Label Font="Roboto" FontSize="14.0"
+                                           HorizontalOptions="Start"
+                                           Grid.Row="1" Grid.Column="0">
+                                    </Label>
+                                    <Label Font="Roboto" FontSize="14.0"
                                            TextColor="{StaticResource SecondaryTextColor}"
                                            Text="{Binding ReportStartTime, StringFormat='{}{0:hh}:{0:mm}'}"
-                                           AbsoluteLayout.LayoutFlags="PositionProportional"
-                                           AbsoluteLayout.LayoutBounds =".45,.9">
-                                        </Label>
-                                    </AbsoluteLayout>
+                                           HorizontalOptions="Start"
+                                           Grid.Row="1" Grid.Column="1">
+                                    </Label>
+                                    <Label Font="Roboto" FontSize="14.0"
+                                           TextColor="{StaticResource SecondaryTextColor}"
+                                           Text="{Binding RefUser.UserName, StringFormat='Creator:{0}'}"
+                                           IsVisible="{Binding BindingContext.IsGroup, Source={x:Reference Root}}"
+                                           Grid.Row="1" Grid.Column="2">
+                                    </Label>
+                                </Grid>
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>

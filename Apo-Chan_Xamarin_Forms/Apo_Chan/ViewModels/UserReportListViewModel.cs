@@ -60,6 +60,23 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+
+        private bool isGroup;
+        /// <summary>
+        /// Is Group
+        /// </summary>
+        public bool IsGroup
+        {
+            get
+            {
+                return isGroup;
+            }
+            private set
+            {
+                SetProperty(ref this.isGroup, value);
+            }
+        }
+
         /// <summary>
         /// Select if user select grouo, set Group Id.
         /// </summary>
@@ -102,11 +119,13 @@ namespace Apo_Chan.ViewModels
         {
             if (parameters.ContainsKey("GroupId") && parameters.ContainsKey("GroupName"))
             {
+                this.IsGroup = true;
                 this.TargetGroupId = (string)parameters["GroupId"];
                 this.ReportHeaderLabel = Flurl.Url.DecodeQueryParamValue((string)parameters["GroupName"]);
             }
             else
             {
+                this.IsGroup = false;
                 this.TargetGroupId = App.SessionRepository.GetValue<string>(nameof(TargetGroupId));
                 this.ReportHeaderLabel = App.SessionRepository.GetValue<string>(nameof(ReportHeaderLabel));
             }
