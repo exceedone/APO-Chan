@@ -128,8 +128,12 @@
     <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\ic_group.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_account.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_group.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ic_account.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
     <!-- <None Include="project.json" /> -->
   </ItemGroup>
   <ItemGroup>
@@ -565,21 +569,33 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\ic_group.imageset\ic_group.png" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_group.imageset\ic_group.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\ic_group.imageset\ic_group%402x.png" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_group.imageset\ic_group%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\ic_group.imageset\ic_group%403x.png" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_group.imageset\ic_group%403x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\ic_account.imageset\ic_account.png" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_account.imageset\ic_account.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\ic_account.imageset\ic_account%402x.png" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_account.imageset\ic_account%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\ic_account.imageset\ic_account%403x.png" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_account.imageset\ic_account%403x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
 </Project>

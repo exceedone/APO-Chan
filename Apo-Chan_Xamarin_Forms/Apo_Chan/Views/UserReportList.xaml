@@ -64,13 +64,14 @@
                                     <Label Font="Roboto" FontSize="16.0"
                                            Text="{Binding ReportTitle}"
                                            TextColor="{StaticResource PrimaryTextColor}"
-                                           Margin="10,0,0,0"
+                                           Margin="5,0,0,0"
                                            Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
                                         </Label>
                                         <Label Font="Roboto" FontSize="14.0"
                                            TextColor="{StaticResource SecondaryTextColor}"
                                            Text="{Binding ReportStartDate, StringFormat='{0:d (ddd)}'}"
                                            HorizontalOptions="Start"
+                                           Margin="10,0,0,0"
                                            Grid.Row="1" Grid.Column="0">
                                     </Label>
                                     <Label Font="Roboto" FontSize="14.0"

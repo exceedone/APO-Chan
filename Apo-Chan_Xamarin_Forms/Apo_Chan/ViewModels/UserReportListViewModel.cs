@@ -123,26 +123,40 @@ namespace Apo_Chan.ViewModels
             //{
             //    RefreshCommand.Execute();
             //}
-            if (parameters.ContainsKey("GroupId") && parameters.ContainsKey("GroupName"))
-            {
-                this.IsGroup = true;
-                this.TargetGroupId = (string)parameters["GroupId"];
-                this.ReportHeaderLabel = Flurl.Url.DecodeQueryParamValue((string)parameters["GroupName"]);
-            }
-            else
-            {
-                this.IsGroup = false;
-                this.TargetGroupId = App.SessionRepository.GetValue<string>(nameof(TargetGroupId));
-                this.ReportHeaderLabel = App.SessionRepository.GetValue<string>(nameof(ReportHeaderLabel));
-            }
-
-            // Set Session
-            App.SessionRepository.SetValue(nameof(TargetGroupId), TargetGroupId);
-            App.SessionRepository.SetValue(nameof(ReportHeaderLabel), reportHeaderLabel);
-
+            
             // navigate mode == new, set items
             if (parameters.GetNavigationMode() == NavigationMode.New)
             {
+                if (parameters.ContainsKey("GroupId") && parameters.ContainsKey("GroupName"))
+                {
+                    this.IsGroup = true;
+                    this.TargetGroupId = (string)parameters["GroupId"];
+                    this.ReportHeaderLabel = Flurl.Url.DecodeQueryParamValue((string)parameters["GroupName"]);
+                }
+                else
+                {
+                    this.TargetGroupId = App.SessionRepository.GetValue<string>(nameof(TargetGroupId));
+                    this.ReportHeaderLabel = App.SessionRepository.GetValue<string>(nameof(ReportHeaderLabel));
+                    this.IsGroup = !string.IsNullOrWhiteSpace(this.TargetGroupId);
+                }
+
+                // Set Session
+                App.SessionRepository.SetValue(nameof(TargetGroupId), TargetGroupId);
+                App.SessionRepository.SetValue(nameof(ReportHeaderLabel), reportHeaderLabel);
+
+                SetItemsAsync();
+            }
+
+            // when navigation is back and has Reset parameters
+            else if (parameters.GetNavigationMode() == NavigationMode.Back && parameters.ContainsKey("Reset"))
+            {
+                this.TargetGroupId = null;
+                this.ReportHeaderLabel = null;
+                this.IsGroup = false;
+                // Set Session
+                App.SessionRepository.SetValue<string>(nameof(TargetGroupId), null);
+                App.SessionRepository.SetValue<string>(nameof(ReportHeaderLabel), null);
+
                 SetItemsAsync();
             }
         }
@@ -169,11 +183,11 @@ namespace Apo_Chan.ViewModels
 
         private async Task setItemsAsync()
         {
-            //if (!GlobalAttributes.isConnectedInternet)
-            //{
-            //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-            //    return;
-            //}
+            if (!GlobalAttributes.isConnectedInternet)
+            {
+                await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+                return;
+            }
 
             IsBusy = true;
             ReportItems.Clear();

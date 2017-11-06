@@ -22,12 +22,26 @@ namespace Apo_Chan.ViewModels
         #region Variable and Property
         public DelegateCommand UpdateCommand { get; private set; }
         public DelegateCommand DeleteCommand { get; private set; }
+
+        private bool isEdit;
+        public bool IsEdit
+        {
+            get
+            {
+                return this.isEdit;
+            }
+            set
+            {
+                SetProperty(ref this.isEdit, value);
+            }
+        }
         #endregion
 
         #region Constructor
         public DetailReportViewModel(INavigationService navigationService, IPageDialogService dialogService)
             : base(navigationService, dialogService)
         {
+            this.IsEdit = true;
             UpdateCommand = new DelegateCommand(updateReport);
             DeleteCommand = new DelegateCommand(deleteReport);
         }
@@ -112,6 +126,15 @@ namespace Apo_Chan.ViewModels
             }
         }
 
+        protected override void selectGroup()
+        {
+            if (!isEdit)
+            {
+                return;
+            }
+            base.selectGroup();
+        }
+
         public async override void OnNavigatedTo(NavigationParameters parameters)
         {
             base.OnNavigatedTo(parameters);
@@ -123,6 +146,7 @@ namespace Apo_Chan.ViewModels
                     try
                     {
                         Report = await ReportManager.DefaultManager.LookupAsync((string)parameters["Id"]);
+                        this.IsEdit = report.RefUserId == GlobalAttributes.refUserId;
 
                         // get reportGroup
                         var reportGroupItems = await CustomFunction.Get<List<GroupItem>>($"api/values/groupsbyreport/{Report.Id}");
@@ -154,6 +178,10 @@ namespace Apo_Chan.ViewModels
 
         protected override void updateLocation()
         {
+            if (!IsEdit)
+            {
+                return;
+            }
             if (Report != null)
             {
                 if (Report.ReportLat == 0 && Report.ReportLon == 0)

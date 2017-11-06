@@ -22,8 +22,19 @@ namespace Apo_Chan.Items
         [JsonProperty(PropertyName = "userProviderId")]
         public string UserProviderId { get; set; }
 
+        private string userName;
         [JsonProperty(PropertyName = "userName")]
-        public string UserName { get; set; }
+        public string UserName
+        {
+            get
+            {
+                return this.userName;
+            }
+            set
+            {
+                SetProperty(ref this.userName, value);
+            }
+        }
 
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }

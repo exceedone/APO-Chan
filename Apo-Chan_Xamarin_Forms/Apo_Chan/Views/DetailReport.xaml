@@ -14,15 +14,19 @@
                             Padding="0,10,0,5">
                 <Label Text="Start"
                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                       AbsoluteLayout.LayoutBounds ="0,.6"/>
+                       AbsoluteLayout.LayoutBounds ="0,.6"
+                       />
                 <DatePicker Date="{Binding Report.ReportStartDate}"
                             Format="dd/MM/yyyy"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
-                            AbsoluteLayout.LayoutBounds =".25,.5"/>
+                            AbsoluteLayout.LayoutBounds =".25,.5"
+                            IsEnabled="{Binding IsEdit}"
+                    />
                 <TimePicker Time="{Binding Report.ReportStartTime}"
                             Format="hh:mm tt"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
-                            AbsoluteLayout.LayoutBounds =".85,.5"/>
+                            AbsoluteLayout.LayoutBounds =".85,.5"
+                            IsEnabled="{Binding IsEdit}"/>
             </AbsoluteLayout>
 
             <AbsoluteLayout x:Name="endDateTimeLayout"
@@ -33,17 +37,20 @@
                 <DatePicker Date="{Binding Report.ReportEndDate}"
                             Format="dd/MM/yyyy"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
-                            AbsoluteLayout.LayoutBounds =".25,.5"/>
+                            AbsoluteLayout.LayoutBounds =".25,.5"
+                            IsEnabled="{Binding IsEdit}"/>
                 <TimePicker Time="{Binding Report.ReportEndTime}"
                             Format="hh:mm tt"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
-                            AbsoluteLayout.LayoutBounds =".85,.5"/>
+                            AbsoluteLayout.LayoutBounds =".85,.5"
+                            IsEnabled="{Binding IsEdit}"/>
             </AbsoluteLayout>
 
             <StackLayout x:Name="titleLayout" Orientation="Vertical"
                          Padding="0,5,0,5">
                 <Label Text="Title"/>
-                <Entry Text="{Binding Report.ReportTitle}"/>
+                <Entry Text="{Binding Report.ReportTitle}"
+                            IsEnabled="{Binding IsEdit}"/>
             </StackLayout>
 
             <StackLayout x:Name="commentLayout" Orientation="Vertical"
@@ -51,7 +58,8 @@
                          Padding="0,5,0,10">
                 <Label Text="Comment"/>
                 <Editor Text="{Binding Report.ReportComment}"
-                        VerticalOptions="FillAndExpand"/>
+                        VerticalOptions="FillAndExpand"
+                        IsEnabled="{Binding IsEdit}"/>
             </StackLayout>
 
             <StackLayout x:Name="groupLayout" Orientation="Vertical"
@@ -78,7 +86,8 @@
             </StackLayout>
 
             <AbsoluteLayout x:Name="actionLayout"
-                            Padding="0,8,0,8">
+                            Padding="0,8,0,8"
+                            IsVisible="{Binding IsEdit}">
                 <Button x:Name="updateButton"
                         Text="Update"
                         Style="{StaticResource BlueButtonStyle}"

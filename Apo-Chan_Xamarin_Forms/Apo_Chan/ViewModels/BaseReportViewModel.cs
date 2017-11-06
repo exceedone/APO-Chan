@@ -203,7 +203,7 @@ namespace Apo_Chan.ViewModels
         /// <summary>
         /// select target group
         /// </summary>
-        protected async void selectGroup()
+        protected virtual async void selectGroup()
         {
             await navigationService.NavigateAsync($"GroupList?CalledType=2&GroupId={groupIds}");
         }

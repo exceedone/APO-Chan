@@ -39,8 +39,7 @@
                 <Label Grid.Row="0" Grid.Column="1" Margin="5,0,0,0" Text="Group Name"/>
 
                 <!-- GroupName Admin:textBox User:Label -->
-                <Entry Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Text="{Binding Group.GroupName}" IsVisible="{Binding Group.IsUserAdmin}"/>
-                <Label Grid.Row="1" Grid.Column="1" FontSize="16.0" Margin="5,0,0,0" Text="{Binding Group.GroupName}" IsVisible="{Binding Group.IsUserNotAdmin}"/>
+                <Entry Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Text="{Binding Group.GroupName}" IsEnabled="{Binding Group.IsUserAdmin}"/>
             </Grid>
 
             <!-- Add User Field -->
@@ -93,6 +92,7 @@
                                                           Grid.RowSpan="2"
                                                           Source="{Binding RefUser.UserImage.ImageSource}" 
                                                           WidthRequest="50" HeightRequest="50"
+                                                          Margin="5"
                                                           Aspect="AspectFill"
                                                           />
                                     <Label Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
@@ -114,14 +114,7 @@
                                             ItemsSource="{Binding BindingContext.AuthPicker, Source={x:Reference Root}}" 
                                             SelectedIndex="{Binding AuthSelectedIndex}"
                                             Margin="0,0,0,0"
-                                            IsVisible="{Binding BindingContext.Group.IsUserAdmin, Source={x:Reference Root}}"/>
-                                    <Label  x:Name="PickerLabel"
-                                            Grid.Column="1" Grid.Row="1"
-                                            Text="{Binding Auth, StringFormat='Role:{0}'}"
-                                            FontSize="18.0"
-                                            Margin="5,5,0,0"
-                                            IsVisible="{Binding BindingContext.Group.IsUserNotAdmin, Source={x:Reference Root}}">
-                                    </Label>
+                                            IsEnabled="{Binding BindingContext.Group.IsUserAdmin, Source={x:Reference Root}}"/>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

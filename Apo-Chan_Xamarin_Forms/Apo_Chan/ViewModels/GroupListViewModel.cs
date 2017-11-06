@@ -121,9 +121,18 @@ namespace Apo_Chan.ViewModels
         {
             if (IsCalledFromReport)
             {
+
                 var toggleList = this.GroupItems.Where(x => x.IsSelect);
                 parameters.Add("GroupId", string.Join(",", toggleList.Select(x => x.Id)));
                 parameters.Add("GroupName", string.Join(",", toggleList.Select(x => Flurl.Url.EncodeQueryParamValue(x.GroupName, false))));
+            }
+            else if (IsCalledFromReportList)
+            {
+                // if flow back, add Reset parameter.
+                if (parameters.GetNavigationMode() == NavigationMode.Back)
+                {
+                    parameters.Add("Reset", true);
+                }
             }
         }
 
@@ -133,7 +142,7 @@ namespace Apo_Chan.ViewModels
             {
                 this.CalledType = Convert.ToInt32(parameters["CalledType"]);
                 // when CalledType = 2(From Report) and has GroupId, set selectGroupList
-                if(this.IsCalledFromReport && parameters.ContainsKey("GroupId"))
+                if (this.IsCalledFromReport && parameters.ContainsKey("GroupId"))
                 {
                     this.selectGroupList = parameters["GroupId"].ToString().Split(',').ToList();
                 }
@@ -211,7 +220,7 @@ namespace Apo_Chan.ViewModels
             }
             IsBusy = false;
         }
-        
+
         #endregion
 
     }
