@@ -31,6 +31,9 @@ namespace Apo_Chan.iOS
             // Initialize Xamarin Forms
             Forms.Init();
 
+            // Init CircleImage
+            ImageCircle.Forms.Plugin.iOS.ImageCircleRenderer.Init();
+
             App.Init(this);
 
             LoadApplication(new App());

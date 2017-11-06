@@ -116,7 +116,7 @@
                          AbsoluteLayout.LayoutBounds=".1,.95">
                 <OnPlatform x:TypeArguments="View">
                     <OnPlatform.iOS>
-                        <Image Source="button_add.png">
+                        <Image Source="button_group_center.png">
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding SelectGroupCommand}"/>
                             </Image.GestureRecognizers>

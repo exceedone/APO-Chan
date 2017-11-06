@@ -114,11 +114,15 @@ namespace Apo_Chan.ViewModels
         #region Function
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
-            ;
+            GlobalAttributes.ShouldUpdateReports = false;
         }
 
         public void OnNavigatedTo(NavigationParameters parameters)
         {
+            //if (GlobalAttributes.ShouldUpdateReports)
+            //{
+            //    RefreshCommand.Execute();
+            //}
             if (parameters.ContainsKey("GroupId") && parameters.ContainsKey("GroupName"))
             {
                 this.IsGroup = true;
@@ -217,18 +221,6 @@ namespace Apo_Chan.ViewModels
             await this.setItemsAsync();
         }
 
-        public void OnNavigatedFrom(NavigationParameters parameters)
-        {
-            GlobalAttributes.ShouldUpdateReports = false;
-        }
-
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
-            if (GlobalAttributes.ShouldUpdateReports)
-            {
-                RefreshCommand.Execute();
-            }
-        }
         #endregion
 
     }
