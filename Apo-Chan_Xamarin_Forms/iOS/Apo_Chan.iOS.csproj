@@ -23,7 +23,7 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
-    <MtouchProfiling>true</MtouchProfiling>
+    <MtouchProfiling>false</MtouchProfiling>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <CopyAppBundle>true</CopyAppBundle>
   </PropertyGroup>
@@ -68,7 +68,7 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <CodesignEntitlements>
     </CodesignEntitlements>
-    <MtouchProfiling>true</MtouchProfiling>
+    <MtouchProfiling>false</MtouchProfiling>
     <CodesignKey>iPhone Developer: Hiroshi Sato (4TBAQ5ACR7)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignProvision>iOS Team Provisioning Profile: *</CodesignProvision>

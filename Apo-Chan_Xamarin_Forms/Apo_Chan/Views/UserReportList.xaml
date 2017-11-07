@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
@@ -117,7 +117,7 @@
                          AbsoluteLayout.LayoutBounds=".1,.95">
                 <OnPlatform x:TypeArguments="View">
                     <OnPlatform.iOS>
-                        <Image Source="button_group_center.png">
+                        <Image Source="button_group.png">
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding SelectGroupCommand}"/>
                             </Image.GestureRecognizers>

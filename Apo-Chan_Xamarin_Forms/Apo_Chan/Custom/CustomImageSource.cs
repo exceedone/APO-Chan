@@ -26,6 +26,15 @@ namespace Xamarin.Forms
             };
         }
 
+        public static CustomImageSource FromResource(string file)
+        {
+            return new CustomImageSource
+            {
+                ImageSource = ImageSource.FromResource(file),
+                FilePath = file
+            };
+        }
+
         public static CustomImageSource FromStream(Func<Stream> stream)
         {
             return new CustomImageSource
