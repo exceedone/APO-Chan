@@ -14,13 +14,13 @@ public class AssemblyService : IAssemblyService
     //アプリバージョン文字列を取得する
     public string GetVersionName()
     {
-        string name = NSBundle.MainBundle.InfoDictionary["CFBundleVersion"].ToString();
+        string name = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
         return name.ToString();
     }
     //アプリバージョンコードを取得する
     public int GetVersionCode()
     {
-        var code = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
+        var code = NSBundle.MainBundle.InfoDictionary["CFBundleVersion"].ToString();
         return int.Parse(code);
     }
 }
