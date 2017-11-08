@@ -183,11 +183,11 @@ namespace Apo_Chan.ViewModels
 
         private async Task setItemsAsync()
         {
-            if (!GlobalAttributes.isConnectedInternet)
-            {
-                await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-                return;
-            }
+            //if (!GlobalAttributes.isConnectedInternet)
+            //{
+            //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+            //    return;
+            //}
 
             IsBusy = true;
             ReportItems.Clear();
