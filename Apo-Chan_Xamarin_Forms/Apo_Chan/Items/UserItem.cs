@@ -36,8 +36,20 @@ namespace Apo_Chan.Items
             }
         }
 
+
+        private string email;
         [JsonProperty(PropertyName = "email")]
-        public string Email { get; set; }
+        public string Email
+        {
+            get
+            {
+                return this.email;
+            }
+            set
+            {
+                SetProperty(ref this.email, value);
+            }
+        }
 
         /// <summary>
         /// Provider Service Token(Not Coneect Mobile App)

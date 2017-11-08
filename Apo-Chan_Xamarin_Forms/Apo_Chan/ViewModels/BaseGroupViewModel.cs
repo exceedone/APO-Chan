@@ -213,7 +213,7 @@ namespace Apo_Chan.ViewModels
                          message,
                          "OK"
                      );
-                this.NewGroupUser.RefUser.Email = null;
+                //this.NewGroupUser.RefUser.Email = null;
             }
         }
 

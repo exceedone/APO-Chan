@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
@@ -25,7 +25,7 @@
                 </Grid.ColumnDefinitions>
 
                 <controls:CircleImage  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" 
-                                       Aspect="AspectFill"
+                                       Aspect="AspectFit"
                                        Margin="0,5,0,5"
                                        VerticalOptions="FillAndExpand"
                                        HorizontalOptions="FillAndExpand"
@@ -57,6 +57,7 @@
 
                     <Entry Grid.Column="0"
                        FontSize="16.0"
+                       Keyboard="Email"
                        Text="{Binding NewGroupUser.RefUser.Email}"
                        TextColor="{StaticResource PrimaryTextColor}"></Entry>
                     <Button Grid.Column="1" 
@@ -89,7 +90,7 @@
                                                           Grid.RowSpan="2"
                                                           Source="{Binding RefUser.UserImage.ImageSource}" 
                                                           WidthRequest="50" HeightRequest="50"
-                                                          Aspect="AspectFill"
+                                                          Aspect="AspectFit"
                                                           />
                                     <Label Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
                                        FontSize="14.0"
