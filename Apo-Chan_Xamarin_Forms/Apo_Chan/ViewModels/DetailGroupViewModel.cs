@@ -118,7 +118,16 @@ namespace Apo_Chan.ViewModels
                 IsBusy = false;
             }
         }
-        
+
+        protected override void imageSelect()
+        {
+            if (this.Group.IsUserNotAdmin)
+            {
+                return;
+            }
+            base.imageSelect();
+        }
+
         #endregion
     }
 }

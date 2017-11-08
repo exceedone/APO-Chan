@@ -24,7 +24,7 @@ namespace Apo_Chan.Managers
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public static async Task<T> Get<T>(string uri) where T:class
+        public static async Task<T> Get<T>(string uri)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -41,7 +41,7 @@ namespace Apo_Chan.Managers
                 else
                 {
                     Debug.WriteLine($"-------------------[Debug] Error : {Constants.ApplicationURL}{uri} Message:" + await response.RequestMessage.Content.ReadAsStringAsync());
-                    return null;
+                    return default(T);
                 }
             }
         }

@@ -59,37 +59,6 @@ namespace Apo_Chan.ViewModels
         #endregion
 
         #region Function
-        private async void imageSelect()
-        {
-            this.IsBusy = true;
-            await CrossMedia.Current.Initialize();
-            if (!CrossMedia.Current.IsTakePhotoSupported)
-            {
-                await dialogService.DisplayAlertAsync("No Camera", "No camera available.", "OK");
-                this.IsBusy = false;
-                return;
-            }
-
-            var file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
-            {
-                PhotoSize = Plugin.Media.Abstractions.PhotoSize.MaxWidthHeight,
-                MaxWidthHeight = 500
-            });
-            if (file == null)
-            {
-                this.IsBusy = false;
-                return;
-            }
-            this.Group.GroupImage = CustomImageSource.FromByteArray(() =>
-            {
-                var stream = file.GetStream();
-                var byteArray = Utils.ReadStram(stream);
-                file.Dispose();
-                return byteArray;
-            });
-            this.IsBusy = false;
-        }
-        
         #endregion
     }
 }

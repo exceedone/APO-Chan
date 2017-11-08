@@ -87,12 +87,8 @@ namespace Apo_Chan.ViewModels
 
         #region Function
 
-        protected async void imageSelect()
+        protected async virtual void imageSelect()
         {
-            if (this.Group.IsUserNotAdmin)
-            {
-                return;
-            }
             this.IsBusy = true;
             await CrossMedia.Current.Initialize();
             if (!CrossMedia.Current.IsTakePhotoSupported)

@@ -1,5 +1,6 @@
 ﻿using Apo_Chan.Items;
 using Apo_Chan.Models;
+using Apo_Chan.Managers;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -90,16 +91,13 @@ namespace Apo_Chan.Service
         #region Azure Blob
         private async static Task<CloudBlockBlob> getBlob(string fileName, string containerName, bool isCreateIfNotExists)
         {
-            var storageCredentials = new StorageCredentials("apochanattachmentdev", "hMIt5ZQvvtIFxC/RIk54L6PL8qESIyTplF2Yy0qvmAGXT4NlH4YE5Yb6vDF98TAg/tD/1sDpLKgipBxzoJGZ6w==");
-            var cloudStorageAccount = new CloudStorageAccount(storageCredentials, true);
-            var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            var container = cloudBlobClient.GetContainerReference(containerName);
-            if (isCreateIfNotExists)
+            // get Signature from Azure mobile apps.
+            var signature = await getSignature(containerName);
+            if (string.IsNullOrWhiteSpace(signature))
             {
-                await container.CreateIfNotExistsAsync();
+                return null;
             }
-            var blob = container.GetBlockBlobReference(fileName);
-            return blob;
+            return new CloudBlobContainer(new Uri(signature)).GetBlockBlobReference(fileName);
         }
 
         /// <summary>
@@ -116,7 +114,7 @@ namespace Apo_Chan.Service
                 var blob = await getBlob(fileName, containerName, true);
                 await blob.UploadFromByteArrayAsync(streamByte, 0, streamByte.Length);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return;
             }
@@ -143,7 +141,7 @@ namespace Apo_Chan.Service
                 }
                 return buffer;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -205,6 +203,32 @@ namespace Apo_Chan.Service
                     await stream.WriteAsync(buffer, 0, buffer.Length);
                 }
             }
+        }
+
+        /// <summary>
+        /// get signature from azure mobile apps(custom function)
+        /// </summary>
+        /// <param name="containerName"></param>
+        /// <returns></returns>
+        private static async Task<string> getSignature(string containerName)
+        {
+            // Get from session
+            var session = App.SessionRepository.GetValue<BlobSignature>($"BlobSignature{containerName}");
+            if (session != null && session.Expire.AddMinutes(-5) > DateTimeOffset.UtcNow)
+            {
+                return session.Signature;
+            }
+            // get Signature from Azure mobile apps.
+            var signature = await CustomFunction.Get<BlobSignature>($"api/values/blobsignature/{containerName}");
+            App.SessionRepository.SetValue($"BlobSignature{containerName}", signature);
+            return signature?.Signature;
+        }
+
+        public class BlobSignature
+        {
+            public string ContainerName { get; set; }
+            public string Signature { get; set; }
+            public DateTimeOffset Expire { get; set; }
         }
         #endregion
     }

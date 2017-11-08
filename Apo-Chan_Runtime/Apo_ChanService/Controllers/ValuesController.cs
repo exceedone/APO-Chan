@@ -1,10 +1,15 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using System.Web.Http.Tracing;
 using System.Web.Http.Controllers;
+using Microsoft.Azure;
 using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Config;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Apo_ChanService.DataObjects;
 using Apo_ChanService.Models;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
@@ -14,6 +19,7 @@ namespace Apo_ChanService.Controllers
     // Use the MobileAppController attribute for each ApiController you want to use  
     // from your mobile clients 
     [MobileAppController]
+    [RoutePrefix("api/values")]
     //[CustomAttributes.CustomAuthentize]
     public class ValuesController : ApiController
     {
@@ -44,12 +50,67 @@ namespace Apo_ChanService.Controllers
         //}
 
         /// <summary>
+        /// Get Blob signature.
+        /// https://docs.microsoft.com/en-us/azure/storage/blobs/storage-dotnet-shared-access-signature-part-2#part-1-create-a-console-application-to-generate-shared-access-signatures
+        /// </summary>
+        /// <param name="containerName"></param>
+        /// <param name="blobname"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("blobsignature/{containername}")]
+        public IHttpActionResult GetBlobSignature(string containername)
+        {
+            if (string.IsNullOrWhiteSpace(containername))
+            {
+                return BadRequest();
+            }
+
+            string policyName = "apochanpolicy" + containername;
+            DateTimeOffset date = DateTimeOffset.UtcNow.AddHours(24);
+
+            //Parse the connection string and return a reference to the storage account.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(System.Configuration.ConfigurationManager.ConnectionStrings["MS_AzureStorageAccountConnectionString"].ToString());
+            //Create the blob client object.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            //Get a reference to a container to use for the sample code, and create it if it does not exist.
+            CloudBlobContainer container = blobClient.GetContainerReference(containername);
+
+            //Clear any existing access policies on container.
+            BlobContainerPermissions perms = container.GetPermissions();
+            perms.SharedAccessPolicies.Clear();
+            container.SetPermissions(perms);
+
+            //Get the container's existing permissions.
+            BlobContainerPermissions permissions = container.GetPermissions();
+            //Create a new shared access policy and define its constraints.
+            SharedAccessBlobPolicy sharedPolicy = new SharedAccessBlobPolicy()
+            {
+                SharedAccessExpiryTime = date,
+                Permissions = SharedAccessBlobPermissions.Write | SharedAccessBlobPermissions.List | SharedAccessBlobPermissions.Read
+            };
+
+            //Add the new policy to the container's permissions, and set the container's permissions.
+            permissions.SharedAccessPolicies.Add(policyName, sharedPolicy);
+            container.SetPermissions(permissions);
+
+            //Generate the shared access signature on the container. In this case, all of the constraints for the
+            //shared access signature are specified on the stored access policy.
+            string sasContainerToken = container.GetSharedAccessSignature(null, policyName);
+
+            //Return the URI string for the container, including the SAS token.
+            string url = container.Uri + sasContainerToken;
+
+            //Return the URI string for the container, including the SAS token.
+            return Content(System.Net.HttpStatusCode.OK, new { ContainerName = containername , Signature = url, Expire = date });
+        }
+
+        /// <summary>
         /// Select user id, and get groups the user joins.
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/values/userjoingroups/{userid}")]
+        [Route("userjoingroups/{userid}")]
         public IHttpActionResult GetUserJoinGroups(string userid)
         {
             List<dynamic> list = new List<dynamic>();
@@ -107,7 +168,7 @@ namespace Apo_ChanService.Controllers
         //}
 
         [HttpGet]
-        [Route("api/values/groupusers/{groupid}")]
+        [Route("groupusers/{groupid}")]
         public IHttpActionResult GetGroupUsers(string groupid)
         {
             List<dynamic> list = new List<dynamic>();
@@ -121,7 +182,7 @@ namespace Apo_ChanService.Controllers
                 ).ToList();
 
             // select usergrouplist
-            var g = items.FirstOrDefault().group;
+            var g = items.FirstOrDefault()?.group;
             var groupusers = items.Select(x => x.usergroupuser.groupuser).ToList();
 
             return Json(new { group = g, groupusers = groupusers });
@@ -133,7 +194,7 @@ namespace Apo_ChanService.Controllers
         /// <param name="groupid"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/values/reportsbygroup/{groupid}/{year}/{month}")]
+        [Route("reportsbygroup/{groupid}/{year}/{month}")]
         public IHttpActionResult GetReportsByGroup(string groupid, int year, int month)
         {
             List<dynamic> list = new List<dynamic>();
@@ -158,7 +219,7 @@ namespace Apo_ChanService.Controllers
         /// <param name="groupid"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/values/groupsbyreport/{reportid}")]
+        [Route("groupsbyreport/{reportid}")]
         public IHttpActionResult GetGroupsByReport(string reportid)
         {
             List<dynamic> list = new List<dynamic>();
