@@ -59,6 +59,7 @@
 
                     <Entry Grid.Column="0"
                        FontSize="16.0"
+                       Keyboard="Email"
                        Text="{Binding NewGroupUser.RefUser.Email}"
                        TextColor="{StaticResource PrimaryTextColor}"></Entry>
                     <Button Grid.Column="1" 
