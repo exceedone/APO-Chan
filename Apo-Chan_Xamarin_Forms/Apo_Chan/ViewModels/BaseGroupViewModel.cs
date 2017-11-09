@@ -161,8 +161,8 @@ namespace Apo_Chan.ViewModels
                         // Remove RefClass.
                         item.RefUser = null;
                         item.RefGroup = null;
-                        await GroupUserManager.DefaultManager.SaveTaskAsync(item);
                     }
+                    await CustomFunction.Post($"table/groupuser/list/{this.Group.Id}", this.GroupUserItems);
 
                     // upload icon
                     if (this.Group.HasImage)

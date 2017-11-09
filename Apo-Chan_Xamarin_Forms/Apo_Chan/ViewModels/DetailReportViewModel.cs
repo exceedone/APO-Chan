@@ -148,6 +148,10 @@ namespace Apo_Chan.ViewModels
                         Report = await ReportManager.DefaultManager.LookupAsync((string)parameters["Id"]);
                         this.IsEdit = report.RefUserId == GlobalAttributes.refUserId;
 
+                        if (Report.ReportLat != 0 && Report.ReportLon != 0)
+                        {
+                            GpsImage = "ic_gps_on.png";
+                        }
                         // get reportGroup
                         var reportGroupItems = await CustomFunction.Get<List<GroupItem>>($"api/values/groupsbyreport/{Report.Id}");
                         if (reportGroupItems.Any())

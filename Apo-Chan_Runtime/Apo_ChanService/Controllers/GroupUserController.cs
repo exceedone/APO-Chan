@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -71,5 +72,48 @@ namespace Apo_ChanService.Controllers
         {
             return DeleteAsync(id);
         }
+
+        /// <summary>
+        /// Post Group User List, If not exists item, remove from db.
+        /// </summary>
+        /// <param name="groupid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("table/groupuser/list/{groupid}")]
+        public async Task<IHttpActionResult> PostReportGroupList(string groupid, [FromBody]List<GroupUserItem> list)
+        {
+            // get items from reportid.
+            List<GroupUserItem> dbItems = this.context.GroupUserItems
+                .Where(x => x.RefGroupId == groupid).ToList();
+            List<string> existsIdList = new List<string>();
+            // loop items
+            foreach (var item in list)
+            {
+                // check parameter refUserId has db
+                var i = dbItems.FirstOrDefault(x => x.RefUserId == item.RefUserId);
+                // not exists : insert(as newItem)
+                if (i == null)
+                {
+                    await InsertAsync(item);
+                }
+                // exists:add i.id (Exists item)
+                else
+                {
+                    existsIdList.Add(i.Id);
+                }
+            }
+
+            foreach (var d in dbItems)
+            {
+                // if d.Id not Exists existsIdList, remove from db.
+                if (!existsIdList.Contains(d.Id))
+                {
+                    await DeleteAsync(d.Id);
+                }
+            }
+
+            return Ok();
+        }
+
     }
 }

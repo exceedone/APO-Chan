@@ -29,9 +29,14 @@ namespace Apo_Chan.Managers
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(Constants.ApplicationURL);
+                var user = GlobalAttributes.User;
+                if (user != null)
+                {
+                    client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", user.AMSToken);
+                }
                 // ADD required querystring "ZUMO-API-VERSION=2.0.0"
                 var requri = uri.SetQueryParam("ZUMO-API-VERSION", "2.0.0");
-                
+
                 var response = await client.GetAsync(requri);
                 if (response.IsSuccessStatusCode)
                 {
@@ -56,9 +61,14 @@ namespace Apo_Chan.Managers
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(Constants.ApplicationURL);
+                var user = GlobalAttributes.User;
+                if (user != null)
+                {
+                    client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", user.AMSToken);
+                }
                 // ADD required querystring "ZUMO-API-VERSION=2.0.0"
                 var requri = uri.SetQueryParam("ZUMO-API-VERSION", "2.0.0");
-
+                
                 // Serialize our concrete class into a JSON String
                 string stringPayload = JsonConvert.SerializeObject(data);
                 var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
