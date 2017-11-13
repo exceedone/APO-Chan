@@ -110,10 +110,10 @@
       <Version>3.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugin.Geolocator">
-      <Version>4.1.1</Version>
+      <Version>4.1.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>2.4.0.18342</Version>
+      <Version>2.4.0.74863</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
