@@ -47,7 +47,13 @@ namespace Apo_Chan.iOS
             try
             {
                 // Sign in using a server-managed flow.
-                loginuser = await App.CurrentClient.LoginAsync(UIApplication.SharedApplication.KeyWindow.RootViewController, providerType.MobileServiceAuthenticationProvider(), "apochan-scheme");
+                loginuser = await App.CurrentClient.LoginAsync
+                    (
+                        UIApplication.SharedApplication.KeyWindow.RootViewController,
+                        providerType.MobileServiceAuthenticationProvider(),
+                        "apochan-scheme",
+                        providerType.MobileServiceParameters()
+                    );
                 if (loginuser != null)
                 {
                     UserItem user = new UserItem()

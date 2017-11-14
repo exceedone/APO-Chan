@@ -23,6 +23,33 @@ namespace Apo_Chan.Models
             return Microsoft.WindowsAzure.MobileServices.MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory;
         }
 
+        public static Dictionary<string, string> MobileServiceParameters(this Constants.EProviderType providerType)
+        {
+            switch (providerType)
+            {
+                case Constants.EProviderType.Google:
+                    return new Dictionary<string, string>()
+                    {
+                        { "access_type", "offline" }
+                    };
+                case Constants.EProviderType.Microsoft:
+                    return new Dictionary<string, string>()
+                    {
+                        { "resource", "https://graph.microsoft.com" },
+                    };
+                case Constants.EProviderType.Office365:
+                    return new Dictionary<string, string>()
+                    {
+                        { "resource", "https://graph.microsoft.com" },
+                        { "response_type", "code id_token" }
+                    };
+            }
+            return new Dictionary<string, string>()
+            {
+                { "resource", "https://graph.microsoft.com" },
+            };
+        }
+
         /// <summary>
         /// Dictionary Add or skip
         /// key is null・・・skip

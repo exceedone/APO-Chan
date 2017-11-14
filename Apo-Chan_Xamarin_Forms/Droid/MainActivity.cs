@@ -76,7 +76,13 @@ namespace Apo_Chan.Droid
             try
             {
                 // Sign in using a server-managed flow.
-                loginuser = await App.CurrentClient.LoginAsync(this, providerType.MobileServiceAuthenticationProvider(), "apochan-scheme", new Dictionary<string, string> { { "resource", "https://graph.microsoft.com" } });
+                loginuser = await App.CurrentClient.LoginAsync
+                    (
+                        this,
+                        providerType.MobileServiceAuthenticationProvider(),
+                        "apochan-scheme",
+                        providerType.MobileServiceParameters()
+                    );
                 if (loginuser != null)
                 {
                     UserItem user = new UserItem()

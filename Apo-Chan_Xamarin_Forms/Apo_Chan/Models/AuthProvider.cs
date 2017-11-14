@@ -46,15 +46,30 @@ namespace Apo_Chan.Models
                 {
                     var user = GlobalAttributes.User;
 
+                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.ExpiresOn > " + user.ExpiresOn.Value.ToString());
+                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.AccessToken > " + user.AccessToken);
+                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.RefreshToken > " + user.RefreshToken);
+                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.AMSToken > " + user.AMSToken);
                     // if past expires_on, refresh token
                     if (!user.ExpiresOn.HasValue || user.ExpiresOn.Value < DateTime.Now)
                     {
-                        client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", user.AMSToken);
-                        var response = await client.GetStringAsync(Constants.ApplicationURL + "/.auth/refresh");
+                        //client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", user.AMSToken);
+                        //var response = await client.GetStringAsync(Constants.ApplicationURL + "/.auth/refresh");
 
-                        JObject jObject = JObject.Parse(response);
-                        user.AMSToken = Convert.ToString(jObject["authenticationToken"]);
-                        App.CurrentClient.CurrentUser.MobileServiceAuthenticationToken = user.AMSToken;
+                        //Debug.WriteLine("-------------------[Debug] " + "RefreshProfile > " + response);
+
+                        //JObject jObject = JObject.Parse(response);
+                        //user.AMSToken = Convert.ToString(jObject["authenticationToken"]);
+                        //App.CurrentClient.CurrentUser.MobileServiceAuthenticationToken = user.AMSToken;
+
+                        var _refreshedUser = await App.CurrentClient.RefreshUserAsync();
+                        if (_refreshedUser != null)
+                        {
+                            user.AMSToken = _refreshedUser.MobileServiceAuthenticationToken;
+                            App.CurrentClient.CurrentUser.MobileServiceAuthenticationToken = user.AMSToken;
+
+                            Debug.WriteLine("-------------------[Debug] " + "RefreshProfile _refreshedUser > " + _refreshedUser.ToString());
+                        }
 
                         BaseAuthProvider provider = BaseAuthProvider.GetAuthProvider(user.EProviderType);
                         string json = await provider.GetProfileJson(user.AMSToken);
@@ -64,8 +79,9 @@ namespace Apo_Chan.Models
 
                     return true;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile catch > " + e.Message);
                     return false;
                 }
             }
