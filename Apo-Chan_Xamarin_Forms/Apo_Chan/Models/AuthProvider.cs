@@ -40,51 +40,43 @@ namespace Apo_Chan.Models
         /// <returns></returns>
         public static async Task<bool> RefreshProfile()
         {
-            using (var client = new HttpClient())
+            try
             {
-                try
+                var user = GlobalAttributes.User;
+
+                //debug info
+                if (user.ExpiresOn.HasValue)
                 {
-                    var user = GlobalAttributes.User;
-
                     Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.ExpiresOn > " + user.ExpiresOn.Value.ToString());
-                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.AccessToken > " + user.AccessToken);
-                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.RefreshToken > " + user.RefreshToken);
-                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.AMSToken > " + user.AMSToken);
+                }
+                if (user.RefreshToken != null)
+                {
+                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.RefreshToken > " + user.RefreshToken.Length);
+                }
 
-                    // if past expires_on, refresh token
-                    if (!user.ExpiresOn.HasValue || user.ExpiresOn.Value < DateTime.Now)
+                // if past expires_on, refresh token
+                if (!user.ExpiresOn.HasValue || user.ExpiresOn.Value < DateTime.Now)
+                {
+                    MobileServiceUser _refreshedUser = null;
+                    _refreshedUser = await App.CurrentClient.RefreshUserAsync();
+                    if (_refreshedUser != null)
                     {
-                        //client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", user.AMSToken);
-                        //var response = await client.GetStringAsync(Constants.ApplicationURL + "/.auth/refresh");
-
-                        //Debug.WriteLine("-------------------[Debug] " + "RefreshProfile > " + response);
-
-                        //JObject jObject = JObject.Parse(response);
-                        //user.AMSToken = Convert.ToString(jObject["authenticationToken"]);
-                        //App.CurrentClient.CurrentUser.MobileServiceAuthenticationToken = user.AMSToken;
-
-                        MobileServiceUser _refreshedUser = null;
-                        _refreshedUser = await App.CurrentClient.RefreshUserAsync();
-                        if (_refreshedUser != null)
-                        {
-                            user.AMSToken = _refreshedUser.MobileServiceAuthenticationToken;
-                            App.CurrentClient.CurrentUser.MobileServiceAuthenticationToken = user.AMSToken;
-                            Debug.WriteLine("-------------------[Debug] " + "RefreshProfile _refreshedUser > " + _refreshedUser.UserId);
-                        }
-
-                        BaseAuthProvider provider = BaseAuthProvider.GetAuthProvider(user.EProviderType);
-                        string json = await provider.GetProfileJson(user.AMSToken);
-                        provider.SetUserProfile(user, json);
-                        await user.SetUserToken();
+                        user.AMSToken = _refreshedUser.MobileServiceAuthenticationToken;
+                        App.CurrentClient.CurrentUser.MobileServiceAuthenticationToken = user.AMSToken;
                     }
 
-                    return true;
+                    BaseAuthProvider provider = BaseAuthProvider.GetAuthProvider(user.EProviderType);
+                    string json = await provider.GetProfileJson(user.AMSToken);
+                    provider.SetUserProfile(user, json);
+                    await user.SetUserToken();
                 }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile catch > " + e.Message);
-                    return false;
-                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("-------------------[Debug] " + "RefreshProfile catch > " + e.Message);
+                return false;
             }
         }
 
