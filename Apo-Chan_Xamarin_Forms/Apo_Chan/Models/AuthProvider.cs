@@ -50,6 +50,7 @@ namespace Apo_Chan.Models
                     Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.AccessToken > " + user.AccessToken);
                     Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.RefreshToken > " + user.RefreshToken);
                     Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.AMSToken > " + user.AMSToken);
+
                     // if past expires_on, refresh token
                     if (!user.ExpiresOn.HasValue || user.ExpiresOn.Value < DateTime.Now)
                     {
@@ -62,13 +63,13 @@ namespace Apo_Chan.Models
                         //user.AMSToken = Convert.ToString(jObject["authenticationToken"]);
                         //App.CurrentClient.CurrentUser.MobileServiceAuthenticationToken = user.AMSToken;
 
-                        var _refreshedUser = await App.CurrentClient.RefreshUserAsync();
+                        MobileServiceUser _refreshedUser = null;
+                        _refreshedUser = await App.CurrentClient.RefreshUserAsync();
                         if (_refreshedUser != null)
                         {
                             user.AMSToken = _refreshedUser.MobileServiceAuthenticationToken;
                             App.CurrentClient.CurrentUser.MobileServiceAuthenticationToken = user.AMSToken;
-
-                            Debug.WriteLine("-------------------[Debug] " + "RefreshProfile _refreshedUser > " + _refreshedUser.ToString());
+                            Debug.WriteLine("-------------------[Debug] " + "RefreshProfile _refreshedUser > " + _refreshedUser.UserId);
                         }
 
                         BaseAuthProvider provider = BaseAuthProvider.GetAuthProvider(user.EProviderType);
