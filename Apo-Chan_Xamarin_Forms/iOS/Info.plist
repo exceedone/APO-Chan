@@ -86,9 +86,11 @@
 	<true/>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Calendar permission is required for App API. The app will not access actual calendar.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to photos.</string>
 	<key>CFBundleName</key>
 	<string>APO-Chan</string>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>6</string>
 </dict>
 </plist>
