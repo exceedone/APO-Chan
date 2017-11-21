@@ -70,11 +70,11 @@ namespace Apo_Chan.Managers
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(@"-------------------[Debug] ReportManager Invalid sync operation: " + msioe.Message);
+                Debug.WriteLine(@"-------------------[Debug] GroupUserManager Invalid sync operation: " + msioe.Message);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] ReportManager Sync error: " + e.Message);
+                Debug.WriteLine(@"-------------------[Debug] GroupUserManager Sync error: " + e.Message);
             }
             return null;
         }
@@ -106,11 +106,11 @@ namespace Apo_Chan.Managers
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(@"-------------------[Debug] ReportManager Invalid sync operation: " + msioe.Message);
+                Debug.WriteLine(@"-------------------[Debug] GroupUserManager Invalid sync operation: " + msioe.Message);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] ReportManager Sync error: " + e.Message);
+                Debug.WriteLine(@"-------------------[Debug] GroupUserManager Sync error: " + e.Message);
             }
             return null;
         }

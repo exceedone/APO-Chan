@@ -37,9 +37,9 @@ namespace Apo_Chan.Managers
             store.DefineTable<T1>();
 
             //Initializes the SyncContext using the default IMobileServiceSyncHandler.
-            this.client.SyncContext.InitializeAsync(store);
+            App.CurrentClient.SyncContext.InitializeAsync(store);
 
-            this.dataTable = client.GetSyncTable<T1>();
+            this.dataTable = App.CurrentClient.GetSyncTable<T1>();
 #else
             this.dataTable = App.CurrentClient.GetTable<T1>();
 #endif
@@ -86,7 +86,7 @@ namespace Apo_Chan.Managers
 
             try
             {
-                await this.client.SyncContext.PushAsync();
+                await App.CurrentClient.SyncContext.PushAsync();
 
                 await this.dataTable.PullAsync(
                     //The first parameter is a query name that is used internally by the client SDK to implement incremental sync.

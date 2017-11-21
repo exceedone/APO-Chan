@@ -56,11 +56,11 @@ namespace Apo_Chan.Managers
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(@"-------------------[Debug] UsersManager Invalid sync operation: " + msioe.Message);
+                Debug.WriteLine(@"-------------------[Debug] ReportGroupManager Invalid sync operation: " + msioe.Message);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] UsersManager Sync error: " + e.Message);
+                Debug.WriteLine(@"-------------------[Debug] ReportGroupManager Sync error: " + e.Message);
             }
             return null;
         }
