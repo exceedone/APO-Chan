@@ -50,7 +50,7 @@ namespace Apo_Chan
             {
                 await NavigationService.NavigateAsync("NavigationPage/SignIn");
             }
-            //await NavigationService.NavigateAsync("NavigationPage/SignIn");
+
             Geolocation.GeoService.Init();
         }
 

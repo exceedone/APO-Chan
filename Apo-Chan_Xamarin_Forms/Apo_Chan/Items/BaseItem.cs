@@ -22,7 +22,8 @@ namespace Apo_Chan.Items
 
         [UpdatedAt]
         public DateTimeOffset UpdatedAt { get; set; }
-
+        
+        [JsonProperty(PropertyName = "deleted")]
         [Deleted]
         public bool Deleted { get; set; }
 

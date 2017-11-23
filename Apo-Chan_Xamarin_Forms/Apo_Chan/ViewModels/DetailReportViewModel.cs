@@ -86,7 +86,7 @@ namespace Apo_Chan.ViewModels
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] DetailReportViewModel > " + e.Message);
                     }
                     IsBusy = false;
                     await this.navigateTop();
@@ -119,10 +119,12 @@ namespace Apo_Chan.ViewModels
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] DetailReportViewModel > " + e.Message);
                 }
                 IsBusy = false;
-                await navigationService.GoBackAsync();
+                NavigationParameters parameters = new NavigationParameters();
+                parameters.Add("Reset", true);
+                await navigationService.GoBackAsync(parameters);
             }
         }
 
@@ -163,7 +165,7 @@ namespace Apo_Chan.ViewModels
                     catch (Exception e)
                     {
 
-                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] DetailReportViewModel > " + e.Message);
                     }
                     IsBusy = false;
                     if (Report != null)

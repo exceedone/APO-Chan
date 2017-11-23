@@ -52,11 +52,11 @@ namespace Apo_Chan.ViewModels
                     );
                 if (accepted)
                 {
-                    if (!GlobalAttributes.isConnectedInternet)
-                    {
-                        await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-                        return;
-                    }
+                    //if (!GlobalAttributes.isConnectedInternet)
+                    //{
+                    //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+                    //    return;
+                    //}
                     IsBusy = true;
                     Report.PropertyChanged -= OnDateTimeChanged;
                     try
@@ -77,10 +77,13 @@ namespace Apo_Chan.ViewModels
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] NewReportViewModel > " + e.Message);
                     }
                     IsBusy = false;
-                    await this.navigateTop();
+                    //await this.navigateTop();
+                    NavigationParameters parameters = new NavigationParameters();
+                    parameters.Add("Reset", true);
+                    await navigationService.GoBackAsync(parameters);
                 }
             }
         }

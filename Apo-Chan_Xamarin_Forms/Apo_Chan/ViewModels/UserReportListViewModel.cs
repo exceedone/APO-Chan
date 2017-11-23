@@ -205,13 +205,14 @@ namespace Apo_Chan.ViewModels
                     allReports = await ReportManager.DefaultManager.GetItemsAsync
                         (
                             this.CurrentDate.Year,
-                            this.CurrentDate.Month
+                            this.CurrentDate.Month,
+                            true
                         );
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                System.Diagnostics.Debug.WriteLine("-------------------[Debug] UserReportListViewModel > " + e.Message);
             }
             if (allReports != null)
             {

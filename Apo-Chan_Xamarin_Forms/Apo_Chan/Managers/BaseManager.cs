@@ -101,6 +101,10 @@ namespace Apo_Chan.Managers
                     syncErrors = exc.PushResult.Errors;
                 }
             }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"-------------------[Debug] BaseManager Sync error: " + e.Message);
+            }
 
             // Simple error/conflict handling. A real application would handle the various errors like network conditions,
             // server conflicts and others via the IMobileServiceSyncHandler.
@@ -119,7 +123,9 @@ namespace Apo_Chan.Managers
                         await error.CancelAndDiscardItemAsync();
                     }
 
-                    Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
+                    //Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
+                    Debug.WriteLine(@"-------------------[Debug] BaseManager Sync error: " + 
+                        @"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
                 }
             }
         }

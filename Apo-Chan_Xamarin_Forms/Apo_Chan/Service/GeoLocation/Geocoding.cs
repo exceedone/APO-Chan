@@ -41,7 +41,7 @@ namespace Apo_Chan.Geolocation
             catch (Exception e)
             {
 
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + e.Message);
+                System.Diagnostics.Debug.WriteLine("-------------------[Debug] Geocoding > " + e.Message);
             }
 
             return address;

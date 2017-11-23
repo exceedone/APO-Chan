@@ -66,7 +66,7 @@ namespace Apo_Chan.Geolocation
             {
                 System.Diagnostics.Debug.WriteLine
                     (
-                        "-------------------[Debug] " +
+                        "-------------------[Debug] GeoService > " +
                         "Currently does not have Location permissions, requesting permissions."
                     );
                 if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location))
@@ -84,7 +84,7 @@ namespace Apo_Chan.Geolocation
                 if (status != PermissionStatus.Granted)
                 {
                     System.Diagnostics.Debug.WriteLine(
-                        "-------------------[Debug] " +
+                        "-------------------[Debug] GeoService > " +
                         "Location permission denied, can not get positions async."
                     );
 
@@ -127,7 +127,7 @@ namespace Apo_Chan.Geolocation
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("-------------------[Debug] GeoService > " + ex.Message);
                 await alertOnViewModel("Cannot acquire location information." +
                     "\nPlease enable location service and try again.");
             }
