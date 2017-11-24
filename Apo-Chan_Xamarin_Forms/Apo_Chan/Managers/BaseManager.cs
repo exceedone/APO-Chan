@@ -37,7 +37,10 @@ namespace Apo_Chan.Managers
             store.DefineTable<T1>();
 
             //Initializes the SyncContext using the default IMobileServiceSyncHandler.
-            App.CurrentClient.SyncContext.InitializeAsync(store);
+            if (!App.CurrentClient.SyncContext.IsInitialized)
+            {
+                App.CurrentClient.SyncContext.InitializeAsync(store);
+            }
 
             this.dataTable = App.CurrentClient.GetSyncTable<T1>();
 #else
@@ -88,11 +91,6 @@ namespace Apo_Chan.Managers
             {
                 await App.CurrentClient.SyncContext.PushAsync();
 
-                await this.dataTable.PullAsync(
-                    //The first parameter is a query name that is used internally by the client SDK to implement incremental sync.
-                    //Use a different query name for each unique query in your program
-                    this.SyncQueryName,
-                    this.dataTable.CreateQuery());
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -103,7 +101,21 @@ namespace Apo_Chan.Managers
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] BaseManager Sync error: " + e.Message);
+
+                Debug.WriteLine(@"-------------------[Debug] BaseManager PushAsync error: " + e.Message);
+            }
+
+            try
+            {
+                await this.dataTable.PullAsync(
+                    //The first parameter is a query name that is used internally by the client SDK to implement incremental sync.
+                    //Use a different query name for each unique query in your program
+                    this.SyncQueryName,
+                    this.dataTable.CreateQuery());
+                }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"-------------------[Debug] BaseManager PullAsync error: " + e.Message);
             }
 
             // Simple error/conflict handling. A real application would handle the various errors like network conditions,
@@ -124,8 +136,8 @@ namespace Apo_Chan.Managers
                     }
 
                     //Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
-                    Debug.WriteLine(@"-------------------[Debug] BaseManager Sync error: " + 
-                        @"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
+                    Debug.WriteLine(@"-------------------[Debug] BaseManager PushAsync error. Item: {0} ({1}). Operation discarded.",
+                        error.TableName, error.Item["id"]);
                 }
             }
         }

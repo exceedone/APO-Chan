@@ -68,6 +68,7 @@ namespace Apo_Chan.Managers
 
         public async Task<UserItem> GetItemAsync(Expression<Func<UserItem, bool>> expression)
         {
+            await this.SyncAsync();
             // get from Azure Mobile Apps
             try
             {
