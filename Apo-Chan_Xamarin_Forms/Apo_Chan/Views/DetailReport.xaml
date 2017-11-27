@@ -24,6 +24,7 @@
                     />
                 <TimePicker Time="{Binding Report.ReportStartTime}"
                             Format="hh:mm tt"
+                            WidthRequest="85"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
                             AbsoluteLayout.LayoutBounds =".85,.5"
                             IsEnabled="{Binding IsEdit}"/>
@@ -41,6 +42,7 @@
                             IsEnabled="{Binding IsEdit}"/>
                 <TimePicker Time="{Binding Report.ReportEndTime}"
                             Format="hh:mm tt"
+                            WidthRequest="85"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
                             AbsoluteLayout.LayoutBounds =".85,.5"
                             IsEnabled="{Binding IsEdit}"/>

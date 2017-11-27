@@ -10,6 +10,7 @@ using Apo_Chan.Models;
 using Apo_Chan.Managers;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Diagnostics;
 
 namespace Apo_Chan.Items
 {
@@ -211,8 +212,10 @@ namespace Apo_Chan.Items
                     // get this id.
                     item = await UsersManager.DefaultManager.GetItemAsync(this.UserProviderId, this.ProviderType);
                 }
-                catch
-                { }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(@"-------------------[Debug] UserItem SetUserToken err: " + ex.Message);
+                }
                 // (2)if item is null(first access), insert this item
                 if (item == null)
                 {
@@ -246,6 +249,7 @@ namespace Apo_Chan.Items
                 Username = this.AMSUserId
             };
             account.Properties.AddOrSkip("UserInfo", JObject.FromObject(this).ToString());
+            string terst = JObject.FromObject(this).ToString();
             account.Properties.AddOrSkip("AccessToken", this.AccessToken);
             account.Properties.AddOrSkip("RefreshToken", this.RefreshToken);
             account.Properties.AddOrSkip("AMSToken", this.AMSToken);

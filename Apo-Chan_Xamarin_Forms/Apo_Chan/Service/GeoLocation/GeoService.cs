@@ -5,6 +5,7 @@ using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace Apo_Chan.Geolocation
@@ -64,11 +65,8 @@ namespace Apo_Chan.Geolocation
             var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location);
             if (status != PermissionStatus.Granted)
             {
-                System.Diagnostics.Debug.WriteLine
-                    (
-                        "-------------------[Debug] GeoService > " +
-                        "Currently does not have Location permissions, requesting permissions."
-                    );
+                Debug.WriteLine("-------------------[Debug] GeoService > " +
+                        "Currently does not have Location permissions, requesting permissions.");
                 if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location))
                 {
                     await alertOnViewModel("Location permission is required.");
@@ -83,10 +81,8 @@ namespace Apo_Chan.Geolocation
 
                 if (status != PermissionStatus.Granted)
                 {
-                    System.Diagnostics.Debug.WriteLine(
-                        "-------------------[Debug] GeoService > " +
-                        "Location permission denied, can not get positions async."
-                    );
+                    Debug.WriteLine("-------------------[Debug] GeoService > " +
+                        "Location permission denied, can not get positions async.");
 
                     await alertOnViewModel("Location permission is denied.");
                     return false;
@@ -127,7 +123,7 @@ namespace Apo_Chan.Geolocation
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] GeoService > " + ex.Message);
+                Debug.WriteLine("-------------------[Debug] GeoService > " + ex.Message);
                 await alertOnViewModel("Cannot acquire location information." +
                     "\nPlease enable location service and try again.");
             }

@@ -7,7 +7,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>jp.co.exceedone.apochan</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.0</string>
+	<string>1.2.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIDeviceFamily</key>
@@ -83,6 +83,6 @@
 	<key>CFBundleName</key>
 	<string>APO-Chan</string>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>8</string>
 </dict>
 </plist>

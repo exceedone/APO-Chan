@@ -68,7 +68,8 @@ namespace Apo_Chan.Managers
 
         public async Task<UserItem> GetItemAsync(Expression<Func<UserItem, bool>> expression)
         {
-            await this.SyncAsync();
+            //only update "user" when there is Internet connection. Need Internet to authenticate anyway.
+            await this.SyncAsync(pushFirst: false);
             // get from Azure Mobile Apps
             try
             {

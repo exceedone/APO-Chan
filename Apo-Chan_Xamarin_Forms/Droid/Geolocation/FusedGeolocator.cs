@@ -7,9 +7,10 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Android.App;
 using Android.Content;
-using Android.OS;
+//using Android.OS;
 
 using Android.Gms.Common.Apis;
 using Android.Gms.Common;
@@ -130,12 +131,12 @@ namespace Apo_Chan.Droid.Geolocation
                     try
                     {
                         LocationServices.FusedLocationApi.RemoveLocationUpdates(mGoogleApiClient, fusedListener);
-                        System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "FusedListener > FinishCallback");
+                        Debug.WriteLine("-------------------[Debug.Droid] " + "FusedListener > FinishCallback");
                     }
                     catch (System.Exception ex)
                     {
                         tcs.SetException(ex);
-                        System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + ex.Message);
+                        Debug.WriteLine("-------------------[Debug.Droid] " + ex.Message);
                     }
                 });
 
@@ -167,7 +168,7 @@ namespace Apo_Chan.Droid.Geolocation
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "Google Api Client not connected");
+                Debug.WriteLine("-------------------[Debug.Droid] " + "Google Api Client not connected");
             }
 
             return fusedListener.Task;
@@ -185,18 +186,18 @@ namespace Apo_Chan.Droid.Geolocation
 
         private LocationRequest mLocationRequest;
 
-        public void OnConnected(Bundle connectionHint)
+        public void OnConnected(Android.OS.Bundle connectionHint)
         {
             mLocationRequest = LocationRequest.Create();
             mLocationRequest.SetPriority(LocationRequest.PriorityHighAccuracy);
             mLocationRequest.SetInterval(1000);
 
-            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "GoogleApiClient > OnConnected");
+            Debug.WriteLine("-------------------[Debug.Droid] " + "GoogleApiClient > OnConnected");
         }
 
         public void OnConnectionSuspended(int cause)
         {
-            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "GoogleApiClient > Connection Suspended");
+            Debug.WriteLine("-------------------[Debug.Droid] " + "GoogleApiClient > Connection Suspended");
         }
 
         /*
@@ -204,7 +205,7 @@ namespace Apo_Chan.Droid.Geolocation
          */
         public void OnConnectionFailed(ConnectionResult result)
         {
-            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + "GoogleApiClient > Connection Failed");
+            Debug.WriteLine("-------------------[Debug.Droid] " + "GoogleApiClient > Connection Failed");
         }
 
     }

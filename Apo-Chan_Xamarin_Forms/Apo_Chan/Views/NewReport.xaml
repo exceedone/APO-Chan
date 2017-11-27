@@ -21,6 +21,7 @@
                             AbsoluteLayout.LayoutBounds =".25,.5"/>
                 <TimePicker Time="{Binding Report.ReportStartTime}"
                             Format="hh:mm tt"
+                            WidthRequest="85"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
                             AbsoluteLayout.LayoutBounds =".85,.5"/>
             </AbsoluteLayout>
@@ -36,6 +37,7 @@
                             AbsoluteLayout.LayoutBounds =".25,.5"/>
                 <TimePicker Time="{Binding Report.ReportEndTime}"
                             Format="hh:mm tt"
+                            WidthRequest="85"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
                             AbsoluteLayout.LayoutBounds =".85,.5"/>
             </AbsoluteLayout>

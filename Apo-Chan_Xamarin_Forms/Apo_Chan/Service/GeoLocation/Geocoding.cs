@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using Plugin.Geolocator.Abstractions;
+﻿using Plugin.Geolocator.Abstractions;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Apo_Chan.Geolocation
@@ -41,7 +39,7 @@ namespace Apo_Chan.Geolocation
             catch (Exception e)
             {
 
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] Geocoding > " + e.Message);
+                Debug.WriteLine("-------------------[Debug] Geocoding > " + e.Message);
             }
 
             return address;

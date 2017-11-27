@@ -27,21 +27,10 @@ namespace Apo_Chan.Managers
         protected IMobileServiceTable<T1> dataTable;
 #endif
 
-        const string offlineDbPath = @"localstore.db";
-
         public BaseManager()
         {
 
 #if OFFLINE_SYNC_ENABLED
-            var store = new MobileServiceSQLiteStore(offlineDbPath);
-            store.DefineTable<T1>();
-
-            //Initializes the SyncContext using the default IMobileServiceSyncHandler.
-            if (!App.CurrentClient.SyncContext.IsInitialized)
-            {
-                App.CurrentClient.SyncContext.InitializeAsync(store);
-            }
-
             this.dataTable = App.CurrentClient.GetSyncTable<T1>();
 #else
             this.dataTable = App.CurrentClient.GetTable<T1>();
@@ -83,26 +72,53 @@ namespace Apo_Chan.Managers
         }
 
 #if OFFLINE_SYNC_ENABLED
-        public async Task SyncAsync()
+        public async Task SyncAsync(bool pushFirst = true)
         {
+            while (!App.CurrentClient.SyncContext.IsInitialized)
+            {
+                Debug.WriteLine($"-------------------[Debug] BaseManager<{SyncQueryName}> SyncAsync wait initialize ... ");
+                await Task.Delay(100);
+            }
             ReadOnlyCollection<MobileServiceTableOperationError> syncErrors = null;
 
-            try
+            if (pushFirst)
             {
-                await App.CurrentClient.SyncContext.PushAsync();
-
-            }
-            catch (MobileServicePushFailedException exc)
-            {
-                if (exc.PushResult != null)
+                try
                 {
-                    syncErrors = exc.PushResult.Errors;
+                    await App.CurrentClient.SyncContext.PushAsync();
                 }
-            }
-            catch (Exception e)
-            {
+                catch (MobileServicePushFailedException exc)
+                {
+                    if (exc.PushResult != null)
+                    {
+                        syncErrors = exc.PushResult.Errors;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine($"-------------------[Debug] BaseManager<{SyncQueryName}> PushAsync error: " + e.Message);
+                }
 
-                Debug.WriteLine(@"-------------------[Debug] BaseManager PushAsync error: " + e.Message);
+                // Simple error/conflict handling. A real application would handle the various errors like network conditions,
+                // server conflicts and others via the IMobileServiceSyncHandler.
+                if (syncErrors != null)
+                {
+                    foreach (var error in syncErrors)
+                    {
+                        if (error.OperationKind == MobileServiceTableOperationKind.Update && error.Result != null)
+                        {
+                            //Update failed, reverting to server's copy.
+                            await error.CancelAndUpdateItemAsync(error.Result);
+                        }
+                        else
+                        {
+                            // Discard local change.
+                            await error.CancelAndDiscardItemAsync();
+                        }
+                        Debug.WriteLine($"-------------------[Debug] BaseManager<{SyncQueryName}>" +
+                            $" PushAsync error. Item: {error.TableName} ({error.Item["id"]}). Operation discarded.");
+                    }
+                }
             }
 
             try
@@ -115,30 +131,8 @@ namespace Apo_Chan.Managers
                 }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] BaseManager PullAsync error: " + e.Message);
-            }
-
-            // Simple error/conflict handling. A real application would handle the various errors like network conditions,
-            // server conflicts and others via the IMobileServiceSyncHandler.
-            if (syncErrors != null)
-            {
-                foreach (var error in syncErrors)
-                {
-                    if (error.OperationKind == MobileServiceTableOperationKind.Update && error.Result != null)
-                    {
-                        //Update failed, reverting to server's copy.
-                        await error.CancelAndUpdateItemAsync(error.Result);
-                    }
-                    else
-                    {
-                        // Discard local change.
-                        await error.CancelAndDiscardItemAsync();
-                    }
-
-                    //Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
-                    Debug.WriteLine(@"-------------------[Debug] BaseManager PushAsync error. Item: {0} ({1}). Operation discarded.",
-                        error.TableName, error.Item["id"]);
-                }
+                Debug.WriteLine($"-------------------[Debug] BaseManager<{SyncQueryName}> PullAsync error: " + e.Message);
+                this.dataTable = App.CurrentClient.GetSyncTable<T1>();
             }
         }
 #endif

@@ -5,7 +5,6 @@ using Apo_Chan.Service;
 using Xamarin.Forms;
 using Microsoft.WindowsAzure.MobileServices;
 using Apo_Chan.Models;
-using Xamarin.Forms.Xaml;
 
 namespace Apo_Chan
 {
@@ -52,6 +51,7 @@ namespace Apo_Chan
             }
 
             Geolocation.GeoService.Init();
+            OfflineSync.InitOfflineSyncContext();
         }
 
         protected override void RegisterTypes()
