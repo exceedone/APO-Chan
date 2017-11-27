@@ -32,16 +32,5 @@ namespace Apo_Chan
         }
 
         private static bool shouldUpdateReports;
-        public static bool ShouldUpdateReports
-        {
-            get
-            {
-                return shouldUpdateReports;
-            }
-            set
-            {
-                shouldUpdateReports = value;
-            }
-        }
     }
 }

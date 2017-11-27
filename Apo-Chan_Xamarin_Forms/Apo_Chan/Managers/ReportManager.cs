@@ -54,7 +54,7 @@ namespace Apo_Chan.Managers
                 IEnumerable<ReportItem> items = await this.dataTable
                     .Where(x =>
                         x.RefUserId == userid
-                        && !x.Deleted
+                        //&& !x.Deleted
                         && ((x.ReportStartDate.Year == year && x.ReportStartDate.Month == month) || (x.ReportEndDate.Year == year && x.ReportEndDate.Month == month))
                     ).OrderBy(x => x.ReportStartDate).ThenBy(x => x.ReportEndDate).ThenBy(x => x.ReportStartTime).ThenBy(x => x.ReportEndTime)
                     .ToEnumerableAsync();
@@ -62,8 +62,14 @@ namespace Apo_Chan.Managers
                 ObservableCollection<ReportItem> reports = new ObservableCollection<ReportItem>();
                 foreach (var item in items)
                 {
-                    Utils.ConvertToLocalDateTime(item);
-                    reports.Add(item);
+                    //for local database, Deleted is null in dataTable
+                    if (!item.Deleted)
+                    {
+                        Utils.ConvertToLocalDateTime(item);
+                        reports.Add(item);
+                    }
+                    //Utils.ConvertToLocalDateTime(item);
+                    //reports.Add(item);
                 }
 
                 return reports;

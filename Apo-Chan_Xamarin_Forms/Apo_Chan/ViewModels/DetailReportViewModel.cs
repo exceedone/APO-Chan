@@ -82,7 +82,6 @@ namespace Apo_Chan.ViewModels
                                 RefReportId = Report.Id
                             }));
                         }
-                        GlobalAttributes.ShouldUpdateReports = true;
                     }
                     catch (Exception e)
                     {
@@ -117,8 +116,6 @@ namespace Apo_Chan.ViewModels
                 try
                 {
                     await ReportManager.DefaultManager.DeleteAsync(Report);
-
-                    GlobalAttributes.ShouldUpdateReports = true;
                 }
                 catch (Exception e)
                 {

@@ -106,24 +106,17 @@ namespace Apo_Chan.ViewModels
             ItemTappedCommand = new DelegateCommand<ReportItem>(NavigateDetailReport);
             NextMonthReportCommand = new DelegateCommand(nextMonthReport);
             PrevMonthReportCommand = new DelegateCommand(prevMonthReport);
-
-            GlobalAttributes.ShouldUpdateReports = true;
         }
         #endregion
 
         #region Function
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
-            GlobalAttributes.ShouldUpdateReports = false;
+            ;
         }
 
         public void OnNavigatedTo(NavigationParameters parameters)
         {
-            //if (GlobalAttributes.ShouldUpdateReports)
-            //{
-            //    RefreshCommand.Execute();
-            //}
-            
             // navigate mode == new, set items
             if (parameters.GetNavigationMode() == NavigationMode.New)
             {

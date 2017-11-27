@@ -62,7 +62,6 @@ namespace Apo_Chan.ViewModels
                     try
                     {
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
-                        GlobalAttributes.ShouldUpdateReports = true;
 
                         // has groupids, post 
                         if (!string.IsNullOrWhiteSpace(this.groupIds))

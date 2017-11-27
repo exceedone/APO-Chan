@@ -132,7 +132,6 @@ namespace Apo_Chan.Managers
             catch (Exception e)
             {
                 Debug.WriteLine($"-------------------[Debug] BaseManager<{SyncQueryName}> PullAsync error: " + e.Message);
-                this.dataTable = App.CurrentClient.GetSyncTable<T1>();
             }
         }
 #endif
