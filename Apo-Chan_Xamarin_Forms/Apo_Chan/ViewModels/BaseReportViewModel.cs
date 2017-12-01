@@ -1,19 +1,12 @@
 ﻿using Apo_Chan.Geolocation;
 using Apo_Chan.Items;
-using Apo_Chan.Managers;
 using Apo_Chan.Models;
 using Plugin.Geolocator.Abstractions;
 using Prism.Commands;
-using Prism.Events;
-using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
@@ -109,7 +102,7 @@ namespace Apo_Chan.ViewModels
             Report = new ReportItem
             {
                 Id = null,
-                RefUserId = GlobalAttributes.refUserId,
+                RefUserId = GlobalAttributes.User.Id,
                 ReportStartDate = now.Date,
                 ReportStartTime = now.TimeOfDay,
                 ReportEndDate = endDate.Date,

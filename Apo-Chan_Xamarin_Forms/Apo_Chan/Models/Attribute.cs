@@ -1,6 +1,7 @@
 ﻿using Apo_Chan.Items;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Connectivity;
+using static Apo_Chan.Service.OfflineSync;
 
 namespace Apo_Chan
 {
@@ -13,24 +14,26 @@ namespace Apo_Chan
                 return UserItem.GetCachedUserItem();
             }
         }
-        public static string refUserId
+
+        public static Position currentPosition;
+        public static Position CurrentPosition
         {
             get
             {
-                return User.Id;
+                if (currentPosition == null)
+                {
+                    currentPosition = new Position();
+                }
+                return currentPosition;
             }
         }
 
-        public static Position currentPosition { get; set; }
-
-        public static bool isConnectedInternet
+        public static bool IsConnectedInternet
         {
             get
             {
                 return CrossConnectivity.Current.IsConnected;
             }
         }
-
-        private static bool shouldUpdateReports;
     }
 }

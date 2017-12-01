@@ -3,11 +3,8 @@ using Apo_Chan.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using Microsoft.WindowsAzure.MobileServices;
 
 namespace Apo_Chan.Managers
@@ -37,19 +34,13 @@ namespace Apo_Chan.Managers
                 defaultInstance = value;
             }
         }
-        public async Task<ObservableCollection<GroupUserItem>> GetItemsAsync(string refGroupId = null, string refUserId = null, bool syncItems = false)
+        public async Task<ObservableCollection<GroupUserItem>> GetItemsAsync(string refGroupId = null, string refUserId = null)
         {
             // get from Azure Mobile Apps
             try
             {
-#if OFFLINE_SYNC_ENABLED
-                if (syncItems)
-                {
-                    await this.SyncAsync();
-                }
-#endif
                 await BaseAuthProvider.RefreshProfile();
-                var query = this.dataTable.Where(x => !x.Deleted);
+                var query = this.localDataTable.Where(x => !x.Deleted);
                 if (!string.IsNullOrWhiteSpace(refGroupId))
                 {
                     query.Where(x => x.RefGroupId == refGroupId);
@@ -70,28 +61,22 @@ namespace Apo_Chan.Managers
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(@"-------------------[Debug] GroupUserManager Invalid sync operation: " + msioe.Message);
+                DebugUtil.WriteLine("GroupUserManager Invalid sync operation: " + msioe.Message);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] GroupUserManager Sync error: " + e.Message);
+                DebugUtil.WriteLine("GroupUserManager Sync error: " + e.Message);
             }
             return null;
         }
 
-        public async Task<ObservableCollection<GroupUserItem>> GetItemsAsync(Expression<Func<GroupUserItem, bool>> extension, bool syncItems = false)
+        public async Task<ObservableCollection<GroupUserItem>> GetItemsAsync(Expression<Func<GroupUserItem, bool>> extension)
         {
             // get from Azure Mobile Apps
             try
             {
-#if OFFLINE_SYNC_ENABLED
-                if (syncItems)
-                {
-                    await this.SyncAsync();
-                }
-#endif
                 await BaseAuthProvider.RefreshProfile();
-                IEnumerable<GroupUserItem> items = await this.dataTable
+                IEnumerable<GroupUserItem> items = await this.localDataTable
                     .Where(x => !x.Deleted)
                     .Where(extension)
                     .ToEnumerableAsync();
@@ -106,11 +91,11 @@ namespace Apo_Chan.Managers
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(@"-------------------[Debug] GroupUserManager Invalid sync operation: " + msioe.Message);
+                DebugUtil.WriteLine("GroupUserManager Invalid sync operation: " + msioe.Message);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] GroupUserManager Sync error: " + e.Message);
+                DebugUtil.WriteLine("GroupUserManager Sync error: " + e.Message);
             }
             return null;
         }

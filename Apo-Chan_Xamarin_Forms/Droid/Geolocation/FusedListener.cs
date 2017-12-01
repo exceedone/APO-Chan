@@ -48,7 +48,7 @@ namespace Apo_Chan.Droid.Geolocation
 
         public void OnLocationChanged(Location location)
         {
-            System.Diagnostics.Debug.WriteLine("-------------------[Debug.Droid] " + location.ToString());
+            Models.DebugUtil.WriteLine("[Droid] OnLocationChanged > " + location.ToString());
             if (location.Accuracy <= _desiredAccuracy)
             {
                 Finish(location);

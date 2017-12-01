@@ -41,6 +41,8 @@ namespace Apo_Chan
         {
             InitializeComponent();
 
+            OfflineSync.InitOfflineSyncContext();
+
             if (BaseAuthProvider.FirstProcess())
             {
                 await NavigationService.NavigateAsync("NavigationPage/UserReportList");
@@ -51,7 +53,6 @@ namespace Apo_Chan
             }
 
             Geolocation.GeoService.Init();
-            OfflineSync.InitOfflineSyncContext();
         }
 
         protected override void RegisterTypes()

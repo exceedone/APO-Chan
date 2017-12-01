@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 using Apo_Chan.Items;
-using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
+using Apo_Chan.Service;
 
 namespace Apo_Chan.Managers
 {
@@ -21,25 +14,14 @@ namespace Apo_Chan.Managers
     {
         protected static BaseManager<T1> defaultInstance;
 
-#if OFFLINE_SYNC_ENABLED
-        protected IMobileServiceSyncTable<T1> dataTable;
-#else
-        protected IMobileServiceTable<T1> dataTable;
-#endif
+        protected IMobileServiceSyncTable<T1> localDataTable;
+        protected IMobileServiceTable<T1> remoteDataTable;
 
         public BaseManager()
         {
 
-#if OFFLINE_SYNC_ENABLED
-            this.dataTable = App.CurrentClient.GetSyncTable<T1>();
-#else
-            this.dataTable = App.CurrentClient.GetTable<T1>();
-#endif
-        }
-
-        public bool IsOfflineEnabled
-        {
-            get { return dataTable is Microsoft.WindowsAzure.MobileServices.Sync.IMobileServiceSyncTable<T1>; }
+            this.localDataTable = App.CurrentClient.GetSyncTable<T1>();
+            //this.remoteDataTable = App.CurrentClient.GetTable<T1>();
         }
 
         public string SyncQueryName
@@ -53,87 +35,72 @@ namespace Apo_Chan.Managers
         {
             if (item.Id == null)
             {
-                await dataTable.InsertAsync(item);
+                await localDataTable.InsertAsync(item);
             }
             else
             {
-                await dataTable.UpdateAsync(item);
+                await localDataTable.UpdateAsync(item);
             }
         }
 
         public async Task DeleteAsync(T1 item)
         {
-            await dataTable.DeleteAsync(item);
+            await localDataTable.DeleteAsync(item);
         }
 
         public async Task<T1> LookupAsync(string id)
         {
-            return await dataTable.LookupAsync(id);
+            return await localDataTable.LookupAsync(id);
         }
 
-#if OFFLINE_SYNC_ENABLED
-        public async Task SyncAsync(bool pushFirst = true)
+        public virtual async Task SyncAsync()
         {
-            while (!App.CurrentClient.SyncContext.IsInitialized)
-            {
-                Debug.WriteLine($"-------------------[Debug] BaseManager<{SyncQueryName}> SyncAsync wait initialize ... ");
-                await Task.Delay(100);
-            }
-            ReadOnlyCollection<MobileServiceTableOperationError> syncErrors = null;
-
-            if (pushFirst)
-            {
-                try
-                {
-                    await App.CurrentClient.SyncContext.PushAsync();
-                }
-                catch (MobileServicePushFailedException exc)
-                {
-                    if (exc.PushResult != null)
-                    {
-                        syncErrors = exc.PushResult.Errors;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine($"-------------------[Debug] BaseManager<{SyncQueryName}> PushAsync error: " + e.Message);
-                }
-
-                // Simple error/conflict handling. A real application would handle the various errors like network conditions,
-                // server conflicts and others via the IMobileServiceSyncHandler.
-                if (syncErrors != null)
-                {
-                    foreach (var error in syncErrors)
-                    {
-                        if (error.OperationKind == MobileServiceTableOperationKind.Update && error.Result != null)
-                        {
-                            //Update failed, reverting to server's copy.
-                            await error.CancelAndUpdateItemAsync(error.Result);
-                        }
-                        else
-                        {
-                            // Discard local change.
-                            await error.CancelAndDiscardItemAsync();
-                        }
-                        Debug.WriteLine($"-------------------[Debug] BaseManager<{SyncQueryName}>" +
-                            $" PushAsync error. Item: {error.TableName} ({error.Item["id"]}). Operation discarded.");
-                    }
-                }
-            }
-
+            IMobileServiceTableQuery<T1> query0;
             try
             {
-                await this.dataTable.PullAsync(
-                    //The first parameter is a query name that is used internally by the client SDK to implement incremental sync.
-                    //Use a different query name for each unique query in your program
-                    this.SyncQueryName,
-                    this.dataTable.CreateQuery());
+                switch (this.SyncQueryName)
+                {
+                    case "UserItem":
+                        {
+                            IMobileServiceTableQuery<UserItem> query;
+                            query = (localDataTable as IMobileServiceSyncTable<UserItem>)
+                                .Where(x => x.UserProviderId == GlobalAttributes.User.UserProviderId);
+                        }
+                        
+                        break;
+                    case "ReportItem":
+                        {
+                            IMobileServiceTableQuery<ReportItem> query;
+                            query = (localDataTable as IMobileServiceSyncTable<ReportItem>)
+                                .Where(x => x.RefUserId == GlobalAttributes.User.Id);
+                        }
+                        
+                        break;
+                    case "GroupItem":
+                        {
+                            IMobileServiceTableQuery<GroupItem> query;
+                            query = (localDataTable as IMobileServiceSyncTable<GroupItem>)
+                                .Where(x => x.CreatedUserId == GlobalAttributes.User.Id);
+                        }
+                        break;
+                    case "GroupUserItem":
+                        break;
+                    case "ReportGroupItem":
+                        break;
+                    default:
+                        query0 = localDataTable.CreateQuery();
+                        break;
                 }
+                await this.localDataTable.PullAsync(
+                    this.SyncQueryName,
+                    this.localDataTable.CreateQuery());
+                OfflineSync.SyncResult.SyncedItems++;
+            }
             catch (Exception e)
             {
-                Debug.WriteLine($"-------------------[Debug] BaseManager<{SyncQueryName}> PullAsync error: " + e.Message);
+                Models.DebugUtil.WriteLine($"BaseManager<{SyncQueryName}> PullAsync error: " + e.Message);
+                OfflineSync.SyncResult.OfflineSyncErrors.Add(Tuple.Create(SyncQueryName, 1));
             }
         }
-#endif
     }
 }

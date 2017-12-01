@@ -1,8 +1,5 @@
 ﻿using Plugin.Geolocator.Abstractions;
 using Prism.Events;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Apo_Chan.Models
 {

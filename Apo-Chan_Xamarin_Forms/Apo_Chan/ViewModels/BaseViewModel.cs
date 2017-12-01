@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Apo_Chan.Geolocation;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
@@ -66,9 +64,9 @@ namespace Apo_Chan.ViewModels
         protected async void InitLocationServiceAsync()
         {
             IsBusy = true;
-            System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + "InitLocationServiceAsync() > Begin");
+            Models.DebugUtil.WriteLine("InitLocationServiceAsync() > Begin");
             await GeoService.DefaultInstance.GetPositionAsync(alertGeoServiceStatusAsync);
-            System.Diagnostics.Debug.WriteLine("-------------------[Debug] " + "InitLocationServiceAsync() > End");
+            Models.DebugUtil.WriteLine("InitLocationServiceAsync() > End");
             IsBusy = false;
         }
 

@@ -33,7 +33,7 @@ namespace Apo_Chan.ViewModels
         #region Function
         private async void NavigateSignIn()
         {
-            if (!GlobalAttributes.isConnectedInternet)
+            if (!GlobalAttributes.IsConnectedInternet)
             {
                 await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
                 return;
@@ -51,7 +51,7 @@ namespace Apo_Chan.ViewModels
         }
         private async void NavigateSignInGoogle()
         {
-            if (!GlobalAttributes.isConnectedInternet)
+            if (!GlobalAttributes.IsConnectedInternet)
             {
                 await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
                 return;

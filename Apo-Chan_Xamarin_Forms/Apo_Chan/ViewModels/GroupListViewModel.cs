@@ -1,7 +1,6 @@
 ﻿using Apo_Chan.Items;
 using Apo_Chan.Managers;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using System;
@@ -9,7 +8,6 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
-using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
 {
@@ -156,7 +154,7 @@ namespace Apo_Chan.ViewModels
 
         public async void SetItemsAsync()
         {
-            if (!GlobalAttributes.isConnectedInternet)
+            if (!GlobalAttributes.IsConnectedInternet)
             {
                 await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
                 return;
@@ -197,7 +195,7 @@ namespace Apo_Chan.ViewModels
             {
                 GroupItems.Clear();
                 // Get Group List contains usercount and auth
-                var groupCountList = await CustomFunction.Get<List<GroupAndUserCountItem>>($"api/values/userjoingroups/{GlobalAttributes.refUserId}");
+                var groupCountList = await CustomFunction.Get<List<GroupAndUserCountItem>>($"api/values/userjoingroups/{GlobalAttributes.User.Id}");
                 if (groupCountList != null)
                 {
                     foreach (var g in groupCountList)
@@ -216,7 +214,7 @@ namespace Apo_Chan.ViewModels
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] GroupListViewModel > " + e.Message);
+                Models.DebugUtil.WriteLine("GroupListViewModel > " + e.Message);
             }
             IsBusy = false;
         }

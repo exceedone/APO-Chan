@@ -1,13 +1,12 @@
 ﻿using Apo_Chan.Items;
 using Apo_Chan.Managers;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-using Xamarin.Forms;
+using Apo_Chan.Models;
 
 namespace Apo_Chan.ViewModels
 {
@@ -82,6 +81,8 @@ namespace Apo_Chan.ViewModels
         /// </summary>
         public string TargetGroupId { get; set; }
 
+        private bool isFirstCall;
+
         public DelegateCommand AddNewReportCommand { get; private set; }
 
         public DelegateCommand SelectGroupCommand { get; private set; }
@@ -92,6 +93,8 @@ namespace Apo_Chan.ViewModels
 
         public DelegateCommand PrevMonthReportCommand { get; private set; }
 
+        public DelegateCommand RefreshCommand { get; private set; }
+
         #endregion
 
         #region Constructor
@@ -101,11 +104,13 @@ namespace Apo_Chan.ViewModels
         {
             ReportItems = new ObservableCollection<ReportItem>();
             CurrentDate = DateTime.Now;
+            this.isFirstCall = true;
             AddNewReportCommand = new DelegateCommand(NavigateNewReport);
             SelectGroupCommand = new DelegateCommand(NavigateSelectGroup);
             ItemTappedCommand = new DelegateCommand<ReportItem>(NavigateDetailReport);
             NextMonthReportCommand = new DelegateCommand(nextMonthReport);
             PrevMonthReportCommand = new DelegateCommand(prevMonthReport);
+            RefreshCommand = new DelegateCommand(SetItemsAsync);
         }
         #endregion
 
@@ -156,6 +161,11 @@ namespace Apo_Chan.ViewModels
 
         public async void SetItemsAsync()
         {
+            if (isFirstCall)
+            {
+                await Service.OfflineSync.PerformAlInOneSync();
+                this.isFirstCall = false;
+            }
             await setItemsAsync();
         }
 
@@ -176,12 +186,6 @@ namespace Apo_Chan.ViewModels
 
         private async Task setItemsAsync()
         {
-            //if (!GlobalAttributes.isConnectedInternet)
-            //{
-            //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-            //    return;
-            //}
-
             IsBusy = true;
             ReportItems.Clear();
             ObservableCollection<ReportItem> allReports = null;
@@ -195,17 +199,12 @@ namespace Apo_Chan.ViewModels
                 // default
                 else
                 {
-                    allReports = await ReportManager.DefaultManager.GetItemsAsync
-                        (
-                            this.CurrentDate.Year,
-                            this.CurrentDate.Month,
-                            true
-                        );
+                    allReports = await ReportManager.DefaultManager.GetItemsAsync(this.CurrentDate.Year, this.CurrentDate.Month);
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("-------------------[Debug] UserReportListViewModel > " + e.Message);
+                Models.DebugUtil.WriteLine("UserReportListViewModel > " + e.Message);
             }
             if (allReports != null)
             {

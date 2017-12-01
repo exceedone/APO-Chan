@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Apo_Chan.Models;
 namespace Apo_Chan
 {
     public static class Constants
     {
         // Replace strings with your Azure Mobile App endpoint.
-        public static string ApplicationURL = @"https://apo-chandev.azurewebsites.net";
+        public static string ApplicationURL = @"https://apo-chan.azurewebsites.net";
 
         /// <summary>
         /// Application name.

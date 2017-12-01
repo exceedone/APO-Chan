@@ -1,7 +1,6 @@
 ﻿using Plugin.Geolocator.Abstractions;
 using System;
 using System.Net.Http;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Apo_Chan.Geolocation
@@ -39,7 +38,7 @@ namespace Apo_Chan.Geolocation
             catch (Exception e)
             {
 
-                Debug.WriteLine("-------------------[Debug] Geocoding > " + e.Message);
+                Models.DebugUtil.WriteLine("Geocoding > " + e.Message);
             }
 
             return address;

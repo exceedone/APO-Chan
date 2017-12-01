@@ -32,7 +32,7 @@ namespace Apo_Chan.ViewModels
             Group = new GroupItem
             {
                 Id = null,
-                CreatedUserId = GlobalAttributes.refUserId,
+                CreatedUserId = GlobalAttributes.User.Id,
                 GroupName = null,
             };
             // Init and add yourself.
@@ -42,7 +42,7 @@ namespace Apo_Chan.ViewModels
                             ,
                 RefUser = GlobalAttributes.User
                             ,
-                RefUserId = GlobalAttributes.refUserId
+                RefUserId = GlobalAttributes.User.Id
                             ,
                 AdminFlg = true
             };

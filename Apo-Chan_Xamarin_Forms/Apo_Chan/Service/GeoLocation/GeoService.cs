@@ -5,7 +5,6 @@ using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace Apo_Chan.Geolocation
@@ -65,7 +64,7 @@ namespace Apo_Chan.Geolocation
             var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location);
             if (status != PermissionStatus.Granted)
             {
-                Debug.WriteLine("-------------------[Debug] GeoService > " +
+                DebugUtil.WriteLine("GeoService > " +
                         "Currently does not have Location permissions, requesting permissions.");
                 if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location))
                 {
@@ -81,7 +80,7 @@ namespace Apo_Chan.Geolocation
 
                 if (status != PermissionStatus.Granted)
                 {
-                    Debug.WriteLine("-------------------[Debug] GeoService > " +
+                    DebugUtil.WriteLine("GeoService > " +
                         "Location permission denied, can not get positions async.");
 
                     await alertOnViewModel("Location permission is denied.");
@@ -112,18 +111,15 @@ namespace Apo_Chan.Geolocation
                     }
                     if (results != null)
                     {
-                        GlobalAttributes.currentPosition = new Position
-                        {
-                            Latitude = results.Latitude,
-                            Longitude = results.Longitude
-                        };
-                        GeoEvent.DefaultInstance.Publish(GlobalAttributes.currentPosition);
+                        GlobalAttributes.CurrentPosition.Latitude = results.Latitude;
+                        GlobalAttributes.CurrentPosition.Longitude = results.Longitude;
+                        GeoEvent.DefaultInstance.Publish(GlobalAttributes.CurrentPosition);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("-------------------[Debug] GeoService > " + ex.Message);
+                DebugUtil.WriteLine("GeoService > " + ex.Message);
                 await alertOnViewModel("Cannot acquire location information." +
                     "\nPlease enable location service and try again.");
             }

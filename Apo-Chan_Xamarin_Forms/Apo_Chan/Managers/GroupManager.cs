@@ -3,11 +3,8 @@ using Apo_Chan.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using Microsoft.WindowsAzure.MobileServices;
 
 namespace Apo_Chan.Managers
@@ -37,42 +34,39 @@ namespace Apo_Chan.Managers
                 defaultInstance = value;
             }
         }
-        public async Task<ObservableCollection<GroupItem>> GetItemsAsync(Expression<Func<GroupItem, bool>> expression, bool syncItems = false)
+        public async Task<ObservableCollection<GroupItem>> GetItemsAsync(Expression<Func<GroupItem, bool>> expression)
         {
             // get from Azure Mobile Apps
             try
             {
-#if OFFLINE_SYNC_ENABLED
-                if (syncItems)
-                {
-                    await this.SyncAsync();
-                }
-#endif
                 await BaseAuthProvider.RefreshProfile();
                 var user = GlobalAttributes.User;
 
-                IEnumerable<GroupItem> items = await this.dataTable
-                    .Where(x =>
-                         !x.Deleted
-                    )
+                IEnumerable<GroupItem> items = await this.localDataTable
+                    //.Where(x =>
+                    //     !x.Deleted
+                    //)
                     .Where(expression)
                     .ToEnumerableAsync();
 
                 ObservableCollection<GroupItem> groups = new ObservableCollection<GroupItem>();
                 foreach (var item in items)
                 {
-                    groups.Add(item);
+                    if (!item.Deleted)
+                    {
+                        groups.Add(item);
+                    }
                 }
 
                 return groups;
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(@"-------------------[Debug] GroupManager Invalid sync operation: " + msioe.Message);
+                DebugUtil.WriteLine("GroupManager Invalid sync operation: " + msioe.Message);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] GroupManager Sync error: " + e.Message);
+                DebugUtil.WriteLine("GroupManager Sync error: " + e.Message);
             }
             return null;
         }

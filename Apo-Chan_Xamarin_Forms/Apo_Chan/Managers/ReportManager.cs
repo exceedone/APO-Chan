@@ -3,10 +3,7 @@ using Apo_Chan.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using Microsoft.WindowsAzure.MobileServices;
 
 namespace Apo_Chan.Managers
@@ -36,51 +33,45 @@ namespace Apo_Chan.Managers
                 defaultInstance = value;
             }
         }
-        public async Task<ObservableCollection<ReportItem>> GetItemsAsync(int year, int month, bool syncItems = false)
+        public async Task<ObservableCollection<ReportItem>> GetItemsAsync(int year, int month)
         {
             // get from Azure Mobile Apps
             try
             {
-#if OFFLINE_SYNC_ENABLED
-                if (syncItems)
-                {
-                    await this.SyncAsync();
-                }
-#endif
                 await BaseAuthProvider.RefreshProfile();
 
                 var user = GlobalAttributes.User;
                 var userid = user.Id;
-                IEnumerable<ReportItem> items = await this.dataTable
+                IEnumerable<ReportItem> items = await this.localDataTable
                     .Where(x =>
                         x.RefUserId == userid
                         //&& !x.Deleted
-                        && ((x.ReportStartDate.Year == year && x.ReportStartDate.Month == month) || (x.ReportEndDate.Year == year && x.ReportEndDate.Month == month))
-                    ).OrderBy(x => x.ReportStartDate).ThenBy(x => x.ReportEndDate).ThenBy(x => x.ReportStartTime).ThenBy(x => x.ReportEndTime)
+                        && ((x.ReportStartDate.Year == year && x.ReportStartDate.Month == month)
+                           || (x.ReportEndDate.Year == year && x.ReportEndDate.Month == month))
+                    ).OrderBy(x => x.ReportStartDate).ThenBy(x => x.ReportEndDate)
+                    .ThenBy(x => x.ReportStartTime).ThenBy(x => x.ReportEndTime)
                     .ToEnumerableAsync();
 
                 ObservableCollection<ReportItem> reports = new ObservableCollection<ReportItem>();
                 foreach (var item in items)
                 {
-                    //for local database, Deleted is null in dataTable
-                    if (!item.Deleted)
+                    //for local database, Deleted is null in dataTable when new report submitted
+                    //if (!item.Deleted)
                     {
                         Utils.ConvertToLocalDateTime(item);
                         reports.Add(item);
                     }
-                    //Utils.ConvertToLocalDateTime(item);
-                    //reports.Add(item);
                 }
 
                 return reports;
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(@"-------------------[Debug] ReportManager Invalid sync operation: " + msioe.Message);
+                DebugUtil.WriteLine("ReportManager Invalid sync operation: " + msioe.Message);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] ReportManager Sync error: " + e.Message);
+                DebugUtil.WriteLine("ReportManager Sync error: " + e.Message);
             }
             return null;
         }
@@ -100,5 +91,23 @@ namespace Apo_Chan.Managers
 
             return report;
         }
+
+        public override async Task SyncAsync()
+        {
+            IMobileServiceTableQuery<ReportItem> query;
+            try
+            {
+                query = localDataTable.Where(x => x.RefUserId == GlobalAttributes.User.UserProviderId);
+
+                await this.localDataTable.PullAsync(this.SyncQueryName, query);
+                Service.OfflineSync.SyncResult.SyncedItems++;
+            }
+            catch (Exception e)
+            {
+                DebugUtil.WriteLine($"{this.SyncQueryName} Manager PullAsync error: " + e.Message);
+                Service.OfflineSync.SyncResult.OfflineSyncErrors.Add(Tuple.Create(SyncQueryName, 1));
+            }
+        }
+
     }
 }

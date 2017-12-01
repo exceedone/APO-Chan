@@ -1,21 +1,11 @@
-﻿using Apo_Chan.Geolocation;
-using Apo_Chan.Items;
+﻿using Apo_Chan.Items;
 using Apo_Chan.Managers;
 using Apo_Chan.Models;
-using Plugin.Geolocator.Abstractions;
-using Plugin.Media;
 using Prism.Commands;
-using Prism.Events;
-using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
 {
@@ -60,7 +50,7 @@ namespace Apo_Chan.ViewModels
                             {
                                 allGroupUserItems.Add(user);
                                 // if userself item, set adminflg
-                                if(user.RefUserId == GlobalAttributes.refUserId)
+                                if(user.RefUserId == GlobalAttributes.User.Id)
                                 {
                                     item.Group.IsUserAdmin = user.AdminFlg;
                                 }
@@ -75,7 +65,7 @@ namespace Apo_Chan.ViewModels
                 catch (Exception e)
                 {
 
-                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] DetailGroupViewModel > " + e.Message);
+                    DebugUtil.WriteLine("DetailGroupViewModel > " + e.Message);
                 }
                 this.GroupUserItems = allGroupUserItems;
                 IsBusy = false;
@@ -100,7 +90,7 @@ namespace Apo_Chan.ViewModels
                 );
             if (accepted)
             {
-                if (!GlobalAttributes.isConnectedInternet)
+                if (!GlobalAttributes.IsConnectedInternet)
                 {
                     await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
                     return;
@@ -112,7 +102,7 @@ namespace Apo_Chan.ViewModels
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] DetailGroupViewModel > " + e.Message);
+                    DebugUtil.WriteLine("DetailGroupViewModel > " + e.Message);
                 }
                 await navigationService.GoBackAsync();
                 IsBusy = false;

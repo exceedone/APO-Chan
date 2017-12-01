@@ -2,16 +2,12 @@
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Diagnostics;
 using Apo_Chan.Items;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Apo_Chan.Managers;
 using Microsoft.WindowsAzure.MobileServices;
-using Xamarin.Auth;
 
 namespace Apo_Chan.Models
 {
@@ -47,11 +43,11 @@ namespace Apo_Chan.Models
                 //debug info
                 if (user.ExpiresOn.HasValue)
                 {
-                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.ExpiresOn > " + user.ExpiresOn.Value.ToString());
+                    DebugUtil.WriteLine("RefreshProfile user.ExpiresOn > " + user.ExpiresOn.Value.ToString());
                 }
                 if (user.RefreshToken != null)
                 {
-                    Debug.WriteLine("-------------------[Debug] " + "RefreshProfile user.RefreshToken > " + user.RefreshToken.Length);
+                    DebugUtil.WriteLine("RefreshProfile user.RefreshToken > " + user.RefreshToken.Length);
                 }
 
                 // if past expires_on, refresh token
@@ -75,7 +71,7 @@ namespace Apo_Chan.Models
             }
             catch (Exception e)
             {
-                Debug.WriteLine("-------------------[Debug] " + "RefreshProfile catch > " + e.Message);
+                DebugUtil.WriteLine("RefreshProfile catch > " + e.Message);
                 return false;
             }
         }

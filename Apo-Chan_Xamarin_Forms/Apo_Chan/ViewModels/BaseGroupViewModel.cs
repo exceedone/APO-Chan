@@ -1,18 +1,13 @@
-﻿using Apo_Chan.Geolocation;
-using Apo_Chan.Items;
+﻿using Apo_Chan.Items;
 using Apo_Chan.Managers;
 using Apo_Chan.Models;
-using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
 using Prism.Commands;
-using Prism.Events;
-using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -142,7 +137,7 @@ namespace Apo_Chan.ViewModels
                 );
             if (accepted)
             {
-                if (!GlobalAttributes.isConnectedInternet)
+                if (!GlobalAttributes.IsConnectedInternet)
                 {
                     await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
                     return;
@@ -172,7 +167,7 @@ namespace Apo_Chan.ViewModels
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] BaseGroupViewModel > " + e.Message);
+                    DebugUtil.WriteLine("BaseGroupViewModel > " + e.Message);
                 }
                 IsBusy = false;
                 await navigationService.GoBackAsync();
@@ -250,7 +245,7 @@ namespace Apo_Chan.ViewModels
             foreach (var item in this.GroupUserItems)
             {
                 // user auth is "user"
-                if (item.RefUserId == GlobalAttributes.refUserId && !item.AdminFlg)
+                if (item.RefUserId == GlobalAttributes.User.Id && !item.AdminFlg)
                 {
                     return "Cannot set your admin 'User'";
                 }

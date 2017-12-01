@@ -1,9 +1,8 @@
 ﻿using Apo_Chan.Items;
 using System;
-using System.Collections.Generic;
 using System.Text;
-using Xamarin.Forms;
 using System.IO;
+using System.Diagnostics;
 
 namespace Apo_Chan.Models
 {
@@ -145,5 +144,48 @@ namespace Apo_Chan.Models
     {
         public bool AdminFlg { get; set; }
         public string Label { get; set; }
+    }
+
+    public static class DebugUtil
+    {
+#if DEBUG
+        public static void WriteLine(string message)
+        {
+            string dtString = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffffff");
+            Debug.WriteLine($"[Debug]---[{dtString}]: {message}");
+
+            //try
+            //{
+            //    throw new Exception("---------aaaa");
+            //}
+            //catch (Exception ex)
+            //{
+            //    StackTrace st = new StackTrace(ex, true);
+            //    StackFrame[] sf = st.GetFrames();
+            //    string aa = st.ToString();
+            //    int bb = sf.Length;
+            //    foreach (var item in sf)
+            //    {
+            //        string methodName = item.GetMethod().DeclaringType.FullName;
+            //        Debug.WriteLine($"[Debug]---[{dtString}]: {methodName}");
+            //    }
+            //}
+        }
+        public static void WriteLine(string format, params object[] args)
+        {
+            string dtString = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ffffff");
+            Debug.WriteLine($"[Debug]---[{dtString}]: {String.Format(format, args)}");
+        }
+#else
+        public static void WriteLine(string message)
+        {
+            return;
+        }
+
+        public static void WriteLine(string format, params object[] args)
+        {
+            return;
+        }
+#endif
     }
 }

@@ -1,18 +1,11 @@
 ﻿using Apo_Chan.Items;
 using Apo_Chan.Managers;
-using Apo_Chan.Geolocation;
 using Prism.Commands;
-using Prism.Events;
-using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using Plugin.Geolocator.Abstractions;
-using System.Threading.Tasks;
-using Apo_Chan.Models;
 using Xamarin.Forms;
 
 namespace Apo_Chan.ViewModels
@@ -61,11 +54,6 @@ namespace Apo_Chan.ViewModels
                     );
                 if (accepted)
                 {
-                    //if (!GlobalAttributes.isConnectedInternet)
-                    //{
-                    //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-                    //    return;
-                    //}
                     IsBusy = true;
                     Report.PropertyChanged -= OnDateTimeChanged;
                     try
@@ -85,7 +73,7 @@ namespace Apo_Chan.ViewModels
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] DetailReportViewModel > " + e.Message);
+                        Models.DebugUtil.WriteLine("DetailReportViewModel > " + e.Message);
                     }
                     IsBusy = false;
                     //await this.navigateTop();
@@ -107,11 +95,6 @@ namespace Apo_Chan.ViewModels
                 );
             if (accepted)
             {
-                //if (!GlobalAttributes.isConnectedInternet)
-                //{
-                //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-                //    return;
-                //}
                 IsBusy = true;
                 try
                 {
@@ -119,7 +102,7 @@ namespace Apo_Chan.ViewModels
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Debug.WriteLine("-------------------[Debug] DetailReportViewModel > " + e.Message);
+                    Models.DebugUtil.WriteLine("DetailReportViewModel > " + e.Message);
                 }
                 IsBusy = false;
                 NavigationParameters parameters = new NavigationParameters();
@@ -148,7 +131,7 @@ namespace Apo_Chan.ViewModels
                     try
                     {
                         Report = await ReportManager.DefaultManager.LookupAsync((string)parameters["Id"]);
-                        this.IsEdit = report.RefUserId == GlobalAttributes.refUserId;
+                        this.IsEdit = report.RefUserId == GlobalAttributes.User.Id;
 
                         if (Report.ReportLat != 0 && Report.ReportLon != 0)
                         {
@@ -165,7 +148,7 @@ namespace Apo_Chan.ViewModels
                     catch (Exception e)
                     {
 
-                        System.Diagnostics.Debug.WriteLine("-------------------[Debug] DetailReportViewModel > " + e.Message);
+                        Models.DebugUtil.WriteLine("DetailReportViewModel > " + e.Message);
                     }
                     IsBusy = false;
                     if (Report != null)

@@ -2,17 +2,10 @@
 using Apo_Chan.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using Microsoft.WindowsAzure.MobileServices;
-using Xamarin.Forms;
-using Xamarin.Auth;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Apo_Chan.Managers
 {
@@ -43,39 +36,16 @@ namespace Apo_Chan.Managers
         public async Task<UserItem> GetItemAsync(string providerId, int providerType)
         {
             return await this.GetItemAsync(x => x.UserProviderId == providerId);
-            //// get from Azure Mobile Apps
-            //try
-            //{
-            //    // not token update info
-            //    //await BaseAuthProvider.RefreshProfile();
-            //    IEnumerable<UserItem> items = await this.dataTable
-            //        .Where(x => x.UserProviderId == providerId)
-            //        .ToEnumerableAsync();
-
-            //    if (!items.Any()) { return null; }
-            //    return items.ToList().FirstOrDefault();
-            //}
-            //catch (MobileServiceInvalidOperationException msioe)
-            //{
-            //    Debug.WriteLine(@"-------------------[Debug] UsersManager Invalid sync operation: " + msioe.Message);
-            //}
-            //catch (Exception e)
-            //{
-            //    Debug.WriteLine(@"-------------------[Debug] UsersManager Sync error: " + e.Message);
-            //}
-            //return null;
         }
 
         public async Task<UserItem> GetItemAsync(Expression<Func<UserItem, bool>> expression)
         {
-            //only update "user" when there is Internet connection. Need Internet to authenticate anyway.
-            await this.SyncAsync(pushFirst: false);
             // get from Azure Mobile Apps
             try
             {
                 // not token update info
                 //await BaseAuthProvider.RefreshProfile();
-                IEnumerable<UserItem> items = await this.dataTable
+                IEnumerable<UserItem> items = await this.localDataTable
                     .Where(expression)
                     .ToEnumerableAsync();
 
@@ -84,13 +54,55 @@ namespace Apo_Chan.Managers
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(@"-------------------[Debug] UsersManager Invalid sync operation: " + msioe.Message);
+                DebugUtil.WriteLine("UsersManager Invalid sync operation: " + msioe.Message);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] UsersManager Sync error: " + e.Message);
+                DebugUtil.WriteLine("UsersManager Sync error: " + e.Message);
             }
             return null;
+        }
+
+        //Online only
+        public async Task<UserItem> GetItemAsync(string providerId)
+        {
+            try
+            {
+                this.remoteDataTable = App.CurrentClient.GetTable<UserItem>();
+
+                IEnumerable<UserItem> items = await remoteDataTable
+                    .Where(x => x.UserProviderId == providerId)
+                    .ToEnumerableAsync();
+
+                if (!items.Any()) { return null; }
+                return items.ToList().FirstOrDefault();
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                DebugUtil.WriteLine("UsersManager Invalid sync operation: " + msioe.Message);
+            }
+            catch (Exception e)
+            {
+                DebugUtil.WriteLine("UsersManager Sync error: " + e.Message);
+            }
+            return null;
+        }
+
+        public override async Task SyncAsync()
+        {
+            IMobileServiceTableQuery<UserItem> query;
+            try
+            {
+                query = localDataTable.Where(x => x.UserProviderId == GlobalAttributes.User.UserProviderId);
+
+                await this.localDataTable.PullAsync(this.SyncQueryName, query);
+                Service.OfflineSync.SyncResult.SyncedItems++;
+            }
+            catch (Exception e)
+            {
+                DebugUtil.WriteLine($"{this.SyncQueryName} Manager PullAsync error: " + e.Message);
+                Service.OfflineSync.SyncResult.OfflineSyncErrors.Add(Tuple.Create(SyncQueryName, 1));
+            }
         }
 
     }

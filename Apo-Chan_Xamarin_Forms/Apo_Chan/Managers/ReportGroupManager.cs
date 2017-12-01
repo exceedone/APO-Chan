@@ -2,17 +2,10 @@
 using Apo_Chan.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using Microsoft.WindowsAzure.MobileServices;
-using Xamarin.Forms;
-using Xamarin.Auth;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Apo_Chan.Managers
 {
@@ -47,7 +40,7 @@ namespace Apo_Chan.Managers
             {
                 // not token update info
                 //await BaseAuthProvider.RefreshProfile();
-                IEnumerable<ReportGroupItem> items = await this.dataTable
+                IEnumerable<ReportGroupItem> items = await this.localDataTable
                     .Where(expression)
                     .ToEnumerableAsync();
 
@@ -56,11 +49,11 @@ namespace Apo_Chan.Managers
             }
             catch (MobileServiceInvalidOperationException msioe)
             {
-                Debug.WriteLine(@"-------------------[Debug] ReportGroupManager Invalid sync operation: " + msioe.Message);
+                DebugUtil.WriteLine("ReportGroupManager Invalid sync operation: " + msioe.Message);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(@"-------------------[Debug] ReportGroupManager Sync error: " + e.Message);
+                DebugUtil.WriteLine("ReportGroupManager Sync error: " + e.Message);
             }
             return null;
         }
