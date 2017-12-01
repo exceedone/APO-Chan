@@ -94,12 +94,22 @@ namespace Apo_Chan.Managers
 
         public override async Task SyncAsync()
         {
-            IMobileServiceTableQuery<ReportItem> query;
             try
             {
-                query = localDataTable.Where(x => x.RefUserId == GlobalAttributes.User.UserProviderId);
-
+                //pull reports created by user
+                IMobileServiceTableQuery<ReportItem> query;
+                query = localDataTable.Where(x => x.RefUserId == GlobalAttributes.User.Id);
                 await this.localDataTable.PullAsync(this.SyncQueryName, query);
+
+                //pull reports in groups - by each report Id
+                ObservableCollection<ReportGroupItem> reportList = await ReportGroupManager.DefaultManager.GetReportList();
+
+                foreach (var item in reportList)
+                {
+                    query = localDataTable.Where(x => x.Id == item.RefReportId);
+                    await this.localDataTable.PullAsync(this.SyncQueryName + item.RefReportId, query);
+                }
+
                 Service.OfflineSync.SyncResult.SyncedItems++;
             }
             catch (Exception e)

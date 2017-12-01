@@ -163,8 +163,10 @@ namespace Apo_Chan.ViewModels
         {
             if (isFirstCall)
             {
+                IsBusy = true;
                 await Service.OfflineSync.PerformAlInOneSync();
                 this.isFirstCall = false;
+                IsBusy = false;
             }
             await setItemsAsync();
         }

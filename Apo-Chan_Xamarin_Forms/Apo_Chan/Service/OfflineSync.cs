@@ -63,7 +63,7 @@ namespace Apo_Chan.Service
                 await Task.Delay(100);
             }
 
-            Models.DebugUtil.WriteLine($"OfflineSync PerformAlInOneSync Pending Sync: {SyncResult.PendingSyncItems}");
+            Models.DebugUtil.WriteLine($"OfflineSync PerformAlInOneSync Pending Push Sync: {SyncResult.PendingSyncItems}");
 
             SyncResult.Reset();
 

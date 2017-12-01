@@ -88,5 +88,25 @@ namespace Apo_Chan.Managers
 
             return group;
         }
+
+        public override async Task SyncAsync()
+        {
+            try
+            {
+                foreach (var item in GroupUserManager.DefaultManager.GroupList)
+                {
+                    //pull groups by id
+                    var query = localDataTable.Where(x => x.Id == item.RefGroupId);
+                    await this.localDataTable.PullAsync(this.SyncQueryName + item.RefGroupId, query);
+                }
+
+                Service.OfflineSync.SyncResult.SyncedItems++;
+            }
+            catch (Exception e)
+            {
+                DebugUtil.WriteLine($"{this.SyncQueryName} Manager PullAsync error: " + e.Message);
+                Service.OfflineSync.SyncResult.OfflineSyncErrors.Add(Tuple.Create(SyncQueryName, 1));
+            }
+        }
     }
 }

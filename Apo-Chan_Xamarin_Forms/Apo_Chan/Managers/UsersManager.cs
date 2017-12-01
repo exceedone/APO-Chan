@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
+using System.Collections.ObjectModel;
 
 namespace Apo_Chan.Managers
 {
@@ -90,12 +91,17 @@ namespace Apo_Chan.Managers
 
         public override async Task SyncAsync()
         {
-            IMobileServiceTableQuery<UserItem> query;
             try
             {
-                query = localDataTable.Where(x => x.UserProviderId == GlobalAttributes.User.UserProviderId);
+                ObservableCollection<GroupUserItem> userList = await GroupUserManager.DefaultManager.GetUserList();
 
-                await this.localDataTable.PullAsync(this.SyncQueryName, query);
+                foreach (var item in userList)
+                {
+                    //pull users in groups, by each user id
+                    var query = localDataTable.Where(x => x.Id == item.RefUserId);
+                    await this.localDataTable.PullAsync(this.SyncQueryName + item.RefUserId, query);
+                }
+
                 Service.OfflineSync.SyncResult.SyncedItems++;
             }
             catch (Exception e)
@@ -104,6 +110,5 @@ namespace Apo_Chan.Managers
                 Service.OfflineSync.SyncResult.OfflineSyncErrors.Add(Tuple.Create(SyncQueryName, 1));
             }
         }
-
     }
 }

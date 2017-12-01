@@ -55,45 +55,10 @@ namespace Apo_Chan.Managers
 
         public virtual async Task SyncAsync()
         {
-            IMobileServiceTableQuery<T1> query0;
+            IMobileServiceTableQuery<T1> query = this.localDataTable.CreateQuery();
             try
             {
-                switch (this.SyncQueryName)
-                {
-                    case "UserItem":
-                        {
-                            IMobileServiceTableQuery<UserItem> query;
-                            query = (localDataTable as IMobileServiceSyncTable<UserItem>)
-                                .Where(x => x.UserProviderId == GlobalAttributes.User.UserProviderId);
-                        }
-                        
-                        break;
-                    case "ReportItem":
-                        {
-                            IMobileServiceTableQuery<ReportItem> query;
-                            query = (localDataTable as IMobileServiceSyncTable<ReportItem>)
-                                .Where(x => x.RefUserId == GlobalAttributes.User.Id);
-                        }
-                        
-                        break;
-                    case "GroupItem":
-                        {
-                            IMobileServiceTableQuery<GroupItem> query;
-                            query = (localDataTable as IMobileServiceSyncTable<GroupItem>)
-                                .Where(x => x.CreatedUserId == GlobalAttributes.User.Id);
-                        }
-                        break;
-                    case "GroupUserItem":
-                        break;
-                    case "ReportGroupItem":
-                        break;
-                    default:
-                        query0 = localDataTable.CreateQuery();
-                        break;
-                }
-                await this.localDataTable.PullAsync(
-                    this.SyncQueryName,
-                    this.localDataTable.CreateQuery());
+                await this.localDataTable.PullAsync(this.SyncQueryName, query);
                 OfflineSync.SyncResult.SyncedItems++;
             }
             catch (Exception e)
