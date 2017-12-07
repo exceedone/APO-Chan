@@ -65,14 +65,14 @@ namespace Apo_Chan.Managers
         }
 
         //Online only
-        public async Task<UserItem> GetItemAsync(string providerId)
+        public async Task<UserItem> GetRemoteItemAsync(Expression<Func<UserItem, bool>> expression)
         {
             try
             {
                 this.remoteDataTable = App.CurrentClient.GetTable<UserItem>();
 
                 IEnumerable<UserItem> items = await remoteDataTable
-                    .Where(x => x.UserProviderId == providerId)
+                    .Where(expression)
                     .ToEnumerableAsync();
 
                 if (!items.Any()) { return null; }
@@ -93,14 +93,10 @@ namespace Apo_Chan.Managers
         {
             try
             {
-                ObservableCollection<GroupUserItem> userList = await GroupUserManager.DefaultManager.GetUserList();
+                ObservableCollection<string> userList = await GroupUserManager.DefaultManager.GetUserIdList();
 
-                foreach (var item in userList)
-                {
-                    //pull users in groups, by each user id
-                    var query = localDataTable.Where(x => x.Id == item.RefUserId);
-                    await this.localDataTable.PullAsync(this.SyncQueryName + item.RefUserId, query);
-                }
+                var query = localDataTable.Where(x => userList.Contains(x.Id));
+                await this.localDataTable.PullAsync(this.SyncQueryName, query);
 
                 Service.OfflineSync.SyncResult.SyncedItems++;
             }

@@ -81,7 +81,7 @@ namespace Apo_Chan.ViewModels
         /// </summary>
         public string TargetGroupId { get; set; }
 
-        private bool isFirstCall;
+        private static bool syncedFlag = false;
 
         public DelegateCommand AddNewReportCommand { get; private set; }
 
@@ -104,7 +104,7 @@ namespace Apo_Chan.ViewModels
         {
             ReportItems = new ObservableCollection<ReportItem>();
             CurrentDate = DateTime.Now;
-            this.isFirstCall = true;
+
             AddNewReportCommand = new DelegateCommand(NavigateNewReport);
             SelectGroupCommand = new DelegateCommand(NavigateSelectGroup);
             ItemTappedCommand = new DelegateCommand<ReportItem>(NavigateDetailReport);
@@ -161,11 +161,12 @@ namespace Apo_Chan.ViewModels
 
         public async void SetItemsAsync()
         {
-            if (isFirstCall)
+            // synchronize tables only once when the app start
+            if (!syncedFlag)
             {
                 IsBusy = true;
                 await Service.OfflineSync.PerformAlInOneSync();
-                this.isFirstCall = false;
+                syncedFlag = true;
                 IsBusy = false;
             }
             await setItemsAsync();
@@ -173,12 +174,14 @@ namespace Apo_Chan.ViewModels
 
         public async void NavigateNewReport()
         {
-            await navigationService.NavigateAsync($"NewReport?GroupId={TargetGroupId}&GroupName={Flurl.Url.EncodeQueryParamValue(this.reportHeaderLabel, false)}");
+            await navigationService.NavigateAsync($"NewReport?GroupId={TargetGroupId}" +
+                $"&GroupName={Flurl.Url.EncodeQueryParamValue(this.reportHeaderLabel, false)}");
         }
 
         public async void NavigateDetailReport(ReportItem item)
         {
-            await navigationService.NavigateAsync($"DetailReport?Id={item.Id}&GroupId={TargetGroupId}&GroupName={Flurl.Url.EncodeQueryParamValue(this.reportHeaderLabel, false)}");
+            await navigationService.NavigateAsync($"DetailReport?Id={item.Id}&GroupId={TargetGroupId}" +
+                $"&GroupName={Flurl.Url.EncodeQueryParamValue(this.reportHeaderLabel, false)}");
         }
 
         public async void NavigateSelectGroup()
@@ -196,7 +199,10 @@ namespace Apo_Chan.ViewModels
                 // if select groupid, get reports referensed group
                 if (!string.IsNullOrWhiteSpace(TargetGroupId))
                 {
-                    allReports = await CustomFunction.Get<ObservableCollection<ReportItem>>($"api/values/reportsbygroup/{TargetGroupId}/{this.CurrentDate.Year}/{this.CurrentDate.Month}");
+                    //allReports = await CustomFunction.Get<ObservableCollection<ReportItem>>
+                    //    ($"api/values/reportsbygroup/{TargetGroupId}/{this.CurrentDate.Year}/{this.CurrentDate.Month}");
+                    allReports = await ReportGroupManager.DefaultManager.GetReportsByGroup
+                        (TargetGroupId, CurrentDate.Year, CurrentDate.Month);
                 }
                 // default
                 else
@@ -206,7 +212,7 @@ namespace Apo_Chan.ViewModels
             }
             catch (Exception e)
             {
-                Models.DebugUtil.WriteLine("UserReportListViewModel > " + e.Message);
+                DebugUtil.WriteLine("UserReportListViewModel > " + e.Message);
             }
             if (allReports != null)
             {

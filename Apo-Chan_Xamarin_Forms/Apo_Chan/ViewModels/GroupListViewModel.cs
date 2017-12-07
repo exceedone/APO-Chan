@@ -154,11 +154,11 @@ namespace Apo_Chan.ViewModels
 
         public async void SetItemsAsync()
         {
-            if (!GlobalAttributes.IsConnectedInternet)
-            {
-                await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-                return;
-            }
+            //if (!GlobalAttributes.IsConnectedInternet)
+            //{
+            //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+            //    return;
+            //}
             await setItemsAsync();
         }
 
@@ -195,21 +195,37 @@ namespace Apo_Chan.ViewModels
             {
                 GroupItems.Clear();
                 // Get Group List contains usercount and auth
-                var groupCountList = await CustomFunction.Get<List<GroupAndUserCountItem>>($"api/values/userjoingroups/{GlobalAttributes.User.Id}");
-                if (groupCountList != null)
+                //var groupCountList = await CustomFunction.Get<List<GroupAndUserCountItem>>($"api/values/userjoingroups/{GlobalAttributes.User.Id}");
+                //if (groupCountList != null)
+                //{
+                //    foreach (var g in groupCountList)
+                //    {
+                //        var group = g.Group;
+                //        group.UserCount = g.UserCount;
+                //        group.IsUserAdmin = g.AdminFlg;
+                //        // g.Id has selectGroupList, group.IsSelect is true.
+                //        group.IsSelect = this.selectGroupList.Contains(g.Group.Id);
+                //        // Add group image
+                //        await Service.ImageService.SetImageSource(group);
+                //        allGroups.Add(group);
+                //    }
+                //}
+                //this.GroupItems = allGroups;
+
+                var groups = await GroupUserManager.DefaultManager.GetGroupAndUserCountList(GlobalAttributes.User.Id);
+
+                foreach (var g in groups)
                 {
-                    foreach (var g in groupCountList)
-                    {
-                        var group = g.Group;
-                        group.UserCount = g.UserCount;
-                        group.IsUserAdmin = g.AdminFlg;
-                        // g.Id has selectGroupList, group.IsSelect is true.
-                        group.IsSelect = this.selectGroupList.Contains(g.Group.Id);
-                        // Add group image
-                        await Service.ImageService.SetImageSource(group);
-                        allGroups.Add(group);
-                    }
+                    var group = g.Group;
+                    group.UserCount = g.UserCount;
+                    group.IsUserAdmin = g.AdminFlg;
+                    // g.Id has selectGroupList, group.IsSelect is true.
+                    group.IsSelect = this.selectGroupList.Contains(g.Group.Id);
+                    // Add group image
+                    await Service.ImageService.SetImageSource(group);
+                    allGroups.Add(group);
                 }
+
                 this.GroupItems = allGroups;
             }
             catch (Exception e)

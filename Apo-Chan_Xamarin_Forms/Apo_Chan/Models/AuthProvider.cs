@@ -40,19 +40,19 @@ namespace Apo_Chan.Models
             {
                 var user = GlobalAttributes.User;
 
-                //debug info
-                if (user.ExpiresOn.HasValue)
-                {
-                    DebugUtil.WriteLine("RefreshProfile user.ExpiresOn > " + user.ExpiresOn.Value.ToString());
-                }
-                if (user.RefreshToken != null)
-                {
-                    DebugUtil.WriteLine("RefreshProfile user.RefreshToken > " + user.RefreshToken.Length);
-                }
-
                 // if past expires_on, refresh token
                 if (!user.ExpiresOn.HasValue || user.ExpiresOn.Value < DateTime.Now)
                 {
+                    //debug info
+                    if (user.ExpiresOn.HasValue)
+                    {
+                        DebugUtil.WriteLine("RefreshProfile user.ExpiresOn > " + user.ExpiresOn.Value.ToString());
+                    }
+                    if (user.RefreshToken != null)
+                    {
+                        DebugUtil.WriteLine("RefreshProfile user.RefreshToken > " + user.RefreshToken.Length);
+                    }
+
                     MobileServiceUser _refreshedUser = null;
                     _refreshedUser = await App.CurrentClient.RefreshUserAsync();
                     if (_refreshedUser != null)

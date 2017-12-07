@@ -13,18 +13,6 @@ namespace Apo_Chan.Managers
 {
     public partial class GroupUserManager : BaseManager<GroupUserItem>
     {
-        private ObservableCollection<GroupUserItem> groupList;
-        public ObservableCollection<GroupUserItem> GroupList
-        {
-            get
-            {
-                if (groupList == null)
-                {
-                    groupList = new ObservableCollection<GroupUserItem>();
-                }
-                return groupList;
-            }
-        }
         static GroupUserManager()
         {
             defaultInstance = new GroupUserManager();
@@ -52,11 +40,11 @@ namespace Apo_Chan.Managers
                 var query = this.localDataTable.Where(x => !x.Deleted);
                 if (!string.IsNullOrWhiteSpace(refGroupId))
                 {
-                    query.Where(x => x.RefGroupId == refGroupId);
+                    query = query.Where(x => x.RefGroupId == refGroupId);
                 }
                 if (!string.IsNullOrWhiteSpace(refUserId))
                 {
-                    query.Where(x => x.RefUserId == refUserId);
+                    query = query.Where(x => x.RefUserId == refUserId);
                 }
                 IEnumerable<GroupUserItem> items = await query.ToEnumerableAsync();
 
@@ -123,6 +111,14 @@ namespace Apo_Chan.Managers
             return group;
         }
 
+        public async Task DeleteAsync(string id)
+        {
+            await BaseAuthProvider.RefreshProfile();
+            GroupUserItem groupuser = await base.LookupAsync(id);
+
+            await localDataTable.DeleteAsync(groupuser);
+        }
+
         public override async Task SyncAsync()
         {
             IMobileServiceTableQuery<GroupUserItem> query;
@@ -133,19 +129,10 @@ namespace Apo_Chan.Managers
 
                 await this.localDataTable.PullAsync(this.SyncQueryName, query);
 
-                //pull users that are in groups with user
-                IEnumerable<GroupUserItem> items = await this.localDataTable
-                    .Where(x => !x.Deleted)
-                    .ToEnumerableAsync();
+                ObservableCollection<string> groupList = await GetGroupIdList();
 
-                GroupList.Clear();
-                foreach (var item in items)
-                {
-                    query = localDataTable.Where(x => x.RefGroupId == item.RefGroupId);
-                    await this.localDataTable.PullAsync(this.SyncQueryName + item.RefGroupId, query);
-
-                    GroupList.Add(item);
-                }
+                query = localDataTable.Where(x => groupList.Contains(x.RefGroupId));
+                await this.localDataTable.PullAsync(this.SyncQueryName + " list", query);
 
                 Service.OfflineSync.SyncResult.SyncedItems++;
             }
@@ -156,9 +143,37 @@ namespace Apo_Chan.Managers
             }
         }
 
-        public async Task<ObservableCollection<GroupUserItem>> GetUserList()
+
+        //sync support
+        public async Task<ObservableCollection<string>> GetGroupIdList()
         {
-            ObservableCollection<GroupUserItem> userList = new ObservableCollection<GroupUserItem>();
+            ObservableCollection<string> groupList = new ObservableCollection<string>();
+
+            IEnumerable<GroupUserItem> items = await this.localDataTable
+                    .Where(x => !x.Deleted)
+                    .OrderBy(x => x.RefGroupId)
+                    .ToEnumerableAsync();
+            GroupUserItem prevGroup = new GroupUserItem
+            {
+                RefGroupId = string.Empty,
+                RefUserId = string.Empty
+            };
+            foreach (var item in items)
+            {
+                if (item.RefGroupId != prevGroup.RefGroupId)
+                {
+                    groupList.Add(item.RefGroupId);
+                    prevGroup = item;
+                }
+            }
+
+            return groupList;
+        }
+
+        //sync support
+        public async Task<ObservableCollection<string>> GetUserIdList()
+        {
+            ObservableCollection<string> userList = new ObservableCollection<string>();
 
             IEnumerable<GroupUserItem> items = await this.localDataTable
                     .Where(x => !x.Deleted)
@@ -173,12 +188,100 @@ namespace Apo_Chan.Managers
             {
                 if (item.RefUserId != prevUser.RefUserId)
                 {
-                    userList.Add(item);
+                    userList.Add(item.RefUserId);
                     prevUser = item;
                 }
             }
 
             return userList;
+        }
+
+        //Client implementation of "api/values/userjoingroups/{userid}"
+        public async Task<ObservableCollection<GroupAndUserCountItem>> GetGroupAndUserCountList(string userId)
+        {
+            ObservableCollection<GroupAndUserCountItem> groupCountList = new ObservableCollection<GroupAndUserCountItem>();
+
+            ObservableCollection<string> groupList;
+            groupList = await this.GetGroupIdList();
+
+            foreach (var groupId in groupList)
+            {
+                var group = await GroupManager.DefaultManager.GetItemAsync(groupId);
+                var groupUserCount = await this.localDataTable.Where(x => x.RefGroupId == groupId).ToEnumerableAsync();
+
+                GroupAndUserCountItem item = new GroupAndUserCountItem();
+                item.Group = group;
+                item.UserCount = groupUserCount.Count();
+                item.AdminFlg = group.CreatedUserId.CompareTo(userId) == 0;
+
+                groupCountList.Add(item);
+            }
+
+            return groupCountList;
+        }
+
+        //Client implementation of "table/groupuser/list/{groupid}"
+        public async Task UpsertGroup(string groupId, ObservableCollection<GroupUserItem> groupUserItems)
+        {
+            ObservableCollection<GroupUserItem> existedGroup = await this.GetItemsAsync(refGroupId: groupId);
+
+            List<string> existedGroupUserId = new List<string>();
+
+            foreach (var item in groupUserItems)
+            {
+                var i = existedGroup.FirstOrDefault(x => x.RefUserId == item.RefUserId);
+                if (i == null)
+                {
+                    await SaveTaskAsync(item);
+                }
+                else
+                {
+                    existedGroupUserId.Add(i.Id);
+                }
+            }
+
+            foreach (var gu in existedGroup)
+            {
+                if (!existedGroupUserId.Contains(gu.Id))
+                {
+                    await DeleteAsync(gu.Id);
+                }
+            }
+        }
+
+        //Client implementation of "api/values/groupusers/{groupid}"
+        public async Task<GroupAndGroupUsersItem> GetGroupAndGroupUsers(string groupId)
+        {
+            GroupAndGroupUsersItem groupAndGroupUsers = new GroupAndGroupUsersItem();
+            var group = await GroupManager.DefaultManager.GetItemAsync(groupId);
+
+            ObservableCollection<GroupUserItem> groupUsers = await this.GetItemsAsync(refGroupId: groupId);
+
+            if (group == null || groupUsers == null)
+            {
+                return null;
+            }
+
+            foreach (var item in groupUsers)
+            {
+                item.RefGroup = await GroupManager.DefaultManager.GetItemAsync(item.RefGroupId);
+                item.RefUser = await UsersManager.DefaultManager.GetItemAsync(x => x.Id == item.RefUserId);
+            }
+
+            groupAndGroupUsers.Group = group;
+            groupAndGroupUsers.GroupUsers = groupUsers.ToList();
+
+            return groupAndGroupUsers;
+        }
+
+        public async Task DeleteGroupAsync(GroupItem group)
+        {
+            ObservableCollection<GroupUserItem> existedGroup = await this.GetItemsAsync(refGroupId: group.Id);
+
+            foreach (var item in existedGroup)
+            {
+                await DeleteAsync(item.Id);
+            }
         }
     }
 }

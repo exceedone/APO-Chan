@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.Sync;
 
 namespace Apo_Chan.Managers
 {
@@ -34,7 +35,7 @@ namespace Apo_Chan.Managers
                 defaultInstance = value;
             }
         }
-        public async Task<ObservableCollection<GroupItem>> GetItemsAsync(Expression<Func<GroupItem, bool>> expression)
+        public async Task<GroupItem> GetItemAsync(string groupId)
         {
             // get from Azure Mobile Apps
             try
@@ -42,20 +43,42 @@ namespace Apo_Chan.Managers
                 await BaseAuthProvider.RefreshProfile();
                 var user = GlobalAttributes.User;
 
+                //pull groups by id
+                var groups = await localDataTable.Where(x => x.Id == groupId).ToEnumerableAsync();
+                foreach (var group in groups)
+                {
+                    if (!group.Deleted)
+                    {
+                        return group;
+                    }
+                }
+            }
+            catch (MobileServiceInvalidOperationException msioe)
+            {
+                DebugUtil.WriteLine("GroupManager Invalid sync operation: " + msioe.Message);
+            }
+            catch (Exception e)
+            {
+                DebugUtil.WriteLine("GroupManager Sync error: " + e.Message);
+            }
+            return null;
+        }
+
+        public async Task<ObservableCollection<GroupItem>> GetItemsAsync(Expression<Func<GroupItem, bool>> expression)
+        {
+            // get from Azure Mobile Apps
+            try
+            {
+                // not token update info
+                //await BaseAuthProvider.RefreshProfile();
                 IEnumerable<GroupItem> items = await this.localDataTable
-                    //.Where(x =>
-                    //     !x.Deleted
-                    //)
                     .Where(expression)
                     .ToEnumerableAsync();
 
                 ObservableCollection<GroupItem> groups = new ObservableCollection<GroupItem>();
                 foreach (var item in items)
                 {
-                    if (!item.Deleted)
-                    {
-                        groups.Add(item);
-                    }
+                    groups.Add(item);
                 }
 
                 return groups;
@@ -93,12 +116,11 @@ namespace Apo_Chan.Managers
         {
             try
             {
-                foreach (var item in GroupUserManager.DefaultManager.GroupList)
-                {
-                    //pull groups by id
-                    var query = localDataTable.Where(x => x.Id == item.RefGroupId);
-                    await this.localDataTable.PullAsync(this.SyncQueryName + item.RefGroupId, query);
-                }
+                ObservableCollection<string> groupList;
+                groupList = await GroupUserManager.DefaultManager.GetGroupIdList();
+
+                var query = localDataTable.Where(x => groupList.Contains(x.Id));
+                await this.localDataTable.PullAsync(this.SyncQueryName, query);
 
                 Service.OfflineSync.SyncResult.SyncedItems++;
             }

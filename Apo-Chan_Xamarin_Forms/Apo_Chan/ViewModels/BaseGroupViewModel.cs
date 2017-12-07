@@ -137,11 +137,11 @@ namespace Apo_Chan.ViewModels
                 );
             if (accepted)
             {
-                if (!GlobalAttributes.IsConnectedInternet)
-                {
-                    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-                    return;
-                }
+                //if (!GlobalAttributes.IsConnectedInternet)
+                //{
+                //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+                //    return;
+                //}
                 IsBusy = true;
                 try
                 {
@@ -157,7 +157,11 @@ namespace Apo_Chan.ViewModels
                         item.RefUser = null;
                         item.RefGroup = null;
                     }
-                    await CustomFunction.Post($"table/groupuser/list/{this.Group.Id}", this.GroupUserItems);
+                    //server side relational tables handle
+                    //await CustomFunction.Post($"table/groupuser/list/{this.Group.Id}", this.GroupUserItems);
+
+                    //client side relational tables handle
+                    await GroupUserManager.DefaultManager.UpsertGroup(this.Group.Id, this.GroupUserItems);
 
                     // upload icon
                     if (this.Group.HasImage)
@@ -176,6 +180,12 @@ namespace Apo_Chan.ViewModels
 
         protected async void addUser()
         {
+            if (!GlobalAttributes.IsConnectedInternet)
+            {
+                await dialogService.DisplayAlertAsync("Error", "This feature only available with network access!", "OK");
+                return;
+            }
+
             UserItem user = null;
             string message = this.getErrorMessageGroupUser();
             if (message == null)
@@ -315,7 +325,10 @@ namespace Apo_Chan.ViewModels
         /// <returns></returns>
         protected async Task<UserItem> getUserByEmail()
         {
-            return await UsersManager.DefaultManager.GetItemAsync(x => x.Email == this.NewGroupUser.RefUser.Email);
+            //return await UsersManager.DefaultManager.GetItemAsync(x => x.Email == this.NewGroupUser.RefUser.Email);
+
+            //guranteed online only version
+            return await UsersManager.DefaultManager.GetRemoteItemAsync(x => x.Email == this.NewGroupUser.RefUser.Email);
         }
 
         #endregion

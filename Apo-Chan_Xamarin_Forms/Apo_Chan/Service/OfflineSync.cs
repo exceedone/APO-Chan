@@ -67,6 +67,8 @@ namespace Apo_Chan.Service
 
             SyncResult.Reset();
 
+            await Models.BaseAuthProvider.RefreshProfile();
+
             Stopwatch diff = new Stopwatch();
             diff.Start();
             await PushAsync();

@@ -211,7 +211,7 @@ namespace Apo_Chan.Items
                     // get this id.
                     //item = await UsersManager.DefaultManager.GetItemAsync(this.UserProviderId, this.ProviderType);
                     // getting user info from server
-                    item = await UsersManager.DefaultManager.GetItemAsync(this.UserProviderId);
+                    item = await UsersManager.DefaultManager.GetRemoteItemAsync(x => x.UserProviderId == this.UserProviderId);
                 }
                 catch (Exception ex)
                 {

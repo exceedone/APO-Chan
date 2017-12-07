@@ -63,12 +63,14 @@ namespace Apo_Chan.ViewModels
                         // has groupids, post 
                         if (!string.IsNullOrWhiteSpace(this.groupIds))
                         {
-                            await CustomFunction.Post($"table/reportgroup/list/{this.Report.Id}", this.groupIds.Split(',').Select(x => new ReportGroupItem()
-                            {
-                                RefGroupId = x
-                                    ,
-                                RefReportId = Report.Id
-                            }));
+                            //await CustomFunction.Post($"table/reportgroup/list/{this.Report.Id}", this.groupIds.Split(',').Select(x => new ReportGroupItem()
+                            //{
+                            //    RefGroupId = x
+                            //        ,
+                            //    RefReportId = Report.Id
+                            //}));
+
+                            await ReportGroupManager.DefaultManager.UpsertReport(this.Report.Id, this.groupIds);
                         }
                     }
                     catch (Exception e)
@@ -98,6 +100,8 @@ namespace Apo_Chan.ViewModels
                 IsBusy = true;
                 try
                 {
+                    //### delete relational records of ReportGroup then delete the report
+                    await ReportGroupManager.DefaultManager.DeleteReportAsync(Report);
                     await ReportManager.DefaultManager.DeleteAsync(Report);
                 }
                 catch (Exception e)
@@ -138,7 +142,8 @@ namespace Apo_Chan.ViewModels
                             GpsImage = "ic_gps_on.png";
                         }
                         // get reportGroup
-                        var reportGroupItems = await CustomFunction.Get<List<GroupItem>>($"api/values/groupsbyreport/{Report.Id}");
+                        //var reportGroupItems = await CustomFunction.Get<List<GroupItem>>($"api/values/groupsbyreport/{Report.Id}");
+                        var reportGroupItems = await ReportGroupManager.DefaultManager.GetGroupsByReport(Report.Id);
                         if (reportGroupItems.Any())
                         {
                             this.groupIds = string.Join(",", reportGroupItems.Select(x => x.Id));

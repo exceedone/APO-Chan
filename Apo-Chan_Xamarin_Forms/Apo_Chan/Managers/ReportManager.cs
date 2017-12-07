@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
+using System.Linq.Expressions;
 
 namespace Apo_Chan.Managers
 {
@@ -33,22 +34,16 @@ namespace Apo_Chan.Managers
                 defaultInstance = value;
             }
         }
-        public async Task<ObservableCollection<ReportItem>> GetItemsAsync(int year, int month)
+
+        public async Task<ObservableCollection<ReportItem>> GetItemsAsync(Expression<Func<ReportItem, bool>> expression)
         {
             // get from Azure Mobile Apps
             try
             {
                 await BaseAuthProvider.RefreshProfile();
 
-                var user = GlobalAttributes.User;
-                var userid = user.Id;
-                IEnumerable<ReportItem> items = await this.localDataTable
-                    .Where(x =>
-                        x.RefUserId == userid
-                        //&& !x.Deleted
-                        && ((x.ReportStartDate.Year == year && x.ReportStartDate.Month == month)
-                           || (x.ReportEndDate.Year == year && x.ReportEndDate.Month == month))
-                    ).OrderBy(x => x.ReportStartDate).ThenBy(x => x.ReportEndDate)
+                IEnumerable<ReportItem> items = await localDataTable.Where(expression)
+                    .OrderBy(x => x.ReportStartDate).ThenBy(x => x.ReportEndDate)
                     .ThenBy(x => x.ReportStartTime).ThenBy(x => x.ReportEndTime)
                     .ToEnumerableAsync();
 
@@ -56,9 +51,8 @@ namespace Apo_Chan.Managers
                 foreach (var item in items)
                 {
                     //for local database, Deleted is null in dataTable when new report submitted
-                    //if (!item.Deleted)
+                    if (!item.Deleted)
                     {
-                        Utils.ConvertToLocalDateTime(item);
                         reports.Add(item);
                     }
                 }
@@ -74,6 +68,34 @@ namespace Apo_Chan.Managers
                 DebugUtil.WriteLine("ReportManager Sync error: " + e.Message);
             }
             return null;
+        }
+
+        public async Task<ObservableCollection<ReportItem>> GetItemsAsync(int year, int month)
+        {
+            var user = GlobalAttributes.User;
+            var userid = user.Id;
+
+            ObservableCollection<ReportItem> reports = await this.GetItemsAsync
+                (
+                    x => x.RefUserId == userid
+                      && ((x.ReportStartDate.Year == year && x.ReportStartDate.Month == month)
+                        ||  (x.ReportEndDate.Year == year && x.ReportEndDate.Month == month))
+                );
+
+            if (reports == null)
+            {
+                return null;
+            }
+            else
+            {
+                foreach (var item in reports)
+                {
+                    
+                     Utils.ConvertToLocalDateTime(item);
+                }
+
+                return reports;
+            }
         }
 
         public new async Task SaveTaskAsync(ReportItem report)
@@ -102,13 +124,10 @@ namespace Apo_Chan.Managers
                 await this.localDataTable.PullAsync(this.SyncQueryName, query);
 
                 //pull reports in groups - by each report Id
-                ObservableCollection<ReportGroupItem> reportList = await ReportGroupManager.DefaultManager.GetReportList();
+                ObservableCollection<string> reportList = await ReportGroupManager.DefaultManager.GetReportIdList();
 
-                foreach (var item in reportList)
-                {
-                    query = localDataTable.Where(x => x.Id == item.RefReportId);
-                    await this.localDataTable.PullAsync(this.SyncQueryName + item.RefReportId, query);
-                }
+                query = localDataTable.Where(x => reportList.Contains(x.Id));
+                await this.localDataTable.PullAsync(this.SyncQueryName + " list", query);
 
                 Service.OfflineSync.SyncResult.SyncedItems++;
             }

@@ -41,7 +41,8 @@ namespace Apo_Chan.ViewModels
                 try
                 {
                     // get group and groupusers
-                    var item = await CustomFunction.Get<GroupAndGroupUsersItem>($"api/values/groupusers/{(string)parameters["Id"]}");
+                    //var item = await CustomFunction.Get<GroupAndGroupUsersItem>($"api/values/groupusers/{(string)parameters["Id"]}");
+                    var item = await GroupUserManager.DefaultManager.GetGroupAndGroupUsers((string)parameters["Id"]);
                     if (item != null)
                     {
                         foreach (var user in item.GroupUsers)
@@ -84,7 +85,7 @@ namespace Apo_Chan.ViewModels
             var accepted = await dialogService.DisplayAlertAsync
                 (
                     "Confirmation",
-                    "Do you want to delete the report?",
+                    "Warning! You are about to delete a group. Do you want to continue?",
                     "Confirm",
                     "Cancel"
                 );
@@ -92,13 +93,19 @@ namespace Apo_Chan.ViewModels
             {
                 if (!GlobalAttributes.IsConnectedInternet)
                 {
-                    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
+                    await dialogService.DisplayAlertAsync("Error", "This feature only available with network access!", "OK");
                     return;
                 }
                 IsBusy = true;
                 try
                 {
+                    //### delete relational records of GroupUser & ReportGroup then delete the group
+                    await ReportGroupManager.DefaultManager.DeleteGroupAsync(Group);
+                    await GroupUserManager.DefaultManager.DeleteGroupAsync(Group);
                     await GroupManager.DefaultManager.DeleteAsync(Group);
+
+                    //### sync with server immediately
+                    await Service.OfflineSync.PerformAlInOneSync();
                 }
                 catch (Exception e)
                 {

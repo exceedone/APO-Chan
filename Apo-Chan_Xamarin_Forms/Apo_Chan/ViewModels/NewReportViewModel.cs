@@ -53,12 +53,14 @@ namespace Apo_Chan.ViewModels
                         // has groupids, post 
                         if (!string.IsNullOrWhiteSpace(this.groupIds))
                         {
-                            await CustomFunction.Post($"table/reportgroup/list/{this.Report.Id}", this.groupIds.Split(',').Select(x => new ReportGroupItem()
-                            {
-                                RefGroupId = x
-                                    ,
-                                RefReportId = Report.Id
-                            }));
+                            //await CustomFunction.Post($"table/reportgroup/list/{this.Report.Id}", this.groupIds.Split(',').Select(x => new ReportGroupItem()
+                            //{
+                            //    RefGroupId = x
+                            //        ,
+                            //    RefReportId = Report.Id
+                            //}));
+
+                            await ReportGroupManager.DefaultManager.UpsertReport(this.Report.Id, this.groupIds);
                         }
                     }
                     catch (Exception e)
