@@ -43,7 +43,7 @@ namespace Apo_Chan
 
             OfflineSync.InitOfflineSyncContext();
 
-            if (BaseAuthProvider.FirstProcess())
+            if (await BaseAuthProvider.FirstProcess())
             {
                 await NavigationService.NavigateAsync("NavigationPage/UserReportList");
             }

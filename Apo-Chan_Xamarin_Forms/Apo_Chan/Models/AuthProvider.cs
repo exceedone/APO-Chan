@@ -80,7 +80,7 @@ namespace Apo_Chan.Models
         /// First Process
         /// </summary>
         /// <returns>true: has userinfo false: none userinfo</returns>
-        public static bool FirstProcess()
+        public static async Task<bool> FirstProcess()
         {
             // First, get user info.
             UserItem user = GlobalAttributes.User;
@@ -89,6 +89,14 @@ namespace Apo_Chan.Models
             {
                 return false;
             }
+
+            // Whether that we can refresh 
+            if (!await RefreshProfile())
+            {
+                UserItem.ClearUserToken();
+                return false;
+            }
+
             App.CurrentClient.CurrentUser = user.MobileServiceUser;
             return true;
         }
