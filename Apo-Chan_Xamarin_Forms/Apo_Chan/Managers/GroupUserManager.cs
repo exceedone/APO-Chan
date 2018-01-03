@@ -37,7 +37,7 @@ namespace Apo_Chan.Managers
             try
             {
                 await BaseAuthProvider.RefreshProfile();
-                var query = this.localDataTable.Where(x => !x.Deleted);
+                var query = this.localDataTable.CreateQuery();//Where(x => !x.Deleted);
                 if (!string.IsNullOrWhiteSpace(refGroupId))
                 {
                     query = query.Where(x => x.RefGroupId == refGroupId);
@@ -74,7 +74,7 @@ namespace Apo_Chan.Managers
             {
                 await BaseAuthProvider.RefreshProfile();
                 IEnumerable<GroupUserItem> items = await this.localDataTable
-                    .Where(x => !x.Deleted)
+                    //.Where(x => !x.Deleted)
                     .Where(extension)
                     .ToEnumerableAsync();
 
@@ -150,7 +150,7 @@ namespace Apo_Chan.Managers
             ObservableCollection<string> groupList = new ObservableCollection<string>();
 
             IEnumerable<GroupUserItem> items = await this.localDataTable
-                    .Where(x => !x.Deleted)
+                    //.Where(x => !x.Deleted)
                     .OrderBy(x => x.RefGroupId)
                     .ToEnumerableAsync();
             GroupUserItem prevGroup = new GroupUserItem
@@ -176,7 +176,7 @@ namespace Apo_Chan.Managers
             ObservableCollection<string> userList = new ObservableCollection<string>();
 
             IEnumerable<GroupUserItem> items = await this.localDataTable
-                    .Where(x => !x.Deleted)
+                    //.Where(x => !x.Deleted)
                     .OrderBy(x => x.RefUserId)
                     .ToEnumerableAsync();
             GroupUserItem prevUser = new GroupUserItem
@@ -207,12 +207,17 @@ namespace Apo_Chan.Managers
             foreach (var groupId in groupList)
             {
                 var group = await GroupManager.DefaultManager.GetItemAsync(groupId);
+                if (group == null)
+                {
+                    continue;
+                }
+
                 var groupUserCount = await this.localDataTable.Where(x => x.RefGroupId == groupId).ToEnumerableAsync();
 
                 GroupAndUserCountItem item = new GroupAndUserCountItem();
                 item.Group = group;
-                item.UserCount = groupUserCount.Count();
                 item.AdminFlg = group.CreatedUserId.CompareTo(userId) == 0;
+                item.UserCount = groupUserCount.Count();
 
                 groupCountList.Add(item);
             }

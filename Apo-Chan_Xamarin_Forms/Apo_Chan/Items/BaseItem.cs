@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Microsoft.WindowsAzure.MobileServices;
 using Prism.Mvvm;
+using System.ComponentModel.DataAnnotations;
 
 namespace Apo_Chan.Items
 {
@@ -18,8 +19,9 @@ namespace Apo_Chan.Items
 
         [UpdatedAt]
         public DateTimeOffset UpdatedAt { get; set; }
-        
+
         [JsonProperty(PropertyName = "deleted")]
+        [Required]
         [Deleted]
         public bool Deleted { get; set; }
 

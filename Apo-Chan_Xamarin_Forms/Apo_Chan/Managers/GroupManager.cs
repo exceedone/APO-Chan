@@ -44,7 +44,9 @@ namespace Apo_Chan.Managers
                 var user = GlobalAttributes.User;
 
                 //pull groups by id
-                var groups = await localDataTable.Where(x => x.Id == groupId).ToEnumerableAsync();
+                IEnumerable<GroupItem> groups = await localDataTable.Where(x => x.Id == groupId)
+                    .ToEnumerableAsync();
+
                 foreach (var group in groups)
                 {
                     if (!group.Deleted)

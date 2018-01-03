@@ -40,8 +40,6 @@ namespace Apo_Chan.Managers
             // get from Azure Mobile Apps
             try
             {
-                await BaseAuthProvider.RefreshProfile();
-
                 IEnumerable<ReportItem> items = await localDataTable.Where(expression)
                     .OrderBy(x => x.ReportStartDate).ThenBy(x => x.ReportEndDate)
                     .ThenBy(x => x.ReportStartTime).ThenBy(x => x.ReportEndTime)
@@ -72,6 +70,7 @@ namespace Apo_Chan.Managers
 
         public async Task<ObservableCollection<ReportItem>> GetItemsAsync(int year, int month)
         {
+            await BaseAuthProvider.RefreshProfile();
             var user = GlobalAttributes.User;
             var userid = user.Id;
 

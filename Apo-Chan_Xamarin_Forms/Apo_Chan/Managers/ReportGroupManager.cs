@@ -114,7 +114,7 @@ namespace Apo_Chan.Managers
             ObservableCollection<string> reportList = new ObservableCollection<string>();
 
             IEnumerable<ReportGroupItem> items = await this.localDataTable
-                    .Where(x => !x.Deleted)
+                    //.Where(x => !x.Deleted)
                     .OrderBy(x => x.RefReportId)
                     .ToEnumerableAsync();
             ReportGroupItem prevReport = new ReportGroupItem
@@ -194,10 +194,18 @@ namespace Apo_Chan.Managers
         //Wrapper for UpsertReport(string reportId, ObservableCollection<ReportGroupItem> reportGroupItems)
         public async Task UpsertReport(string reportId, string groupIds)
         {
-            string[] groupIdList = groupIds.Split(',');
+            string[] groupIdList = groupIds.Split(new char[]{','}, StringSplitOptions.RemoveEmptyEntries);
 
-            ObservableCollection<ReportGroupItem> reportGroupItems
-                = await this.GetItemsAsync(x => x.RefReportId == reportId && groupIdList.Contains(x.RefGroupId));
+            ObservableCollection<ReportGroupItem> reportGroupItems = new ObservableCollection<ReportGroupItem>();
+            foreach (var groupId in groupIdList)
+            {
+                ReportGroupItem item = new ReportGroupItem
+                {
+                    RefReportId = reportId,
+                    RefGroupId = groupId
+                };
+                reportGroupItems.Add(item);
+            }
 
             await this.UpsertReport(reportId, reportGroupItems);
         }

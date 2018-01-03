@@ -61,17 +61,18 @@ namespace Apo_Chan.ViewModels
                         await ReportManager.DefaultManager.SaveTaskAsync(Report);
 
                         // has groupids, post 
-                        if (!string.IsNullOrWhiteSpace(this.groupIds))
-                        {
-                            //await CustomFunction.Post($"table/reportgroup/list/{this.Report.Id}", this.groupIds.Split(',').Select(x => new ReportGroupItem()
-                            //{
-                            //    RefGroupId = x
-                            //        ,
-                            //    RefReportId = Report.Id
-                            //}));
+                        //if (!string.IsNullOrWhiteSpace(this.groupIds))
+                        //{
+                        //    await CustomFunction.Post($"table/reportgroup/list/{this.Report.Id}", this.groupIds.Split(',').Select(x => new ReportGroupItem()
+                        //    {
+                        //        RefGroupId = x
+                        //            ,
+                        //        RefReportId = Report.Id
+                        //    }));
+                        //}
 
-                            await ReportGroupManager.DefaultManager.UpsertReport(this.Report.Id, this.groupIds);
-                        }
+                        //In the case remove groups from report, this method will delete ReportGroup entry
+                        await ReportGroupManager.DefaultManager.UpsertReport(this.Report.Id, this.groupIds);
                     }
                     catch (Exception e)
                     {

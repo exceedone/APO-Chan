@@ -7,13 +7,6 @@ using Plugin.CurrentActivity;
 
 namespace Apo_Chan.Droid
 {
-	//You can specify additional application information in this attribute
-    [Application]
-#if DEBUG
-    [assembly: Application(Debuggable = true)]
-#else
-    [assembly: Application(Debuggable = false)]
-#endif
     public class MainApplication : Application, Application.IActivityLifecycleCallbacks
     {
         public MainApplication(IntPtr handle, JniHandleOwnership transer)

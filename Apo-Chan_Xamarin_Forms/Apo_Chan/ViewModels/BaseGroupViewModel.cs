@@ -137,11 +137,11 @@ namespace Apo_Chan.ViewModels
                 );
             if (accepted)
             {
-                //if (!GlobalAttributes.IsConnectedInternet)
-                //{
-                //    await dialogService.DisplayAlertAsync("Error", "APO-Chan cannot connect to the Internet!", "OK");
-                //    return;
-                //}
+                if (!GlobalAttributes.IsConnectedInternet)
+                {
+                    await dialogService.DisplayAlertAsync("Error", "This feature only available with network access!", "OK");
+                    return;
+                }
                 IsBusy = true;
                 try
                 {
@@ -168,6 +168,9 @@ namespace Apo_Chan.ViewModels
                     {
                         await Service.ImageService.SaveImage(this.Group, this.Group.GroupImage.StreamByte);
                     }
+
+                    //### finally, sync with server
+                    await Service.OfflineSync.PerformAlInOneSync();
                 }
                 catch (Exception e)
                 {

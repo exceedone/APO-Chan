@@ -15,7 +15,7 @@ namespace Apo_Chan.Droid
     public class FloatingActionButtonViewRenderer : ViewRenderer<FloatingActionButtonView, FrameLayout>
     {
 
-        public async static void Init()
+        public static void Init()
         {
             var temp = DateTime.Now;
         }
